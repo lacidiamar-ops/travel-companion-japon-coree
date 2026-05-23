@@ -376,66 +376,133 @@ function AIAssistantPage() {
 }
 
 function BudgetPage() {
-  const [total, setTotal] = useLocalStorage('budget_total', 5000)
-  const [spent, setSpent] = useLocalStorage('budget_spent', 1425)
+  const RATES_DEFAULT = { JPY: 0.0061, KRW: 0.00064, EUR: 1 }
+  const ZONE_CURRENCY  = { Japon: { code: 'JPY', sym: '¥' }, Corée: { code: 'KRW', sym: '₩' }, Europe: { code: 'EUR', sym: '€' } }
+  const CATEGORIES = ['Restaurant', 'Transport', 'Visite', 'Shopping', 'Hôtel', 'Snack', 'Autre']
+
+  const [total,    setTotal]    = useLocalStorage('budget_total', 5000)
+  const [rates,    setRates]    = useLocalStorage('budget_rates', RATES_DEFAULT)
   const [expenses, setExpenses] = useLocalStorage('budget_items', [])
-  const [form, setForm] = useState({ label: '', amount: '' })
+  const [showRates, setShowRates] = useState(false)
+  const [form, setForm] = useState({
+    date: new Date().toISOString().slice(0, 10),
+    pays: 'Japon', categorie: 'Restaurant', label: '', amount: ''
+  })
+
+  const toEUR = (amount, pays) => parseFloat(amount) * (rates[ZONE_CURRENCY[pays]?.code] ?? 1)
+  const spent  = expenses.reduce((s, x) => s + x.eur, 0)
+  const restant = total - spent
 
   const addExpense = () => {
-    const amount = Number(form.amount)
-    if (!form.label || !amount) return
-    const item = { id: Date.now(), label: form.label, amount }
+    const raw = parseFloat(form.amount)
+    if (!form.label.trim() || isNaN(raw) || raw <= 0) return
+    const item = {
+      id: Date.now(),
+      date: form.date,
+      pays: form.pays,
+      categorie: form.categorie,
+      label: form.label.trim(),
+      amount: raw,
+      devise: ZONE_CURRENCY[form.pays].code,
+      eur: toEUR(raw, form.pays),
+    }
     setExpenses([item, ...expenses])
-    setSpent((prev) => prev + amount)
-    setForm({ label: '', amount: '' })
+    setForm(f => ({ ...f, label: '', amount: '' }))
   }
 
-  const removeExpense = (item) => {
-    setExpenses(expenses.filter((x) => x.id !== item.id))
-    setSpent((prev) => Math.max(0, prev - item.amount))
-  }
+  const removeExpense = (id) => setExpenses(expenses.filter(x => x.id !== id))
 
   const exportCsv = () => {
-    const rows = [['Libellé', 'Montant €'], ...expenses.map((x) => [x.label, x.amount])]
-    const csv = rows.map((r) => r.join(';')).join('\n')
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
+    const header = 'date,pays,catégorie,libellé,montant_local,devise,equivalent_eur'
+    const rows = expenses.map(x =>
+      [x.date, x.pays, x.categorie, `"${x.label}"`, x.amount, x.devise, x.eur.toFixed(2)].join(',')
+    )
+    const blob = new Blob([header + '\n' + rows.join('\n')], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
-    a.href = url
-    a.download = 'budget-voyage.csv'
-    a.click()
+    a.href = url; a.download = 'depenses-lacidi.csv'; a.click()
     URL.revokeObjectURL(url)
   }
+
+  const zoneInfo = ZONE_CURRENCY[form.pays]
+  const preview = form.amount ? toEUR(form.amount, form.pays) : 0
 
   return (
     <motion.div key="budget" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="page-stack">
       <BudgetOverviewCard spent={spent} total={total} onOpen={() => {}} />
+
+      {/* Taux de change modifiables */}
       <div className="panel card-panel">
-        <SectionTitle title="Réglages" />
+        <SectionTitle title="Réglages" linkLabel={showRates ? 'Masquer taux' : '⚙ Taux de change'} onLink={() => setShowRates(v => !v)} />
         <div className="input-grid two">
-          <label><span>Budget total (€)</span><input className="text-input" type="number" value={total} onChange={(e) => setTotal(Number(e.target.value || 0))} /></label>
-          <label><span>Dépensé (€)</span><input className="text-input" type="number" value={spent} onChange={(e) => setSpent(Number(e.target.value || 0))} /></label>
+          <label><span>Budget total (€)</span>
+            <input className="text-input" type="number" value={total} onChange={e => setTotal(Number(e.target.value || 0))} />
+          </label>
         </div>
+        {showRates && (
+          <div className="input-grid two" style={{ marginTop: '0.6rem' }}>
+            {Object.keys(RATES_DEFAULT).map(code => (
+              <label key={code}><span>1 {code} = … €</span>
+                <input className="text-input" type="number" step="0.0001"
+                  value={rates[code]}
+                  onChange={e => setRates({ ...rates, [code]: parseFloat(e.target.value) || 0 })} />
+              </label>
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* Formulaire ajout */}
       <div className="panel card-panel">
         <SectionTitle title="Ajouter une dépense" />
         <div className="input-grid two">
-          <input className="text-input" placeholder="Ex : ramen Kyoto" value={form.label} onChange={(e) => setForm({ ...form, label: e.target.value })} />
-          <input className="text-input" placeholder="Montant en €" type="number" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} />
+          <label><span>Date</span>
+            <input className="text-input" type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} />
+          </label>
+          <label><span>Zone</span>
+            <select className="text-input" value={form.pays} onChange={e => setForm(f => ({ ...f, pays: e.target.value }))}>
+              {Object.keys(ZONE_CURRENCY).map(z => <option key={z}>{z}</option>)}
+            </select>
+          </label>
+          <label><span>Catégorie</span>
+            <select className="text-input" value={form.categorie} onChange={e => setForm(f => ({ ...f, categorie: e.target.value }))}>
+              {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+            </select>
+          </label>
+          <label><span>Libellé</span>
+            <input className="text-input" placeholder="ex : Ramen Kyoto" value={form.label}
+              onChange={e => setForm(f => ({ ...f, label: e.target.value }))} />
+          </label>
+          <label style={{ gridColumn: '1 / -1' }}>
+            <span>Montant ({zoneInfo.sym} {zoneInfo.code}) — ≈ <strong>{preview.toFixed(2)} €</strong></span>
+            <input className="text-input" type="number" placeholder="0" value={form.amount}
+              onChange={e => setForm(f => ({ ...f, amount: e.target.value }))} />
+          </label>
         </div>
-        <button className="primary-action" onClick={addExpense}><PlusCircle size={17} /> Ajouter</button>
+        <button className="primary-action" onClick={addExpense}><PlusCircle size={17} /> Ajouter la dépense</button>
       </div>
+
+      {/* Historique */}
       <div className="panel card-panel">
-        <SectionTitle title="Historique" linkLabel="Exporter CSV" onLink={exportCsv} />
+        <SectionTitle title={`Historique (${expenses.length})`} linkLabel={expenses.length ? 'Exporter CSV' : undefined} onLink={exportCsv} />
         <div className="simple-list">
           {expenses.length === 0 && <p className="soft">Aucune dépense enregistrée.</p>}
-          {expenses.map((item) => (
+          {expenses.map(item => (
             <div className="simple-row no-hover" key={item.id}>
-              <span>{item.label} <small>{euro(item.amount)}</small></span>
-              <button className="icon-btn" onClick={() => removeExpense(item)}><Trash2 size={16} /></button>
+              <span>
+                <strong>{item.label}</strong>
+                <small style={{ marginLeft: 6, color: '#888' }}>{item.date} · {item.pays} · {item.categorie}</small><br />
+                <small>{item.amount.toLocaleString('fr-FR')} {item.devise} → <strong>{euro(item.eur)}</strong></small>
+              </span>
+              <button className="icon-btn" onClick={() => removeExpense(item.id)}><Trash2 size={16} /></button>
             </div>
           ))}
         </div>
+        {expenses.length > 0 && (
+          <div style={{ textAlign: 'right', marginTop: '0.5rem', fontWeight: 700, color: restant < 0 ? '#e53935' : '#2e7d32' }}>
+            Restant : {euro(restant)}
+          </div>
+        )}
       </div>
     </motion.div>
   )
@@ -644,7 +711,9 @@ function ToolsPage() {
 
 function AppShell() {
   const [tab, setTab] = useState('days')
-  const [spent] = useLocalStorage('budget_spent', 1425)
+  const [expenses] = useLocalStorage('budget_items', [])
+  const [rates] = useLocalStorage('budget_rates', { JPY: 0.0061, KRW: 0.00064, EUR: 1 })
+  const spent = expenses.reduce((s, x) => s + (x.eur ?? x.amount ?? 0), 0)
   const [total] = useLocalStorage('budget_total', 5000)
   const nextDay = useMemo(() => days[4], [])
 
