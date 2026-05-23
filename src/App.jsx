@@ -24,10 +24,10 @@ const days = [
   { id: 5, date: '15 juil.', city: 'Kyoto', title: 'Kyoto – Jour 1 ⛩️', image: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=1200&q=80', summary: 'Kiyomizu-dera, Sannenzaka, Yasaka Shrine, Nishiki Market, Gion & Shirakawa.', timeRange: '08:00 – 21:30', steps: '15 420 pas', highlights: ['Kiyomizu-dera', 'Nishiki Market', 'Gion'], restaurants: ['Nishiki Market', 'Ramen Sen no Kaze'], spots: ['Kiyomizu-dera', 'Sannenzaka', 'Gion Shirakawa'] },
   { id: 6, date: '16 juil.', city: 'Kyoto', title: 'Fushimi Inari → Arashiyama', image: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1200&q=80', summary: 'Torii rouges, forêt de bambous, Tenryu-ji et Pontocho.', timeRange: '07:30 – 21:00', steps: '16 200 pas', highlights: ['Fushimi Inari', 'Bamboo Grove', 'Pontocho'], restaurants: ['% Arabica', 'Pontocho Alley'], spots: ['Torii rouges', 'Togetsukyo Bridge'] },
   { id: 7, date: '17 juil.', city: 'Kyoto / Séoul', title: 'Gion Matsuri → Séoul', image: 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&fit=crop&w=1200&q=80', summary: 'Festival Gion Matsuri, Haruka Express, vol KIX → Incheon, Myeongdong.', timeRange: '08:00 – 23:00', steps: '10 800 pas', highlights: ['Gion Matsuri', 'Haruka', 'Myeongdong'], restaurants: ['Myeongdong Street Food'], spots: ['Shijo Kawaramachi', 'Myeongdong night'] },
-  { id: 8, date: '18 juil.', city: 'Séoul', title: 'Gyeongbokgung → Bukchon → Myeongdong', image: 'https://images.unsplash.com/photo-1538485399081-7c8ed2c331ca?auto=format&fit=crop&w=1200&q=80', summary: 'Palais royal, village hanok, Insadong et street food Myeongdong.', timeRange: '09:00 – 21:30', steps: '14 900 pas', highlights: ['Gyeongbokgung', 'Bukchon', 'Myeongdong'], restaurants: ['Myeongdong Kyoja', 'Insadong Geujib'], spots: ['Bukchon Hanok', 'Myeongdong neon'] },
+  { id: 8, date: '18 juil.', city: 'Séoul', title: 'Gyeongbokgung → Bukchon → Myeongdong', image: 'https://images.unsplash.com/photo-1543158265-9be72f7c7e19?auto=format&fit=crop&w=1200&q=80', summary: 'Palais royal, village hanok, Insadong et street food Myeongdong.', timeRange: '09:00 – 21:30', steps: '14 900 pas', highlights: ['Gyeongbokgung', 'Bukchon', 'Myeongdong'], restaurants: ['Myeongdong Kyoja', 'Insadong Geujib'], spots: ['Bukchon Hanok', 'Myeongdong neon'] },
   { id: 9, date: '19 juil.', city: 'Séoul', title: 'N Seoul Tower → Hongdae', image: 'https://images.unsplash.com/photo-1506816561089-5cc37b3aa9b0?auto=format&fit=crop&w=1200&q=80', summary: 'Vue Namsan, marchés, Hongdae et dîner BBQ coréen.', timeRange: '10:00 – 22:00', steps: '13 400 pas', highlights: ['N Seoul Tower', 'Hongdae'], restaurants: ['Wangbijib', 'Hongdae Chicken'], spots: ['Namsan', 'Hongdae'] },
-  { id: 10, date: '20 juil.', city: 'Busan', title: 'Séoul → Busan + Haeundae', image: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?auto=format&fit=crop&w=1200&q=80', summary: 'KTX vers Busan, Haeundae Beach, Dongbaekseom et The Bay 101.', timeRange: '08:00 – 21:30', steps: '12 100 pas', highlights: ['KTX', 'Haeundae', 'The Bay 101'], restaurants: ['Haeundae Market', 'The Bay 101'], spots: ['Haeundae', 'Skyline Busan'] },
-  { id: 11, date: '21 juil.', city: 'Busan', title: 'Temple mer → Gamcheon → Gwangalli', image: 'https://images.unsplash.com/photo-1605322535860-0f657f4eae2d?auto=format&fit=crop&w=1200&q=80', summary: 'Temple Haedong Yonggungsa, Gamcheon, Jagalchi et Gwangalli.', timeRange: '09:00 – 22:00', steps: '16 050 pas', highlights: ['Temple mer', 'Gamcheon', 'Gwangalli'], restaurants: ['Jagalchi', 'BIFF Square'], spots: ['Gamcheon', 'Gwangalli Bridge'] },
+  { id: 10, date: '20 juil.', city: 'Busan', title: 'Séoul → Busan + Haeundae', image: 'https://images.unsplash.com/photo-1569264018996-a5e5a37ed2d0?auto=format&fit=crop&w=1200&q=80', summary: 'KTX vers Busan, Haeundae Beach, Dongbaekseom et The Bay 101.', timeRange: '08:00 – 21:30', steps: '12 100 pas', highlights: ['KTX', 'Haeundae', 'The Bay 101'], restaurants: ['Haeundae Market', 'The Bay 101'], spots: ['Haeundae', 'Skyline Busan'] },
+  { id: 11, date: '21 juil.', city: 'Busan', title: 'Temple mer → Gamcheon → Gwangalli', image: 'https://images.unsplash.com/photo-1569264018996-a5e5a37ed2d0?auto=format&fit=crop&w=1200&q=80', summary: 'Temple Haedong Yonggungsa, Gamcheon, Jagalchi et Gwangalli.', timeRange: '09:00 – 22:00', steps: '16 050 pas', highlights: ['Temple mer', 'Gamcheon', 'Gwangalli'], restaurants: ['Jagalchi', 'BIFF Square'], spots: ['Gamcheon', 'Gwangalli Bridge'] },
   { id: 12, date: '22 juil.', city: 'Tokyo', title: 'Busan → Narita → Shinjuku', image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80', summary: 'Gimhae Airport, vol vers Narita, Narita Express puis Shinjuku.', timeRange: '08:30 – 22:00', steps: '9 400 pas', highlights: ['Blue Line Park', 'NEX', 'Shinjuku'], restaurants: ['Shinjuku late dinner'], spots: ['Kabukicho'] },
 ]
 
@@ -211,11 +211,17 @@ function WeatherLiveCard() {
     navigator.geolocation.getCurrentPosition(async (pos) => {
       const { latitude, longitude } = pos.coords
       try {
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto`
-        const response = await fetch(url)
-        const data = await response.json()
-        setWeather({ ...data.current, latitude, longitude })
-        setStatus('Météo mise à jour selon ta position actuelle.')
+        const [weatherRes, geoRes] = await Promise.all([
+          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto`),
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, { headers: { 'Accept-Language': 'fr' } })
+        ])
+        const data = await weatherRes.json()
+        const geo  = await geoRes.json()
+        const city = geo.address?.city || geo.address?.town || geo.address?.village || geo.address?.county || ''
+        const country = geo.address?.country || ''
+        const place = city && country ? `${city}, ${country}` : (city || country || `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`)
+        setWeather({ ...data.current, latitude, longitude, place })
+        setStatus(`📍 ${place}`)
       } catch {
         setStatus('Impossible de charger la météo. Vérifie la connexion internet.')
       } finally {
@@ -244,7 +250,7 @@ function WeatherLiveCard() {
             <span>Humidité {weather.relative_humidity_2m}%</span>
             <span>Vent {Math.round(weather.wind_speed_10m)} km/h</span>
           </div>
-          <p className="soft">{status}</p>
+          <p className="soft">{weather.place || status}</p>
         </div>
       ) : (
         <div className="weather-empty">
@@ -379,10 +385,15 @@ function BudgetPage() {
   const RATES_DEFAULT = { JPY: 0.0061, KRW: 0.00064, EUR: 1 }
   const ZONE_CURRENCY  = { Japon: { code: 'JPY', sym: '¥' }, Corée: { code: 'KRW', sym: '₩' }, Europe: { code: 'EUR', sym: '€' } }
   const CATEGORIES = ['Restaurant', 'Transport', 'Visite', 'Shopping', 'Hôtel', 'Snack', 'Autre']
+  // Enveloppes
+  const ENVELOPES_DEF = { Restauration: 1200, Transport: 800, Loisirs: 600 }
+  const CAT_TO_ENV = { Restaurant: 'Restauration', Snack: 'Restauration', Transport: 'Transport', Visite: 'Loisirs', Shopping: 'Loisirs', Hôtel: 'Loisirs', Autre: 'Loisirs' }
+  const ENV_COLORS = { Restauration: '#e8523a', Transport: '#3a7bd5', Loisirs: '#27ae60' }
 
-  const [total,    setTotal]    = useLocalStorage('budget_total', 5000)
-  const [rates,    setRates]    = useLocalStorage('budget_rates', RATES_DEFAULT)
-  const [expenses, setExpenses] = useLocalStorage('budget_items', [])
+  const [total,     setTotal]     = useLocalStorage('budget_total', 5000)
+  const [rates,     setRates]     = useLocalStorage('budget_rates', RATES_DEFAULT)
+  const [expenses,  setExpenses]  = useLocalStorage('budget_items', [])
+  const [envelopes, setEnvelopes] = useLocalStorage('budget_envelopes', ENVELOPES_DEF)
   const [showRates, setShowRates] = useState(false)
   const [form, setForm] = useState({
     date: new Date().toISOString().slice(0, 10),
@@ -430,6 +441,35 @@ function BudgetPage() {
   return (
     <motion.div key="budget" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="page-stack">
       <BudgetOverviewCard spent={spent} total={total} onOpen={() => {}} />
+
+      {/* Enveloppes par catégorie */}
+      <div className="panel card-panel">
+        <SectionTitle title="Enveloppes" />
+        <div className="input-grid two">
+          {Object.keys(ENVELOPES_DEF).map(env => {
+            const spent_env = expenses.filter(x => CAT_TO_ENV[x.categorie] === env).reduce((s,x) => s + x.eur, 0)
+            const budget_env = envelopes[env] || 0
+            const pct = Math.min(100, budget_env ? (spent_env / budget_env) * 100 : 0)
+            return (
+              <div key={env} style={{ background: '#f9f9f9', border: `2px solid ${ENV_COLORS[env]}`, borderRadius: 10, padding: '0.6rem 0.8rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                  <span style={{ fontWeight: 700, fontSize: '0.85rem', color: ENV_COLORS[env] }}>{env}</span>
+                  <input type="number" value={budget_env}
+                    onChange={e => setEnvelopes(prev => ({ ...prev, [env]: Number(e.target.value || 0) }))}
+                    style={{ width: 60, textAlign: 'right', border: 'none', borderBottom: `1px solid ${ENV_COLORS[env]}`, background: 'transparent', fontWeight: 700, fontSize: '0.85rem' }} /> <span style={{fontSize:'0.75rem'}}>€</span>
+                </div>
+                <div style={{ background: '#e0e0e0', borderRadius: 6, height: 6 }}>
+                  <div style={{ background: ENV_COLORS[env], width: `${pct}%`, height: 6, borderRadius: 6, transition: 'width 0.3s' }} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 3, fontSize: '0.75rem', color: '#666' }}>
+                  <span>Dépensé : <b>{spent_env.toFixed(0)} €</b></span>
+                  <span style={{ color: spent_env > budget_env ? '#e53935' : '#27ae60' }}>Reste : {(budget_env - spent_env).toFixed(0)} €</span>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
 
       {/* Taux de change modifiables */}
       <div className="panel card-panel">
@@ -709,8 +749,36 @@ function ToolsPage() {
   )
 }
 
+function loadNotifData(setNotifPos, setNotifData) {
+  if (!navigator.geolocation) { setNotifPos('denied'); return }
+  setNotifPos('loading')
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const { latitude, longitude } = pos.coords
+    try {
+      const [weatherRes, geoRes] = await Promise.all([
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&timezone=auto`),
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, { headers: { 'Accept-Language': 'fr' } })
+      ])
+      const weatherData = await weatherRes.json()
+      const geoData     = await geoRes.json()
+      const city    = geoData.address?.city || geoData.address?.town || geoData.address?.village || ''
+      const country = geoData.address?.country || ''
+      setNotifData({
+        place: city && country ? `${city}, ${country}` : `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`,
+        temp:  Math.round(weatherData.current?.temperature_2m ?? 0),
+        desc:  { 0:'Ciel dégagé', 1:'Peu nuageux', 2:'Partiellement nuageux', 3:'Couvert', 61:'Pluie', 80:'Averses', 95:'Orage' }[weatherData.current?.weather_code] || 'Météo variable'
+      })
+      setNotifPos('ok')
+    } catch { setNotifPos('error') }
+  }, () => setNotifPos('denied'))
+}
+
 function AppShell() {
   const [tab, setTab] = useState('days')
+  const [showMenu, setShowMenu] = useState(false)
+  const [showNotifs, setShowNotifs] = useState(false)
+  const [notifPos, setNotifPos] = useState(null)
+  const [notifData, setNotifData] = useState(null)
   const [expenses] = useLocalStorage('budget_items', [])
   const [rates] = useLocalStorage('budget_rates', { JPY: 0.0061, KRW: 0.00064, EUR: 1 })
   const spent = expenses.reduce((s, x) => s + (x.eur ?? x.amount ?? 0), 0)
@@ -731,12 +799,70 @@ function AppShell() {
       <div className="hero-banner">
         <img src={assets.banner} alt="Bandeau voyage Famille Lacidi" />
         <div className="hero-topbar">
-          <button className="round-btn"><Menu size={20} /></button>
+          <button className="round-btn" onClick={() => setShowMenu(true)}><Menu size={20} /></button>
           <div className="hero-actions">
-            <button className="round-btn"><Bell size={20} /></button>
+            <button className="round-btn" onClick={() => { setShowNotifs(true); loadNotifData(setNotifPos, setNotifData) }}><Bell size={20} /></button>
             <button className="round-btn"><SunMedium size={20} /></button>
           </div>
         </div>
+
+      {/* DRAWER MENU */}
+      {showMenu && (
+        <div style={{ position:'fixed', inset:0, zIndex:9999 }} onClick={() => setShowMenu(false)}>
+          <div style={{ position:'absolute', top:0, left:0, width:280, height:'100%', background:'#0b1f3a', color:'#fff', padding:'2rem 1.5rem', boxShadow:'4px 0 20px rgba(0,0,0,0.4)' }} onClick={e => e.stopPropagation()}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'2rem' }}>
+              <span style={{ fontSize:'1.2rem', fontWeight:700 }}>Lacidi Travel</span>
+              <button onClick={() => setShowMenu(false)} style={{ background:'none', border:'none', color:'#fff', fontSize:'1.4rem', cursor:'pointer' }}>✕</button>
+            </div>
+            {quickLinks.map(item => {
+              const Icon = item.icon
+              return (
+                <button key={item.key} onClick={() => { setTab(item.key); setShowMenu(false) }}
+                  style={{ display:'flex', alignItems:'center', gap:14, width:'100%', background: tab===item.key ? 'rgba(255,255,255,0.15)' : 'none',
+                    border:'none', color:'#fff', padding:'0.75rem 1rem', borderRadius:10, marginBottom:4, cursor:'pointer', fontSize:'1rem', textAlign:'left' }}>
+                  <Icon size={20} style={{ opacity:0.9 }} />
+                  {item.label}
+                </button>
+              )
+            })}
+            <div style={{ borderTop:'1px solid rgba(255,255,255,0.15)', marginTop:'1.5rem', paddingTop:'1.5rem', fontSize:'0.8rem', opacity:0.5 }}>
+              Famille Lacidi — Japon &amp; Corée 2025
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PANEL NOTIFICATIONS */}
+      {showNotifs && (
+        <div style={{ position:'fixed', inset:0, zIndex:9999 }} onClick={() => setShowNotifs(false)}>
+          <div style={{ position:'absolute', top:60, right:12, width:300, background:'#fff', borderRadius:16, boxShadow:'0 8px 32px rgba(0,0,0,0.18)', padding:'1rem' }} onClick={e => e.stopPropagation()}>
+            <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'0.8rem' }}>
+              <span style={{ fontWeight:700, fontSize:'1rem' }}>🔔 Alertes &amp; Autour de moi</span>
+              <button onClick={() => setShowNotifs(false)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'1.2rem' }}>✕</button>
+            </div>
+            {notifData ? (
+              <div>
+                <p style={{ fontSize:'0.85rem', color:'#0b1f3a', fontWeight:600, marginBottom:4 }}>📍 {notifData.place}</p>
+                <p style={{ fontSize:'0.82rem', color:'#555', marginBottom:'0.6rem' }}>🌡 {notifData.temp}°C — {notifData.desc}</p>
+                <div style={{ borderTop:'1px solid #eee', paddingTop:'0.6rem' }}>
+                  <p style={{ fontSize:'0.78rem', color:'#888', marginBottom:4 }}>À explorer à proximité :</p>
+                  {['Restaurants locaux', 'Attractions du quartier', 'Transports proches', 'Cafés & snacks'].map(tip => (
+                    <div key={tip} style={{ fontSize:'0.82rem', padding:'0.3rem 0', borderBottom:'1px solid #f5f5f5', color:'#333' }}>• {tip}</div>
+                  ))}
+                </div>
+              </div>
+            ) : notifPos === 'loading' ? (
+              <p style={{ fontSize:'0.82rem', color:'#888' }}>Localisation en cours…</p>
+            ) : notifPos === 'denied' ? (
+              <p style={{ fontSize:'0.82rem', color:'#e53935' }}>Géolocalisation refusée. Active-la dans les réglages du navigateur.</p>
+            ) : (
+              <button onClick={() => loadNotifData(setNotifPos, setNotifData)} style={{ background:'#0b1f3a', color:'#fff', border:'none', borderRadius:8, padding:'0.5rem 1rem', cursor:'pointer', width:'100%' }}>
+                Activer les alertes de localisation
+              </button>
+            )}
+          </div>
+        </div>
+      )}
       </div>
 
       <div className="home-surface">
