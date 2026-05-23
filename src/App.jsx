@@ -32,11 +32,150 @@ const days = [
 ]
 
 const instagramBuzz = [
-  { city: 'Osaka', area: 'Dotonbori / Namba', top: ['Takoyaki Dotonbori Kukuru', 'Creo-ru Takoyaki', 'Kani Doraku', 'Rikuro Ojisan', 'Kuromon Ichiba'], note: 'Néons, street food, foule très forte le soir.' },
-  { city: 'Kyoto', area: 'Nishiki / Gion / Higashiyama', top: ['Nishiki Market', 'KUMONOCHA Gion', 'Ninenzaka sweets', 'Arashiyama cafés'], note: 'Ultra photogénique entre 11h et 16h.' },
-  { city: 'Tokyo', area: 'Harajuku / Shibuya / Asakusa', top: ['Takeshita Street', 'Totti Candy Factory', 'Flipper’s', 'Asakusa Kagetsudo', 'Tsukiji'], note: 'Très viral, desserts, crossing et marchés.' },
-  { city: 'Séoul', area: 'Myeongdong / Hongdae / Gwangjang', top: ['Myeongdong Street Food', 'Myeongdong Kyoja', 'Gwangjang Market', 'Jayeondo Salt Bread', 'Seongsu cafés'], note: 'Street food, K-pop, cafés tendance.' },
-  { city: 'Busan', area: 'Haeundae / Gwangalli / Nampo', top: ['Haeundae Market', 'The Bay 101', 'Jagalchi', 'BIFF Square', 'Cheongsapo cafes'], note: 'Vue mer, skyline et cafés viraux.' },
+  {
+    dayId: 1, date: '11 juil.', city: 'Osaka', title: 'Dotonbori & Namba',
+    spots: [
+      { name: 'Dotonbori Bridge', tag: 'dotonbori', url: 'https://www.instagram.com/explore/tags/dotonbori/' },
+      { name: 'Glico Running Man', tag: 'glicoman', url: 'https://www.instagram.com/explore/tags/glicoman/' },
+      { name: 'Tombori Riverwalk', tag: 'tomboririverwalk', url: 'https://www.instagram.com/explore/tags/tomboririverwalk/' },
+    ],
+    restaurants: [
+      { name: 'Kukuru Takoyaki', handle: 'kukurutakoyaki_official', tag: 'kukurutakoyaki', url: 'https://www.instagram.com/explore/tags/kukurutakoyaki/' },
+      { name: 'Rikuro Ojisan', handle: 'rikuro_ojisan_namba', tag: 'rikuroojisan', url: 'https://www.instagram.com/explore/tags/rikuroojisan/' },
+      { name: 'Creo-ru Takoyaki', tag: 'creoru', url: 'https://www.instagram.com/explore/tags/creoru/' },
+    ]
+  },
+  {
+    dayId: 2, date: '12 juil.', city: 'Osaka', title: 'Osaka Castle & Shinsekai',
+    spots: [
+      { name: 'Osaka Castle', tag: 'osakacastle', url: 'https://www.instagram.com/explore/tags/osakacastle/' },
+      { name: 'Tsutenkaku Tower', handle: 'tsutenkaku_official', tag: 'tsutenkaku', url: 'https://www.instagram.com/tsutenkaku_official/' },
+      { name: 'Namba Yasaka Shrine', tag: 'nambayasaka', url: 'https://www.instagram.com/explore/tags/nambayasaka/' },
+    ],
+    restaurants: [
+      { name: 'Daruma Kushikatsu', tag: 'darumakushikatsu', url: 'https://www.instagram.com/explore/tags/darumakushikatsu/' },
+      { name: 'Shinsekai Food', tag: 'shinsekai', url: 'https://www.instagram.com/explore/tags/shinsekai/' },
+    ]
+  },
+  {
+    dayId: 3, date: '13 juil.', city: 'Osaka', title: 'Universal Studios Japan',
+    spots: [
+      { name: 'Super Nintendo World', handle: 'usjofficialinstagram', tag: 'supernintendoworld', url: 'https://www.instagram.com/usjofficialinstagram/' },
+      { name: 'Hogwarts Castle USJ', handle: 'usjofficialinstagram', tag: 'harrypotterworldjapan', url: 'https://www.instagram.com/explore/tags/harrypotterworldjapan/' },
+      { name: 'Jurassic Park USJ', handle: 'usjofficialinstagram', tag: 'usjjurassicpark', url: 'https://www.instagram.com/explore/tags/usj/' },
+    ],
+    restaurants: [
+      { name: 'Butterbeer', handle: 'usjofficialinstagram', tag: 'butterbeerusj', url: 'https://www.instagram.com/explore/tags/butterbeerusj/' },
+      { name: 'Three Broomsticks', tag: 'usjfood', url: 'https://www.instagram.com/explore/tags/usjfood/' },
+    ]
+  },
+  {
+    dayId: 4, date: '14 juil.', city: 'Nara / Kyoto', title: 'Daims de Nara & Gion',
+    spots: [
+      { name: 'Nara Deer Park', tag: 'naradeer', url: 'https://www.instagram.com/explore/tags/naradeer/' },
+      { name: 'Kasuga Taisha', tag: 'kasugataisha', url: 'https://www.instagram.com/explore/tags/kasugataisha/' },
+      { name: 'Gion at Night', tag: 'gionkyoto', url: 'https://www.instagram.com/explore/tags/gionkyoto/' },
+    ],
+    restaurants: [
+      { name: 'Nakatanidou Mochi', tag: 'nakatanidou', url: 'https://www.instagram.com/explore/tags/nakatanidou/' },
+      { name: 'Gyoza ChaoChao', tag: 'chaochaogyoza', url: 'https://www.instagram.com/explore/tags/chaochao/' },
+    ]
+  },
+  {
+    dayId: 5, date: '15 juil.', city: 'Kyoto', title: 'Kiyomizu & Higashiyama',
+    spots: [
+      { name: 'Kiyomizu-dera', tag: 'kiyomizudera', url: 'https://www.instagram.com/explore/tags/kiyomizudera/' },
+      { name: 'Sannenzaka', tag: 'sannenzaka', url: 'https://www.instagram.com/explore/tags/sannenzaka/' },
+      { name: 'Gion Shirakawa', tag: 'gionshirakawa', url: 'https://www.instagram.com/explore/tags/gionshirakawa/' },
+    ],
+    restaurants: [
+      { name: 'Nishiki Market', tag: 'nishikimarket', url: 'https://www.instagram.com/explore/tags/nishikimarket/' },
+      { name: 'Ramen Kyoto', tag: 'ramenyakyoto', url: 'https://www.instagram.com/explore/tags/ramenyakyoto/' },
+    ]
+  },
+  {
+    dayId: 6, date: '16 juil.', city: 'Kyoto', title: 'Fushimi Inari & Arashiyama',
+    spots: [
+      { name: 'Fushimi Inari Torii', tag: 'fushimiinari', url: 'https://www.instagram.com/explore/tags/fushimiinari/' },
+      { name: 'Arashiyama Bamboo', tag: 'arashiyamabamboo', url: 'https://www.instagram.com/explore/tags/arashiyamabamboo/' },
+      { name: 'Togetsukyo Bridge', tag: 'togetsukyobridge', url: 'https://www.instagram.com/explore/tags/togetsukyobridge/' },
+    ],
+    restaurants: [
+      { name: '% Arabica Kyoto', handle: 'arabicakyoto', tag: 'arabicakyoto', url: 'https://www.instagram.com/arabicakyoto/' },
+      { name: 'Pontocho Alley', tag: 'pontocho', url: 'https://www.instagram.com/explore/tags/pontocho/' },
+    ]
+  },
+  {
+    dayId: 7, date: '17 juil.', city: 'Kyoto → Séoul', title: 'Gion Matsuri & Myeongdong',
+    spots: [
+      { name: 'Gion Matsuri Festival', tag: 'gionmatsuri', url: 'https://www.instagram.com/explore/tags/gionmatsuri/' },
+      { name: 'Shijo Kawaramachi', tag: 'shijokawaramachi', url: 'https://www.instagram.com/explore/tags/shijokawaramachi/' },
+      { name: 'Myeongdong Night', tag: 'myeongdong', url: 'https://www.instagram.com/explore/tags/myeongdong/' },
+    ],
+    restaurants: [
+      { name: 'Myeongdong Street Food', tag: 'myeongdongstreetfood', url: 'https://www.instagram.com/explore/tags/myeongdongstreetfood/' },
+    ]
+  },
+  {
+    dayId: 8, date: '18 juil.', city: 'Séoul', title: 'Gyeongbokgung & Bukchon',
+    spots: [
+      { name: 'Gyeongbokgung Palace', tag: 'gyeongbokgung', url: 'https://www.instagram.com/explore/tags/gyeongbokgung/' },
+      { name: 'Bukchon Hanok Village', tag: 'bukchonhanokvillage', url: 'https://www.instagram.com/explore/tags/bukchonhanokvillage/' },
+      { name: 'Insadong Street', tag: 'insadong', url: 'https://www.instagram.com/explore/tags/insadong/' },
+    ],
+    restaurants: [
+      { name: 'Myeongdong Kyoja', tag: 'myeongdongkyoja', url: 'https://www.instagram.com/explore/tags/myeongdongkyoja/' },
+      { name: 'Insadong Food', tag: 'insadongfood', url: 'https://www.instagram.com/explore/tags/insadongfood/' },
+    ]
+  },
+  {
+    dayId: 9, date: '19 juil.', city: 'Séoul', title: 'N Seoul Tower & Hongdae',
+    spots: [
+      { name: 'N Seoul Tower', handle: 'nseoultower', tag: 'nseoultower', url: 'https://www.instagram.com/nseoultower/' },
+      { name: 'Namsan Park View', tag: 'namsanpark', url: 'https://www.instagram.com/explore/tags/namsanpark/' },
+      { name: 'Hongdae Street Art', tag: 'hongdaeseoul', url: 'https://www.instagram.com/explore/tags/hongdaeseoul/' },
+    ],
+    restaurants: [
+      { name: 'Wangbijib BBQ', tag: 'wangbijib', url: 'https://www.instagram.com/explore/tags/wangbijib/' },
+      { name: 'Seongsu Cafés', tag: 'seongsuseoul', url: 'https://www.instagram.com/explore/tags/seongsuseoul/' },
+    ]
+  },
+  {
+    dayId: 10, date: '20 juil.', city: 'Busan', title: 'Haeundae & The Bay 101',
+    spots: [
+      { name: 'Haeundae Beach', tag: 'haeundaebeach', url: 'https://www.instagram.com/explore/tags/haeundaebeach/' },
+      { name: 'The Bay 101', handle: 'thebay101', tag: 'thebay101', url: 'https://www.instagram.com/thebay101/' },
+      { name: 'Dongbaekseom Island', tag: 'dongbaekseom', url: 'https://www.instagram.com/explore/tags/dongbaekseom/' },
+    ],
+    restaurants: [
+      { name: 'Haeundae Market', tag: 'haeundaemarket', url: 'https://www.instagram.com/explore/tags/haeundaemarket/' },
+      { name: 'The Bay 101 Bar', handle: 'thebay101', tag: 'thebay101food', url: 'https://www.instagram.com/thebay101/' },
+    ]
+  },
+  {
+    dayId: 11, date: '21 juil.', city: 'Busan', title: 'Gamcheon & Gwangalli',
+    spots: [
+      { name: 'Gamcheon Village', tag: 'gamcheon', url: 'https://www.instagram.com/explore/tags/gamcheon/' },
+      { name: 'Gwangalli Bridge Night', tag: 'gwangallibridge', url: 'https://www.instagram.com/explore/tags/gwangallibridge/' },
+      { name: 'Haedong Yonggungsa', tag: 'haedong', url: 'https://www.instagram.com/explore/tags/haedong/' },
+    ],
+    restaurants: [
+      { name: 'Jagalchi Market', tag: 'jagalchi', url: 'https://www.instagram.com/explore/tags/jagalchi/' },
+      { name: 'BIFF Square', tag: 'biffsquare', url: 'https://www.instagram.com/explore/tags/biffsquare/' },
+    ]
+  },
+  {
+    dayId: 12, date: '22 juil.', city: 'Tokyo', title: 'Shinjuku & Kabukicho',
+    spots: [
+      { name: 'Kabukicho Neon', tag: 'kabukicho', url: 'https://www.instagram.com/explore/tags/kabukicho/' },
+      { name: 'Shinjuku by Night', tag: 'shinjukubynight', url: 'https://www.instagram.com/explore/tags/shinjukubynight/' },
+      { name: 'Golden Gai Bars', tag: 'goldengai', url: 'https://www.instagram.com/explore/tags/goldengai/' },
+    ],
+    restaurants: [
+      { name: 'Ichiran Ramen', handle: 'ichiran_global', tag: 'ichiranramen', url: 'https://www.instagram.com/ichiran_global/' },
+      { name: 'Omoide Yokocho', tag: 'omoide', url: 'https://www.instagram.com/explore/tags/omoide/' },
+    ]
+  },
 ]
 
 const quickLinks = [
@@ -665,22 +804,71 @@ function VoiceBlock() {
 }
 
 function BuzzBlock() {
+  const [activeDay, setActiveDay] = useState(instagramBuzz[0].dayId)
+  const item = instagramBuzz.find(d => d.dayId === activeDay) || instagramBuzz[0]
+  const open = (url) => window.open(url, '_blank', 'noopener,noreferrer')
+
   return (
     <div className="panel card-panel">
-      <SectionTitle title="Instagram Buzz" />
-      <p className="soft">Section totalement séparée du planning : seulement les lieux qui buzzent le plus sur Instagram.</p>
-      <div className="buzz-stack">
-        {instagramBuzz.map((item) => (
-          <div className="buzz-card" key={item.city + item.area}>
-            <div className="buzz-head"><Camera size={17} /> <strong>{item.city} · {item.area}</strong></div>
-            <p>{item.note}</p>
-            <div className="tag-wrap">
-              {item.top.map((place) => (
-                <span key={place} className="buzz-actions">
-                  <button className="tag" onClick={() => openMaps(place)}>{place}</button>
-                  <button className="tag instagram-tag" onClick={() => window.open(`https://www.instagram.com/explore/search/keyword/?q=${encodeURIComponent(place)}`, '_blank', 'noopener,noreferrer')}>Instagram</button>
-                </span>
-              ))}
+      <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:'0.5rem' }}>
+        <Camera size={18} style={{ color:'#e1306c' }} />
+        <span style={{ fontWeight:700, fontSize:'1rem' }}>Instagram · Spots &amp; Restos par jour</span>
+      </div>
+      <p className="soft" style={{ marginBottom:'0.8rem' }}>Sélectionne un jour pour voir les comptes et hashtags les plus viraux du voyage.</p>
+
+      {/* Sélecteur de jour */}
+      <div style={{ display:'flex', gap:6, overflowX:'auto', paddingBottom:6, marginBottom:'1rem' }}>
+        {instagramBuzz.map(d => (
+          <button key={d.dayId} onClick={() => setActiveDay(d.dayId)}
+            style={{ flexShrink:0, padding:'4px 10px', borderRadius:20, fontSize:'0.75rem', fontWeight:600, cursor:'pointer',
+              background: activeDay===d.dayId ? '#e1306c' : '#f0f0f0',
+              color: activeDay===d.dayId ? '#fff' : '#444',
+              border: 'none' }}>
+            {d.date}
+          </button>
+        ))}
+      </div>
+
+      {/* Détail du jour */}
+      <div style={{ background:'#fff9fb', border:'1px solid #f0d0da', borderRadius:12, padding:'0.8rem 1rem' }}>
+        <p style={{ fontWeight:700, marginBottom:6, color:'#0b1f3a' }}>📍 {item.city} — {item.title}</p>
+
+        {/* Spots photo */}
+        <p style={{ fontSize:'0.78rem', color:'#e1306c', fontWeight:700, marginBottom:4, textTransform:'uppercase', letterSpacing:1 }}>📸 Spots photo</p>
+        {item.spots.map(s => (
+          <div key={s.name} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'5px 0', borderBottom:'1px solid #f5e8ed' }}>
+            <span style={{ fontSize:'0.85rem', color:'#333' }}>{s.name}</span>
+            <div style={{ display:'flex', gap:6 }}>
+              <button onClick={() => open(s.url)}
+                style={{ background:'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', color:'#fff', border:'none', borderRadius:8, padding:'3px 10px', fontSize:'0.72rem', cursor:'pointer', fontWeight:600 }}>
+                #{s.tag}
+              </button>
+              {s.handle && (
+                <button onClick={() => open(`https://www.instagram.com/${s.handle}/`)}
+                  style={{ background:'#e1306c', color:'#fff', border:'none', borderRadius:8, padding:'3px 10px', fontSize:'0.72rem', cursor:'pointer', fontWeight:600 }}>
+                  @{s.handle}
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+
+        {/* Restaurants */}
+        <p style={{ fontSize:'0.78rem', color:'#e1306c', fontWeight:700, margin:'10px 0 4px', textTransform:'uppercase', letterSpacing:1 }}>🍜 Restaurants</p>
+        {item.restaurants.map(r => (
+          <div key={r.name} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'5px 0', borderBottom:'1px solid #f5e8ed' }}>
+            <span style={{ fontSize:'0.85rem', color:'#333' }}>{r.name}</span>
+            <div style={{ display:'flex', gap:6 }}>
+              <button onClick={() => open(r.url)}
+                style={{ background:'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', color:'#fff', border:'none', borderRadius:8, padding:'3px 10px', fontSize:'0.72rem', cursor:'pointer', fontWeight:600 }}>
+                #{r.tag}
+              </button>
+              {r.handle && (
+                <button onClick={() => open(`https://www.instagram.com/${r.handle}/`)}
+                  style={{ background:'#e1306c', color:'#fff', border:'none', borderRadius:8, padding:'3px 10px', fontSize:'0.72rem', cursor:'pointer', fontWeight:600 }}>
+                  @{r.handle}
+                </button>
+              )}
             </div>
           </div>
         ))}
@@ -702,11 +890,7 @@ function FullWordGuide() {
       </select>
       <div className="word-detail">
         <h4>{section.title}</h4>
-        {section.images?.length > 0 && (
-          <div className="word-gallery">
-            {section.images.map((src, idx) => <img key={`${src}-${idx}`} src={src} alt={`Photo ${idx + 1} ${section.title}`} loading="lazy" />)}
-          </div>
-        )}
+
         <div className="word-text">
           {section.paragraphs.map((p, idx) => {
             const isTitle = /^([📍>]*\s*)?(jour|JOUR|📅|✈️|🚄|🏯|Tokyo|Le |le |\d{1,2}\s+juillet|Programme)/.test(p)
