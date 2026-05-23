@@ -3,14 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#06111f" />
+    <meta name="theme-color" content="#0b1f3a" />
     <meta name="description" content="Guide voyage mobile Japon & Corée avec GPS, budget, favoris, notes et assistant IA." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Lacidi Travel" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
-    <title>Travel Companion Japon & Corée</title>
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>Famille Lacidi — Japon &amp; Corée</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => null);
+        });
+      }
+    </script>
   </body>
 </html>
