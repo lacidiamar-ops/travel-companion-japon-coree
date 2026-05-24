@@ -179,13 +179,17 @@ const instagramBuzz = [
 ]
 
 const quickLinks = [
-  { key: 'days',    label: 'Jours',    icon: CalendarDays,   color: 'violet' },
-  { key: 'map',     label: 'Carte',    icon: Map,            color: 'blue'   },
-  { key: 'explorer',label: 'Explorer', icon: Camera,         color: 'orange' },
-  { key: 'carnet',  label: 'Carnet',   icon: BookOpen,       color: 'amber'  },
-  { key: 'ai',      label: 'ChatGPT',  icon: Sparkles,       color: 'green'  },
-  { key: 'budget',  label: 'Budget',   icon: Wallet,         color: 'pink'   },
-  { key: 'tools',   label: 'Outils',   icon: Briefcase,      color: 'teal'   },
+  { key: 'days',     label: 'Jours',    icon: CalendarDays, color: 'violet' },
+  { key: 'explorer', label: 'Explorer', icon: Camera,       color: 'orange' },
+  { key: 'budget',   label: 'Budget',   icon: Wallet,       color: 'pink'   },
+  { key: 'carnet',   label: 'Carnet',   icon: BookOpen,     color: 'amber'  },
+  { key: 'tools',    label: 'Outils',   icon: Briefcase,    color: 'teal'   },
+]
+// Onglets secondaires accessibles via le menu hamburger uniquement
+const secondaryLinks = [
+  { key: 'map', label: 'Carte', icon: Map, color: 'blue' },
+  { key: 'ai',  label: 'ChatGPT', icon: Sparkles, color: 'green' },
+  { key: 'converter', label: 'Convertisseur', icon: Calculator, color: 'indigo' },
 ]
 
 const usefulInfo = [
@@ -1184,6 +1188,144 @@ function ToolsPage() {
 }
 
 
+function ConverterPage() {
+  const CURRENCIES = [
+    { code:'EUR', label:'Euro', symbol:'€', flag:'🇪🇺' },
+    { code:'JPY', label:'Yen japonais', symbol:'¥', flag:'🇯🇵' },
+    { code:'KRW', label:'Won coréen', symbol:'₩', flag:'🇰🇷' },
+    { code:'USD', label:'Dollar US', symbol:'$', flag:'🇺🇸' },
+  ]
+  const DEFAULT_RATES = { EUR:1, JPY:162.5, KRW:1480, USD:1.08 }
+  const [rates, setRates]   = useLocalStorage('conv_rates', DEFAULT_RATES)
+  const [from, setFrom]     = useState('EUR')
+  const [to, setTo]         = useState('JPY')
+  const [amount, setAmount] = useState('')
+  const [showRates, setShowRates] = useState(false)
+
+  const convert = (val, f, t) => {
+    const n = parseFloat(val)
+    if (isNaN(n)) return ''
+    const inEur = n / (rates[f] || 1)
+    return (inEur * (rates[t] || 1)).toFixed(t === 'JPY' || t === 'KRW' ? 0 : 2)
+  }
+
+  const result = convert(amount, from, to)
+  const fromCur = CURRENCIES.find(c => c.code === from)
+  const toCur   = CURRENCIES.find(c => c.code === to)
+
+  const QUICK_AMOUNTS = [100, 500, 1000, 5000, 10000, 50000]
+
+  return (
+    <motion.div key="conv" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
+
+      {/* Header */}
+      <div style={{ background:'linear-gradient(135deg,#0b1f3a,#1a3a6b)', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
+        <div style={{ fontWeight:800, fontSize:'1.1rem' }}>💱 Convertisseur</div>
+        <div style={{ fontSize:'0.8rem', opacity:0.75, marginTop:2 }}>Yen · Won · Euro · Dollar — mis à jour manuellement</div>
+      </div>
+
+      {/* Convertisseur principal */}
+      <div style={{ background:'#fff', borderRadius:16, padding:'1.2rem', border:'1px solid #e0e0e0' }}>
+
+        {/* De */}
+        <label style={{ display:'block', fontSize:'0.8rem', color:'#888', marginBottom:4 }}>De</label>
+        <div style={{ display:'flex', gap:8, marginBottom:12 }}>
+          <select value={from} onChange={e => setFrom(e.target.value)}
+            style={{ flex:1, padding:'10px', borderRadius:10, border:'1px solid #ddd', fontSize:'0.95rem', background:'#f9f9f9' }}>
+            {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.label} ({c.symbol})</option>)}
+          </select>
+          <input type="number" value={amount} onChange={e => setAmount(e.target.value)}
+            placeholder="0" style={{ flex:1, padding:'10px', borderRadius:10, border:'2px solid #0b1f3a', fontSize:'1.1rem', fontWeight:700, textAlign:'right' }} />
+        </div>
+
+        {/* Flèche swap */}
+        <div style={{ textAlign:'center', margin:'4px 0' }}>
+          <button onClick={() => { setFrom(to); setTo(from) }}
+            style={{ background:'#f0f0f0', border:'none', borderRadius:20, padding:'6px 16px', cursor:'pointer', fontSize:'1rem' }}>
+            ⇅ Inverser
+          </button>
+        </div>
+
+        {/* Vers */}
+        <label style={{ display:'block', fontSize:'0.8rem', color:'#888', margin:'8px 0 4px' }}>Vers</label>
+        <div style={{ display:'flex', gap:8 }}>
+          <select value={to} onChange={e => setTo(e.target.value)}
+            style={{ flex:1, padding:'10px', borderRadius:10, border:'1px solid #ddd', fontSize:'0.95rem', background:'#f9f9f9' }}>
+            {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.label} ({c.symbol})</option>)}
+          </select>
+          <div style={{ flex:1, padding:'10px', borderRadius:10, background: result ? '#e8f5e9' : '#f5f5f5',
+            border:`2px solid ${result ? '#27ae60' : '#ddd'}`, fontSize:'1.3rem', fontWeight:800,
+            textAlign:'right', color:'#27ae60', display:'flex', alignItems:'center', justifyContent:'flex-end' }}>
+            {result ? `${toCur?.symbol}${Number(result).toLocaleString('fr-FR')}` : '—'}
+          </div>
+        </div>
+
+        {/* Taux affiché */}
+        {amount && result && (
+          <div style={{ textAlign:'center', marginTop:10, fontSize:'0.8rem', color:'#888' }}>
+            1 {fromCur?.symbol} = {convert(1, from, to)} {toCur?.symbol}
+          </div>
+        )}
+      </div>
+
+      {/* Montants rapides */}
+      <div style={{ background:'#fff', borderRadius:16, padding:'1rem', border:'1px solid #e0e0e0' }}>
+        <div style={{ fontSize:'0.85rem', fontWeight:700, color:'#0b1f3a', marginBottom:8 }}>
+          Montants rapides — {fromCur?.flag} {fromCur?.symbol} → {toCur?.flag} {toCur?.symbol}
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:6 }}>
+          {QUICK_AMOUNTS.map(n => (
+            <button key={n} onClick={() => setAmount(String(n))}
+              style={{ padding:'8px 4px', borderRadius:10, border:'1px solid #e0e0e0', background:'#f9f9f9',
+                cursor:'pointer', fontSize:'0.8rem', textAlign:'center' }}>
+              <div style={{ fontWeight:700, color:'#0b1f3a' }}>{fromCur?.symbol}{n.toLocaleString()}</div>
+              <div style={{ color:'#27ae60', fontSize:'0.78rem' }}>
+                {toCur?.symbol}{Number(convert(n, from, to)).toLocaleString('fr-FR')}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Tableau toutes devises */}
+      <div style={{ background:'#fff', borderRadius:16, padding:'1rem', border:'1px solid #e0e0e0' }}>
+        <div style={{ fontSize:'0.85rem', fontWeight:700, color:'#0b1f3a', marginBottom:8 }}>
+          {amount ? `${fromCur?.symbol}${Number(amount).toLocaleString()} =` : 'Équivalences (pour 1 unité)'}
+        </div>
+        {CURRENCIES.filter(c => c.code !== from).map(c => (
+          <div key={c.code} style={{ display:'flex', justifyContent:'space-between', padding:'7px 0', borderBottom:'1px solid #f0f0f0' }}>
+            <span style={{ fontSize:'0.9rem' }}>{c.flag} {c.label}</span>
+            <span style={{ fontWeight:700, color:'#0b1f3a', fontSize:'0.95rem' }}>
+              {c.symbol}{Number(convert(amount || 1, from, c.code)).toLocaleString('fr-FR')}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Taux modifiables */}
+      <div style={{ background:'#fff', borderRadius:16, padding:'1rem', border:'1px solid #e0e0e0' }}>
+        <button onClick={() => setShowRates(v => !v)}
+          style={{ background:'none', border:'none', cursor:'pointer', fontWeight:700, fontSize:'0.85rem', color:'#0b1f3a' }}>
+          ⚙️ {showRates ? 'Masquer' : 'Mettre à jour les taux de change'}
+        </button>
+        {showRates && (
+          <div style={{ marginTop:10, display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
+            {CURRENCIES.filter(c => c.code !== 'EUR').map(c => (
+              <label key={c.code} style={{ fontSize:'0.82rem' }}>
+                {c.flag} 1 EUR = … {c.symbol}
+                <input type="number" step="0.01" value={rates[c.code]}
+                  onChange={e => setRates(prev => ({ ...prev, [c.code]: parseFloat(e.target.value)||0 }))}
+                  style={{ display:'block', width:'100%', padding:'6px', borderRadius:8, border:'1px solid #ddd', marginTop:2 }} />
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+
+    </motion.div>
+  )
+}
+
 function loadNotifData(setNotifPos, setNotifData) {
   if (!navigator.geolocation) { setNotifPos('denied'); return }
   setNotifPos('loading')
@@ -1221,14 +1363,15 @@ function AppShell() {
   const nextDay = useMemo(() => days[4], [])
 
   const page = {
-    days:    <HomePage nextDay={nextDay} spent={spent} total={total} onGo={setTab} />,
-    map:     <MapPage />,
-    food:    <FoodPage />,
-    explorer:<ExplorerPage />,
-    carnet:  <CarnetPage />,
-    ai:      <ChatGPTPage />,
-    budget:  <BudgetPage />,
-    tools:   <ToolsPage />,
+    days:      <HomePage nextDay={nextDay} spent={spent} total={total} onGo={setTab} />,
+    map:       <MapPage />,
+    food:      <FoodPage />,
+    explorer:  <ExplorerPage />,
+    carnet:    <CarnetPage />,
+    ai:        <ChatGPTPage />,
+    budget:    <BudgetPage />,
+    tools:     <ToolsPage />,
+    converter: <ConverterPage />,
   }[tab]
 
   return (
@@ -1251,7 +1394,7 @@ function AppShell() {
               <span style={{ fontSize:'1.2rem', fontWeight:700 }}>Lacidi Travel</span>
               <button onClick={() => setShowMenu(false)} style={{ background:'none', border:'none', color:'#fff', fontSize:'1.4rem', cursor:'pointer' }}>✕</button>
             </div>
-            {quickLinks.map(item => {
+            {[...quickLinks, ...secondaryLinks].map(item => {
               const Icon = item.icon
               return (
                 <button key={item.key} onClick={() => { setTab(item.key); setShowMenu(false) }}
