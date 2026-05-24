@@ -889,51 +889,89 @@ const TYPES_FOOD = [...new Set(RESTAURANTS_DB.map(r => r.type))]
 const CITIES_FOOD = [...new Set(RESTAURANTS_DB.map(r => r.city))]
 
 const SPOTS_DB = [
-  // ── Osaka ──
-  { city:'Osaka', name:'Dotonbori Bridge', desc:'Néons, Glico Man, rivière — meilleur la nuit', heure:'21h-23h', tag:'dotonbori', ig:'https://www.instagram.com/explore/tags/dotonbori/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234560-Reviews-Dotonbori-Osaka.html' },
-  { city:'Osaka', name:'Glico Running Man', desc:`L'icône la plus photographiée du Japon`, heure:'20h-23h', tag:'glicoman', ig:'https://www.instagram.com/explore/tags/glicoman/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234561-Reviews-Glico_Sign-Osaka.html' },
-  { city:'Osaka', name:'Tsutenkaku Tower', desc:'Rétro, panorama 360° sur Shinsekai', heure:'10h-16h', tag:'tsutenkaku', ig:'https://www.instagram.com/tsutenkaku_official/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234562-Reviews-Tsutenkaku-Osaka.html' },
-  { city:'Osaka', name:'Osaka Castle au lever', desc:'Lumière dorée sur le château', heure:'6h-9h', tag:'osakacastle', ig:'https://www.instagram.com/explore/tags/osakacastle/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234563-Reviews-Osaka_Castle-Osaka.html' },
-  // ── Kyoto ──
-  { city:'Kyoto', name:'Fushimi Inari Torii', desc:'Tunnel de 10 000 torii rouges', heure:'5h-8h', tag:'fushimiinari', ig:'https://www.instagram.com/explore/tags/fushimiinari/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234564-Reviews-Fushimi_Inari-Kyoto.html' },
-  { city:'Kyoto', name:'Arashiyama Bambouseraie', desc:'Forêt de bambous géants, lumière filtrée', heure:'7h-9h', tag:'arashiyamabamboo', ig:'https://www.instagram.com/explore/tags/arashiyamabamboo/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234565-Reviews-Arashiyama_Bamboo-Kyoto.html' },
-  { city:'Kyoto', name:`Kinkaku-ji (Pavillon d'Or)`, desc:`Reflet parfait sur l'étang`, heure:'9h-11h', tag:'kinkakuji', ig:'https://www.instagram.com/explore/tags/kinkakuji/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234566-Reviews-Kinkakuji-Kyoto.html' },
-  { city:'Kyoto', name:'Gion Shirakawa', desc:'Quartier geisha, lanternes et canal', heure:'18h-21h', tag:'gionshirakawa', ig:'https://www.instagram.com/explore/tags/gionshirakawa/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d2345670-Reviews-Gion-Kyoto.html' },
-  { city:'Kyoto', name:'Sannenzaka Ninenzaka', desc:'Ruelle pavée typique Meiji', heure:'8h-10h', tag:'sannenzaka', ig:'https://www.instagram.com/explore/tags/sannenzaka/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d3456780-Reviews-Sannenzaka-Kyoto.html' },
-  // ── Nara ──
-  { city:'Nara', name:'Daims de Nara Park', desc:'Cerfs en liberté dans le parc national', heure:'7h-10h', tag:'naradeer', ig:'https://www.instagram.com/explore/tags/naradeer/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298198-d1234567-Reviews-Nara_Park-Nara.html' },
-  { city:'Nara', name:'Tōdai-ji', desc:'Plus grand bâtiment en bois du monde', heure:'8h-12h', tag:'todaiji', ig:'https://www.instagram.com/explore/tags/todaiji/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298198-d1234568-Reviews-Todaiji-Nara.html' },
-  // ── Séoul ──
-  { city:'Séoul', name:'Gyeongbokgung Palace', desc:'Palais royal, garde royale à 10h et 14h', heure:'9h-11h', tag:'gyeongbokgung', ig:'https://www.instagram.com/explore/tags/gyeongbokgung/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234569-Reviews-Gyeongbokgung-Seoul.html' },
-  { city:'Séoul', name:'Bukchon Hanok Village', desc:'Maisons coréennes traditionnelles', heure:'8h-10h', tag:'bukchonhanokvillage', ig:'https://www.instagram.com/explore/tags/bukchonhanokvillage/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d2345671-Reviews-Bukchon-Seoul.html' },
-  { city:'Séoul', name:'N Seoul Tower', desc:'Vue 360° sur la ville illuminée', heure:'19h-22h', tag:'nseoultower', ig:'https://www.instagram.com/nseoultower/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d320895-Reviews-N_Seoul_Tower-Seoul.html' },
-  { city:'Séoul', name:'Hongdae Street Art', desc:'Street art, musiques live, jeunesse', heure:'18h-23h', tag:'hongdaeseoul', ig:'https://www.instagram.com/explore/tags/hongdaeseoul/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456783-Reviews-Hongdae-Seoul.html' },
-  // ── Busan ──
-  { city:'Busan', name:'Gamcheon Village', desc:'Village arc-en-ciel sur la colline', heure:'10h-14h', tag:'gamcheon', ig:'https://www.instagram.com/explore/tags/gamcheon/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d1234573-Reviews-Gamcheon-Busan.html' },
-  { city:'Busan', name:'Gwangalli Bridge by Night', desc:'Double pont illuminé face à la mer', heure:'20h-23h', tag:'gwangallibridge', ig:'https://www.instagram.com/explore/tags/gwangallibridge/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d2345683-Reviews-Gwangalli_Beach-Busan.html' },
-  { city:'Busan', name:'Haedong Yonggungsa Temple', desc:'Temple bouddhiste au bord de la mer', heure:'7h-9h', tag:'haedong', ig:'https://www.instagram.com/explore/tags/haedong/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d1234574-Reviews-Haedong-Busan.html' },
-  // ── Tokyo ──
-  { city:'Tokyo', name:'Shibuya Crossing', desc:'Le carrefour le plus fréquenté du monde', heure:'18h-20h', tag:'shibuyacrossing', ig:'https://www.instagram.com/explore/tags/shibuyacrossing/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066456-d1234575-Reviews-Shibuya_Crossing-Tokyo.html' },
-  { city:'Tokyo', name:'Senso-ji Asakusa', desc:'Pagode et lanterne géante rouge', heure:'6h-8h', tag:'sensoji', ig:'https://www.instagram.com/explore/tags/sensoji/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d320888-Reviews-Senso_ji-Tokyo.html' },
-  { city:'Tokyo', name:'Shinjuku Kabukicho', desc:'Néons, Golden Gai, énergie unique', heure:'21h-23h', tag:'kabukicho', ig:'https://www.instagram.com/explore/tags/kabukicho/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066456-d1234576-Reviews-Kabukicho-Tokyo.html' },
-  { city:'Tokyo', name:'Takeshita Street Harajuku', desc:'Mode, couleurs, culture pop jeune', heure:'11h-16h', tag:'takeshitastreet', ig:'https://www.instagram.com/explore/tags/takeshitastreet/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234577-Reviews-Takeshita_Street-Tokyo.html' },
-]
-const CITIES_SPOTS = [...new Set(SPOTS_DB.map(s => s.city))]
+  // ════ OSAKA ════
+  { cat:'📸 Instagram', city:'Osaka', name:'Dotonbori Nuit', desc:'Néons, Glico Man, reflets sur la rivière Dotonbori', heure:'20h-23h', tag:'dotonbori', ig:'https://www.instagram.com/explore/tags/dotonbori/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234560-Reviews-Dotonbori-Osaka.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Osaka', name:'Glico Running Man', desc:"L'icône la plus photographiée du Japon, fond de néons", heure:'20h-23h', tag:'glicoman', ig:'https://www.instagram.com/explore/tags/glicoman/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234561-Reviews-Glico_Sign-Osaka.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Osaka', name:'Tsutenkaku Tower', desc:'Tour rétro des années 50, quartier Shinsekai coloré', heure:'10h-16h', tag:'tsutenkaku', ig:'https://www.instagram.com/tsutenkaku_official/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234562-Reviews-Tsutenkaku-Osaka.html', prix:'¥900' },
+  { cat:'📸 Instagram', city:'Osaka', name:'Osaka Castle Golden Hour', desc:'Lumière dorée sur le château, fossé miroir', heure:'6h-9h', tag:'osakacastle', ig:'https://www.instagram.com/explore/tags/osakacastle/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234563-Reviews-Osaka_Castle-Osaka.html', prix:'¥600' },
+  { cat:'🎪 Insolite', city:'Osaka', name:'Cat Café Calico Osaka', desc:'50+ chats en liberté, ambiance cosy et relaxante', heure:'11h-20h', tag:'catcafeosaka', ig:'https://www.instagram.com/explore/tags/catcafeosaka/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234580-Reviews-Calico_Cat_Cafe-Osaka.html', prix:'¥200/10min' },
+  { cat:'🎪 Insolite', city:'Osaka', name:'teamLab Borderless Osaka', desc:'Art numérique immersif, forêt de lumières interactives', heure:'10h-19h', tag:'teamlab', ig:'https://www.instagram.com/explore/tags/teamlab/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d12345601-Reviews-teamLab-Osaka.html', prix:'¥3200' },
+  { cat:'🎪 Insolite', city:'Osaka', name:'Hep Five Ferris Wheel', desc:'Grande roue rouge au centre commercial, vue sur Umeda', heure:'11h-23h', tag:'hepfive', ig:'https://www.instagram.com/explore/tags/hepfive/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234602-Reviews-Hep_Five-Osaka.html', prix:'¥600' },
+  { cat:'🏛️ Atypique', city:'Osaka', name:'Namba Yasaka Shrine', desc:'Temple avec tête de lion géante, architecture unique', heure:'8h-17h', tag:'nambayasaka', ig:'https://www.instagram.com/explore/tags/nambayasaka/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234603-Reviews-Yasaka-Osaka.html', prix:'Gratuit' },
+  { cat:'🏛️ Atypique', city:'Osaka', name:'Shinsekai Quarter', desc:'Quartier rétro des années 20, bistrots & nostalgie', heure:'11h-21h', tag:'shinsekai', ig:'https://www.instagram.com/explore/tags/shinsekai/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234604-Reviews-Shinsekai-Osaka.html', prix:'Gratuit' },
+  { cat:'🎵 Musical', city:'Osaka', name:'Namba Bears Live House', desc:'Salle de rock underground culte de Namba', heure:'19h-24h', tag:'nambabears', ig:'https://www.instagram.com/explore/tags/osakamusic/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234605-Reviews-Namba_Bears-Osaka.html', prix:'¥2000-3500' },
+  { cat:'🎵 Musical', city:'Osaka', name:'Amemura Triangle Park', desc:'Concerts de rue quotidiens, cœur de la jeunesse Osaka', heure:'14h-21h', tag:'americanmuraosaka', ig:'https://www.instagram.com/explore/tags/americanmura/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234606-Reviews-Amemura-Osaka.html', prix:'Gratuit' },
 
-const INSOLITE_DB = [
-  { emoji:'🦔', city:'Tokyo', name:'Hedgehog Café Harry', desc:'Caresser des hérissons miniatures', price:'¥1500/30min', ig:'https://www.instagram.com/explore/tags/hedgehogcafe/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234578-Reviews-Harry_Hedgehog-Tokyo.html' },
-  { emoji:'🦉', city:'Tokyo', name:'Owl Café Akiba Fukurou', desc:'Hiboux en liberté dans le café', price:'¥1800/1h', ig:'https://www.instagram.com/explore/tags/owlcafe/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234579-Reviews-Owl_Cafe-Tokyo.html' },
-  { emoji:'🐱', city:'Osaka', name:'Cat Café Calico Osaka', desc:'50+ chats, ambiance cosy', price:'¥200/10min', ig:'https://www.instagram.com/explore/tags/catcafeosaka/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234580-Reviews-Calico_Cat_Cafe-Osaka.html' },
-  { emoji:'♨️', city:'Tokyo', name:'Oedo Onsen Monogatari', desc:'Parc onsen thématique Edo, accès famille', price:'¥2980', ig:'https://www.instagram.com/explore/tags/oedoonsen/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234581-Reviews-Oedo_Onsen-Tokyo.html' },
-  { emoji:'🎎', city:'Kyoto', name:'Kimono Rental Yumeyakata', desc:'Louer un kimono et se promener à Gion', price:'¥3000-6000', ig:'https://www.instagram.com/explore/tags/kimonoryokan/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234582-Reviews-Yumeyakata-Kyoto.html' },
-  { emoji:'🍵', city:'Kyoto', name:'Cérémonie du thé En', desc:'Cérémonie authentique à Higashiyama', price:'¥3800', ig:'https://www.instagram.com/explore/tags/teaceremonykyoto/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d2345685-Reviews-Tea_Ceremony-Kyoto.html' },
-  { emoji:'🎮', city:'Tokyo', name:'Akihabara Retro Games', desc:'Arcades 3 étages, Taiko no Tatsujin', price:'¥500-2000', ig:'https://www.instagram.com/explore/tags/akihabara/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234583-Reviews-Akihabara-Tokyo.html' },
-  { emoji:'🌸', city:'Tokyo', name:'Shinjuku Gyoen Garden', desc:'Jardin national, cerisiers & azalées', price:'¥500', ig:'https://www.instagram.com/explore/tags/shinjukugyoen/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066456-d1234584-Reviews-Shinjuku_Gyoen-Tokyo.html' },
-  { emoji:'🐺', city:'Nara', name:'Nara Deer selfies', desc:`Les cerfs s'inclinent si tu t'inclines`, price:'Gratuit', ig:'https://www.instagram.com/explore/tags/naradeer/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298198-d1234585-Reviews-Nara_Park-Nara.html' },
-  { emoji:'🎡', city:'Séoul', name:'Lotte World Theme Park', desc:`Parc d'attraction indoor + outdoor géant`, price:'₩54000', ig:'https://www.instagram.com/explore/tags/lotteworld/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234586-Reviews-Lotte_World-Seoul.html' },
-  { emoji:'🌃', city:'Séoul', name:'Café avec vue N Tower', desc:'Cafés en hauteur sur Namsan', price:'₩8000 conso', ig:'https://www.instagram.com/explore/tags/namsancafe/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d2345686-Reviews-Namsan-Seoul.html' },
-  { emoji:'🎭', city:'Séoul', name:'Nanta Show', desc:'Comédie musicale culinaire sans paroles', price:'₩40000', ig:'https://www.instagram.com/explore/tags/nantashow/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234587-Reviews-Nanta_Show-Seoul.html' },
+  // ════ KYOTO ════
+  { cat:'📸 Instagram', city:'Kyoto', name:'Fushimi Inari Torii', desc:'Tunnel de 10 000 torii rouges, lever du soleil magique', heure:'5h-8h', tag:'fushimiinari', ig:'https://www.instagram.com/explore/tags/fushimiinari/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234564-Reviews-Fushimi_Inari-Kyoto.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Kyoto', name:'Arashiyama Bambouseraie', desc:'Forêt de bambous géants, lumière filtrée tôt le matin', heure:'7h-9h', tag:'arashiyamabamboo', ig:'https://www.instagram.com/explore/tags/arashiyamabamboo/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234565-Reviews-Arashiyama_Bamboo-Kyoto.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Kyoto', name:'Kinkaku-ji Pavillon Or', desc:'Reflet parfait du temple doré sur le lac Kyoko-chi', heure:'9h-11h', tag:'kinkakuji', ig:'https://www.instagram.com/explore/tags/kinkakuji/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234566-Reviews-Kinkakuji-Kyoto.html', prix:'¥500' },
+  { cat:'📸 Instagram', city:'Kyoto', name:'Gion Shirakawa at Dusk', desc:'Canal, lanternes, saules — photo parfaite au coucher du soleil', heure:'17h-20h', tag:'gionshirakawa', ig:'https://www.instagram.com/explore/tags/gionshirakawa/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d2345670-Reviews-Gion-Kyoto.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Kyoto', name:'Sannenzaka & Ninenzaka', desc:'Ruelles pavées Meiji, maisons de thé et kimono', heure:'8h-11h', tag:'sannenzaka', ig:'https://www.instagram.com/explore/tags/sannenzaka/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d3456780-Reviews-Sannenzaka-Kyoto.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Kyoto', name:'Philosopher Path Sakura', desc:'Chemin du philosophe longeant le canal, cerisiers en fleurs', heure:'7h-10h', tag:'philosopherspath', ig:'https://www.instagram.com/explore/tags/philosopherspath/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234610-Reviews-Philosophers_Path-Kyoto.html', prix:'Gratuit' },
+  { cat:'🎪 Insolite', city:'Kyoto', name:'Kimono Rental Yumeyakata', desc:'Louer un kimono traditionnel et se balader à Gion', heure:'9h-17h', tag:'kimonoryokan', ig:'https://www.instagram.com/explore/tags/kimonokyoto/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234582-Reviews-Yumeyakata-Kyoto.html', prix:'¥3000-6000' },
+  { cat:'🎪 Insolite', city:'Kyoto', name:'Ceremony du Thé Urasenke', desc:'Cérémonie authentique dans école de thé historique', heure:'9h-12h', tag:'teaceremonykyoto', ig:'https://www.instagram.com/explore/tags/teaceremonykyoto/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d2345685-Reviews-Tea_Ceremony-Kyoto.html', prix:'¥3800' },
+  { cat:'🎪 Insolite', city:'Kyoto', name:'Manga Museum Kyoto', desc:'20 000 volumes en libre accès, lecture sur pelouse', heure:'10h-18h', tag:'mangamuseum', ig:'https://www.instagram.com/explore/tags/kyotomangamuseum/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234611-Reviews-Manga_Museum-Kyoto.html', prix:'¥900' },
+  { cat:'🏛️ Atypique', city:'Kyoto', name:'Fushimi Sake District', desc:'Quartier des brasseurs de sake, murs et ruisseaux tradition', heure:'10h-17h', tag:'fushimisake', ig:'https://www.instagram.com/explore/tags/fushimisake/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234612-Reviews-Fushimi-Kyoto.html', prix:'Gratuit' },
+  { cat:'🏛️ Atypique', city:'Kyoto', name:'Nishiki Covered Market', desc:'400 ans, 130 boutiques, cuisine de rue couverte', heure:'10h-18h', tag:'nishikimarket', ig:'https://www.instagram.com/explore/tags/nishikimarket/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234570-Reviews-Nishiki_Market-Kyoto.html', prix:'Gratuit' },
+  { cat:'🎵 Musical', city:'Kyoto', name:'Pontocho Jazz Bars', desc:'Bars de jazz intimistes dans la ruelle Pontocho', heure:'20h-00h', tag:'pontochojazz', ig:'https://www.instagram.com/explore/tags/kyotojazz/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234582-Reviews-Pontocho-Kyoto.html', prix:'¥1500-3000' },
+  { cat:'🎵 Musical', city:'Kyoto', name:'Gion Hatanaka Geisha Show', desc:'Spectacle de danse maiko & geisha en soirée', heure:'18h-21h', tag:'geishakyoto', ig:'https://www.instagram.com/explore/tags/geishakyoto/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234613-Reviews-Gion_Show-Kyoto.html', prix:'¥3500' },
+
+  // ════ NARA ════
+  { cat:'📸 Instagram', city:'Nara', name:'Cerfs de Nara Park', desc:'Cerfs en liberté qui saluent si tu te courbes', heure:'7h-10h', tag:'naradeer', ig:'https://www.instagram.com/explore/tags/naradeer/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298198-d1234567-Reviews-Nara_Park-Nara.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Nara', name:'Todai-ji Temple', desc:'Plus grand bâtiment en bois du monde, Buddha géant', heure:'8h-11h', tag:'todaiji', ig:'https://www.instagram.com/explore/tags/todaiji/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298198-d1234568-Reviews-Todaiji-Nara.html', prix:'¥600' },
+  { cat:'📸 Instagram', city:'Nara', name:'Kasuga Taisha', desc:'Temple aux 3000 lanternes, allées de pierre mystiques', heure:'6h-9h', tag:'kasugataisha', ig:'https://www.instagram.com/explore/tags/kasugataisha/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298198-d1234569-Reviews-Kasuga_Taisha-Nara.html', prix:'¥500' },
+  { cat:'🎪 Insolite', city:'Nara', name:'Nakatanidou Mochi Show', desc:'Mochi frappé en direct 2 fois par seconde, spectacle', heure:'10h-17h', tag:'nakatanidou', ig:'https://www.instagram.com/explore/tags/nakatanidou/', tri:'https://www.tripadvisor.fr/Restaurant_Review-g298198-d1234571-Reviews-Nakatanidou-Nara.html', prix:'¥400' },
+  { cat:'🏛️ Atypique', city:'Nara', name:'Isuien Garden', desc:'Jardin traditionnel avec vue sur Todai-ji, harmonie parfaite', heure:'9h-17h', tag:'isuien', ig:'https://www.instagram.com/explore/tags/isuien/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298198-d1234614-Reviews-Isuien-Nara.html', prix:'¥900' },
+
+  // ════ SÉOUL ════
+  { cat:'📸 Instagram', city:'Séoul', name:'Gyeongbokgung Palace', desc:'Garde royale en costume 10h & 14h, architecture majestueuse', heure:'9h-11h', tag:'gyeongbokgung', ig:'https://www.instagram.com/explore/tags/gyeongbokgung/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234569-Reviews-Gyeongbokgung-Seoul.html', prix:'₩3000' },
+  { cat:'📸 Instagram', city:'Séoul', name:'Bukchon Hanok Village', desc:'Maisons coréennes traditionnelles, vue sur la ville', heure:'8h-10h', tag:'bukchonhanokvillage', ig:'https://www.instagram.com/explore/tags/bukchonhanokvillage/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d2345671-Reviews-Bukchon-Seoul.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Séoul', name:'N Seoul Tower by Night', desc:'Vue 360° sur Seoul illuminée, cadenas amoureux', heure:'19h-22h', tag:'nseoultower', ig:'https://www.instagram.com/nseoultower/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d320895-Reviews-N_Seoul_Tower-Seoul.html', prix:'₩16000' },
+  { cat:'📸 Instagram', city:'Séoul', name:'Seongsu Murals', desc:'Quartier hipster, cafés arty, murals streetart industriel', heure:'11h-18h', tag:'seongsuseoul', ig:'https://www.instagram.com/explore/tags/seongsuseoul/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456783-Reviews-Seongsu-Seoul.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Séoul', name:'Lotte Tower Sky Seoul', desc:'123e étage, vue panoramique, sky bridge vitré', heure:'9h-23h', tag:'lottetower', ig:'https://www.instagram.com/explore/tags/lottetower/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234615-Reviews-Lotte_Tower-Seoul.html', prix:'₩27000' },
+  { cat:'🎪 Insolite', city:'Séoul', name:'Lotte World Theme Park', desc:"Parc d'attraction indoor + outdoor géant, Corée en miniature", heure:'9h-21h', tag:'lotteworld', ig:'https://www.instagram.com/explore/tags/lotteworld/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234586-Reviews-Lotte_World-Seoul.html', prix:'₩54000' },
+  { cat:'🎪 Insolite', city:'Séoul', name:'Trick Eye Museum', desc:'Musée illusions optiques, photos trompe-l'oeil ultra virales', heure:'10h-20h', tag:'trickeye', ig:'https://www.instagram.com/explore/tags/trickeye/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d5678901-Reviews-Trick_Eye-Seoul.html', prix:'₩15000' },
+  { cat:'🎪 Insolite', city:'Séoul', name:'Nanta Show Hongdae', desc:'Spectacle culinaire percussions sans paroles, interactif', heure:'17h & 20h', tag:'nantashow', ig:'https://www.instagram.com/explore/tags/nantashow/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234587-Reviews-Nanta_Show-Seoul.html', prix:'₩40000' },
+  { cat:'🏛️ Atypique', city:'Séoul', name:'Ihwa Mural Village', desc:'Village mural sur colline Naksan, art de rue authentique', heure:'10h-18h', tag:'ihwamural', ig:'https://www.instagram.com/explore/tags/ihwamural/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234616-Reviews-Ihwa_Village-Seoul.html', prix:'Gratuit' },
+  { cat:'🏛️ Atypique', city:'Séoul', name:'Gwangjang Market 1905', desc:"Plus vieux marché couvert de Corée, ambiance d'époque", heure:'8h-23h', tag:'gwangjangmarket', ig:'https://www.instagram.com/explore/tags/gwangjangmarket/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456781-Reviews-Gwangjang-Seoul.html', prix:'Gratuit' },
+  { cat:'🎵 Musical', city:'Séoul', name:'Hongdae Club District', desc:'50+ clubs & live houses, K-indie & électro', heure:'22h-6h', tag:'hongdaeclub', ig:'https://www.instagram.com/explore/tags/hongdaeclub/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456784-Reviews-Hongdae-Seoul.html', prix:'₩10000-20000' },
+  { cat:'🎵 Musical', city:'Séoul', name:'SM Town Coex', desc:'Pop coréenne, musée K-pop interactif, hologrammes', heure:'12h-21h', tag:'smtown', ig:'https://www.instagram.com/explore/tags/smtown/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d7654321-Reviews-SM_Town-Seoul.html', prix:'Gratuit (expo) ₩15000 show' },
+  { cat:'🎵 Musical', city:'Séoul', name:'K-Star Road Gangnam', desc:'Statues des groupes K-pop, photozones officielles', heure:'Anytime', tag:'kstarroad', ig:'https://www.instagram.com/explore/tags/kstarroad/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d8765432-Reviews-K_Star_Road-Seoul.html', prix:'Gratuit' },
+  { cat:'🎵 Musical', city:'Séoul', name:'Nanta Cookin Show', desc:'Comédie percussive culinaire, classique de Seoul', heure:'17h & 20h', tag:'nantashow', ig:'https://www.instagram.com/explore/tags/nantashow/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234617-Reviews-Nanta-Seoul.html', prix:'₩40000' },
+
+  // ════ BUSAN ════
+  { cat:'📸 Instagram', city:'Busan', name:'Gamcheon Culture Village', desc:'Village arc-en-ciel sur la colline, labyrinthes colorés', heure:'9h-13h', tag:'gamcheon', ig:'https://www.instagram.com/explore/tags/gamcheon/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d1234573-Reviews-Gamcheon-Busan.html', prix:'₩2000' },
+  { cat:'📸 Instagram', city:'Busan', name:'Gwangalli Bridge by Night', desc:'Double pont illuminé en néons face à la mer', heure:'20h-23h', tag:'gwangallibridge', ig:'https://www.instagram.com/explore/tags/gwangallibridge/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d2345683-Reviews-Gwangalli-Busan.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Busan', name:'Haedong Yonggungsa', desc:'Temple bouddhiste spectaculaire au bord de la mer', heure:'6h-9h', tag:'haedong', ig:'https://www.instagram.com/explore/tags/haedong/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d1234574-Reviews-Haedong-Busan.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Busan', name:'Haeundae Beach Sunrise', desc:'Lever de soleil sur la plage la plus célèbre de Corée', heure:'5h30-7h', tag:'haeundaebeach', ig:'https://www.instagram.com/explore/tags/haeundaebeach/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d1234575-Reviews-Haeundae-Busan.html', prix:'Gratuit' },
+  { cat:'🎪 Insolite', city:'Busan', name:'Aqua Palace Spa', desc:'Jjimjilbang géant coréen, sauna thématique 24h/24', heure:'24h/24', tag:'jjimjilbang', ig:'https://www.instagram.com/explore/tags/jjimjilbang/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d1234618-Reviews-Aqua_Palace-Busan.html', prix:'₩12000' },
+  { cat:'🏛️ Atypique', city:'Busan', name:'Huinnyeoul Culture Village', desc:'Village abandonné réhabilité en galeries et ateliers', heure:'9h-18h', tag:'huinnyeoul', ig:'https://www.instagram.com/explore/tags/huinnyeoul/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d1234619-Reviews-Huinnyeoul-Busan.html', prix:'Gratuit' },
+  { cat:'🎵 Musical', city:'Busan', name:'Galmegi Brewing Live', desc:'Brasserie craft beer avec concerts de groupes locaux', heure:'18h-24h', tag:'galmegibrewing', ig:'https://www.instagram.com/galmegibrewing/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d3456780-Reviews-Galmegi-Busan.html', prix:'₩5000-15000' },
+
+  // ════ TOKYO ════
+  { cat:'📸 Instagram', city:'Tokyo', name:'Shibuya Crossing', desc:'Carrefour le plus fréquenté du monde, 3000 personnes/vague', heure:'18h-20h', tag:'shibuyacrossing', ig:'https://www.instagram.com/explore/tags/shibuyacrossing/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066456-d1234575-Reviews-Shibuya_Crossing-Tokyo.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Tokyo', name:'Senso-ji Asakusa Dawn', desc:'Pagode et lanterne géante rouge, brume matinale', heure:'5h30-7h30', tag:'sensoji', ig:'https://www.instagram.com/explore/tags/sensoji/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d320888-Reviews-Senso_ji-Tokyo.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Tokyo', name:'Kabukicho Neon Night', desc:'Quartier des néons, Golden Gai, énergie nocturne unique', heure:'21h-00h', tag:'kabukicho', ig:'https://www.instagram.com/explore/tags/kabukicho/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066456-d1234576-Reviews-Kabukicho-Tokyo.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Tokyo', name:'Takeshita Street', desc:'Mode, couleurs, Harajuku culture pop, créations uniques', heure:'11h-16h', tag:'takeshitastreet', ig:'https://www.instagram.com/explore/tags/takeshitastreet/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234577-Reviews-Takeshita_Street-Tokyo.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Tokyo', name:'Shinjuku Gyoen Garden', desc:'Cerisiers + azalées, jardin national dans la ville', heure:'9h-17h', tag:'shinjukugyoen', ig:'https://www.instagram.com/explore/tags/shinjukugyoen/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066456-d1234584-Reviews-Shinjuku_Gyoen-Tokyo.html', prix:'¥500' },
+  { cat:'📸 Instagram', city:'Tokyo', name:'Tokyo Tower by Night', desc:'Tour Eiffel japonaise illuminée rouge et blanc', heure:'19h-23h', tag:'tokyotower', ig:'https://www.instagram.com/explore/tags/tokyotower/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d320898-Reviews-Tokyo_Tower-Tokyo.html', prix:'¥1200' },
+  { cat:'📸 Instagram', city:'Tokyo', name:'teamLab Planets Toyosu', desc:'Art digital immersif, marcher dans des fleurs numériques', heure:'9h-22h', tag:'teamlab', ig:'https://www.instagram.com/explore/tags/teamlabplanets/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d15678902-Reviews-teamLab_Planets-Tokyo.html', prix:'¥3200' },
+  { cat:'🎪 Insolite', city:'Tokyo', name:'Hedgehog Café Harry', desc:'Caresser des hérissons miniatures dans un café cosy', heure:'11h-20h', tag:'hedgehogcafe', ig:'https://www.instagram.com/explore/tags/hedgehogcafe/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234578-Reviews-Harry_Hedgehog-Tokyo.html', prix:'¥1500/30min' },
+  { cat:'🎪 Insolite', city:'Tokyo', name:'Owl Café Akiba Fukurou', desc:'Hiboux en liberté dans un café Akihabara', heure:'11h-21h', tag:'owlcafe', ig:'https://www.instagram.com/explore/tags/owlcafe/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234579-Reviews-Owl_Cafe-Tokyo.html', prix:'¥1800/1h' },
+  { cat:'🎪 Insolite', city:'Tokyo', name:'Oedo Onsen Monogatari', desc:'Parc onsen thématique Edo, bains et village reconstitué', heure:'11h-9h', tag:'oedoonsen', ig:'https://www.instagram.com/explore/tags/oedoonsen/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234581-Reviews-Oedo_Onsen-Tokyo.html', prix:'¥2980' },
+  { cat:'🎪 Insolite', city:'Tokyo', name:'Robot Restaurant Shinjuku', desc:'Show de robots géants fluorescents, spectacle hallucinant', heure:'17h30-22h', tag:'robotrestaurant', ig:'https://www.instagram.com/explore/tags/robotrestaurant/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066456-d6543212-Reviews-Robot_Restaurant-Tokyo.html', prix:'¥8000' },
+  { cat:'🏛️ Atypique', city:'Tokyo', name:'Akihabara Electronics', desc:'Paradis de la tech, manga, anime et retrogaming sur 5 rues', heure:'10h-21h', tag:'akihabara', ig:'https://www.instagram.com/explore/tags/akihabara/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234583-Reviews-Akihabara-Tokyo.html', prix:'Gratuit' },
+  { cat:'🏛️ Atypique', city:'Tokyo', name:'Yanaka Old Town', desc:'Quartier préservé de la période Edo, temples et artisans', heure:'10h-17h', tag:'yanaka', ig:'https://www.instagram.com/explore/tags/yanaka/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234620-Reviews-Yanaka-Tokyo.html', prix:'Gratuit' },
+  { cat:'🏛️ Atypique', city:'Tokyo', name:'Tsukiji Outer Market', desc:'Marché extérieur toujours actif, sushi & fruits de mer 6h', heure:'5h-14h', tag:'tsukiji', ig:'https://www.instagram.com/explore/tags/tsukiji/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234621-Reviews-Tsukiji-Tokyo.html', prix:'Gratuit' },
+  { cat:'🎵 Musical', city:'Tokyo', name:'Shibuya Womb Club', desc:'Club techno emblématique de Tokyo, sound system légendaire', heure:'23h-6h', tag:'womb', ig:'https://www.instagram.com/womb_shibuya/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066456-d1234622-Reviews-Womb-Tokyo.html', prix:'¥3000-4000' },
+  { cat:'🎵 Musical', city:'Tokyo', name:'Blue Note Tokyo', desc:'Jazz club de référence, artistes internationaux', heure:'18h-24h', tag:'bluenotetokyo', ig:'https://www.instagram.com/bluenotetokyo/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234623-Reviews-Blue_Note-Tokyo.html', prix:'¥7000-15000' },
+  { cat:'🎵 Musical', city:'Tokyo', name:'Shimokitazawa Live Scene', desc:'10 petites salles de rock & indie en 500m², Le Brooklyn de Tokyo', heure:'18h-24h', tag:'shimokitazawa', ig:'https://www.instagram.com/explore/tags/shimokitazawa/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234624-Reviews-Shimokitazawa-Tokyo.html', prix:'¥1500-3000' },
+  { cat:'🎵 Musical', city:'Tokyo', name:'Karaoke Uta Hiroba', desc:'Karaoké japonais luxe, salles privées 24h/24', heure:'24h/24', tag:'karaoke', ig:'https://www.instagram.com/explore/tags/karaoketokyo/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234625-Reviews-Karaoke-Tokyo.html', prix:'¥500/h' },
 ]
+
+const SPOT_CATS = ['Tous', '📸 Instagram', '🎪 Insolite', '🏛️ Atypique', '🎵 Musical']
+const CITIES_SPOTS = [...new Set(SPOTS_DB.map(s => s.city))]
 
 // ════════════════════════════════════════════════════
 //  EXPLORER PAGE
@@ -945,6 +983,7 @@ function ExplorerPage() {
   const [cityFilter, setCityFilter] = useState('Toutes')
   const [citySpot, setCitySpot] = useState('Osaka')
   const [mealFilter, setMealFilter] = useState('Tous repas')
+  const [spotCat, setSpotCat] = useState('Tous')
   const open = (url) => window.open(url, '_blank', 'noopener,noreferrer')
   const [copied, setCopied] = useState(null)
   const copyTag = (tag, id) => {
@@ -956,7 +995,7 @@ function ExplorerPage() {
     { key:'jour',  label:'📅 Par jour' },
     { key:'food',  label:'🍜 Adresses' },
     { key:'spots', label:'📸 Spots' },
-    { key:'inso',  label:'💡 Insolite' },
+
   ]
 
   const restosFiltered = RESTAURANTS_DB.filter(r =>
@@ -1091,57 +1130,67 @@ function ExplorerPage() {
         </div>
       )}
 
-      {/* ─── SPOTS PHOTO ─── */}
+      {/* ─── SPOTS / LIEUX ─── */}
       {subTab === 'spots' && (
         <div>
+          {/* Filtre catégorie */}
+          <div style={{ display:'flex', gap:5, overflowX:'auto', padding:'2px 0 6px' }}>
+            {SPOT_CATS.map(c => (
+              <button key={c} onClick={() => setSpotCat(c)}
+                style={{ flexShrink:0, padding:'5px 12px', borderRadius:20, fontSize:'0.78rem', fontWeight:700, cursor:'pointer', border:'none', whiteSpace:'nowrap',
+                  background: spotCat===c ? '#833ab4' : '#f0f0f0',
+                  color: spotCat===c ? '#fff' : '#555' }}>
+                {c}
+              </button>
+            ))}
+          </div>
+          {/* Filtre ville */}
           <div style={{ display:'flex', gap:5, overflowX:'auto', padding:'2px 0 8px' }}>
-            {CITIES_SPOTS.map(c => (
+            {['Toutes villes', ...CITIES_SPOTS].map(c => (
               <button key={c} onClick={() => setCitySpot(c)}
-                style={{ flexShrink:0, padding:'5px 12px', borderRadius:20, fontSize:'0.78rem', fontWeight:700, cursor:'pointer', border:'none',
-                  background: citySpot===c ? '#833ab4' : '#f0f0f0',
+                style={{ flexShrink:0, padding:'3px 9px', borderRadius:20, fontSize:'0.7rem', cursor:'pointer', border:'1px solid #ddd',
+                  background: citySpot===c ? '#0b1f3a' : '#fff',
                   color: citySpot===c ? '#fff' : '#555' }}>
                 {c}
               </button>
             ))}
           </div>
-          {SPOTS_DB.filter(s => s.city === citySpot).map(spot => (
-            <div key={spot.name} style={{ background:'#fff', border:'1px solid #eee', borderRadius:14, padding:'0.85rem 1rem', marginBottom:8 }}>
-              <div style={{ fontWeight:800, fontSize:'0.9rem', color:'#0b1f3a' }}>{spot.name}</div>
-              <div style={{ fontSize:'0.78rem', color:'#666', margin:'3px 0' }}>{spot.desc}</div>
-              <div style={{ fontSize:'0.72rem', color:'#833ab4', fontWeight:600, marginBottom:8 }}>⏰ Meilleure heure : {spot.heure}</div>
-              <div style={{ display:'flex', gap:6 }}>
-                <button onClick={() => open(spot.ig)} style={{ ...igBtnStyle, flex:1 }}>📷 #{spot.tag}</button>
-                <button onClick={() => open(spot.tri)} style={{ ...triBtnStyle, flex:1 }}>🟢 TripAdvisor</button>
-                <button onClick={() => { navigator.clipboard.writeText('#'+spot.tag); setCopied(spot.name); setTimeout(()=>setCopied(null),1500) }}
-                  style={{ padding:'5px 10px', borderRadius:10, fontSize:'0.72rem', border:'1px solid #ccc', background: copied===spot.name?'#27ae60':'#fff', color: copied===spot.name?'#fff':'#666', cursor:'pointer', flex:1 }}>
-                  {copied===spot.name?'✓ Copié':'📋 Tag'}
-                </button>
+          {(() => {
+            const filtered = SPOTS_DB.filter(s =>
+              (spotCat === 'Tous' || s.cat === spotCat) &&
+              (citySpot === 'Toutes villes' || s.city === citySpot)
+            )
+            const CAT_COLORS = { '📸 Instagram':'#e1306c', '🎪 Insolite':'#f39c12', '🏛️ Atypique':'#2980b9', '🎵 Musical':'#8e44ad' }
+            return (
+              <div>
+                <div style={{ fontSize:'0.75rem', color:'#888', marginBottom:8 }}>{filtered.length} lieu{filtered.length>1?'x':''}</div>
+                {filtered.map(spot => (
+                  <div key={spot.name+spot.city} style={{ background:'#fff', border:`1px solid ${CAT_COLORS[spot.cat]||'#eee'}`, borderRadius:14, padding:'0.85rem 1rem', marginBottom:8 }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+                      <div style={{ flex:1 }}>
+                        <div style={{ display:'flex', gap:6, alignItems:'center', marginBottom:3 }}>
+                          <span style={{ fontSize:'0.68rem', fontWeight:700, background:CAT_COLORS[spot.cat], color:'#fff', padding:'2px 8px', borderRadius:10 }}>{spot.cat}</span>
+                          <span style={{ fontSize:'0.72rem', color:'#888' }}>{spot.city}</span>
+                        </div>
+                        <div style={{ fontWeight:800, fontSize:'0.9rem', color:'#0b1f3a' }}>{spot.name}</div>
+                        <div style={{ fontSize:'0.78rem', color:'#555', margin:'3px 0' }}>{spot.desc}</div>
+                        <div style={{ fontSize:'0.72rem', color:'#833ab4', fontWeight:600 }}>⏰ {spot.heure}</div>
+                      </div>
+                      <div style={{ marginLeft:8, fontWeight:700, color:'#27ae60', fontSize:'0.82rem', whiteSpace:'nowrap' }}>{spot.prix}</div>
+                    </div>
+                    <div style={{ display:'flex', gap:6, marginTop:8 }}>
+                      <button onClick={() => open(spot.ig)} style={{ ...igBtnStyle, flex:1 }}>📷 #{spot.tag}</button>
+                      <button onClick={() => open(spot.tri)} style={{ ...triBtnStyle, flex:1 }}>🟢 TripAdvisor</button>
+                      <button onClick={() => { navigator.clipboard.writeText('#'+spot.tag); setCopied(spot.name); setTimeout(()=>setCopied(null),1500) }}
+                        style={{ padding:'5px 8px', borderRadius:10, fontSize:'0.7rem', border:'1px solid #ccc', background: copied===spot.name?'#27ae60':'#fff', color: copied===spot.name?'#fff':'#666', cursor:'pointer' }}>
+                        {copied===spot.name?'✓':'📋'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* ─── INSOLITE ─── */}
-      {subTab === 'inso' && (
-        <div>
-          <p style={{ fontSize:'0.82rem', color:'#888', marginBottom:10 }}>Expériences uniques que les guides ne montrent pas 🎌</p>
-          {INSOLITE_DB.map(item => (
-            <div key={item.name} style={{ background:'#fff', border:'1px solid #eee', borderRadius:14, padding:'0.85rem 1rem', marginBottom:8 }}>
-              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
-                <div style={{ flex:1 }}>
-                  <div style={{ fontWeight:800, fontSize:'0.9rem', color:'#0b1f3a' }}>{item.emoji} {item.name}</div>
-                  <div style={{ fontSize:'0.75rem', color:'#833ab4', fontWeight:600 }}>{item.city}</div>
-                  <div style={{ fontSize:'0.8rem', color:'#555', marginTop:3 }}>{item.desc}</div>
-                </div>
-                <div style={{ fontWeight:700, color:'#27ae60', fontSize:'0.85rem', marginLeft:10, whiteSpace:'nowrap' }}>{item.price}</div>
-              </div>
-              <div style={{ display:'flex', gap:6, marginTop:8 }}>
-                <button onClick={() => open(item.ig)} style={{ ...igBtnStyle, flex:1 }}>📷 Instagram</button>
-                <button onClick={() => open(item.tri)} style={{ ...triBtnStyle, flex:1 }}>🟢 TripAdvisor</button>
-              </div>
-            </div>
-          ))}
+            )
+          })()}
         </div>
       )}
     </motion.div>
