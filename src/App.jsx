@@ -1258,12 +1258,10 @@ function CarnetPage() {
                 color: isH ? '#0b1f3a' : '#444',
                 lineHeight: 1.7,
                 marginBottom: isH ? 12 : 8,
-                paddingLeft: isEmoji && !isH ? 4 : 0,
                 borderLeft: isH ? '3px solid #e1306c' : 'none',
-                paddingLeft: isH ? 10 : (isEmoji ? 4 : 0),
                 background: isH ? '#fff9fb' : 'transparent',
                 borderRadius: isH ? 6 : 0,
-                padding: isH ? '6px 10px' : undefined,
+                padding: isH ? '6px 10px' : (isEmoji ? '0 0 0 4px' : '0'),
               }}>{p}</p>
             )
           })}
