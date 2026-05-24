@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { wordSections } from './wordContent.js'
 import {
-  CalendarDays, Map, UtensilsCrossed, Sparkles, Wallet, Briefcase,
+  CalendarDays, Map, UtensilsCrossed, Sparkles, Wallet, Briefcase, BookOpen,
   Menu, Bell, SunMedium, ChevronRight, MapPin, Clock3, Footprints,
   Camera, WalletCards, Globe, Smartphone, Hotel, Plane, Train, Phone,
   Languages, Mic, Volume2, Search, Send, PlusCircle, Trash2, Download,
@@ -24,7 +24,7 @@ const days = [
   { id: 5, date: '15 juil.', city: 'Kyoto', title: 'Kyoto – Jour 1 ⛩️', image: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=1200&q=80', summary: 'Kiyomizu-dera, Sannenzaka, Yasaka Shrine, Nishiki Market, Gion & Shirakawa.', timeRange: '08:00 – 21:30', steps: '15 420 pas', highlights: ['Kiyomizu-dera', 'Nishiki Market', 'Gion'], restaurants: ['Nishiki Market', 'Ramen Sen no Kaze'], spots: ['Kiyomizu-dera', 'Sannenzaka', 'Gion Shirakawa'] },
   { id: 6, date: '16 juil.', city: 'Kyoto', title: 'Fushimi Inari → Arashiyama', image: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1200&q=80', summary: 'Torii rouges, forêt de bambous, Tenryu-ji et Pontocho.', timeRange: '07:30 – 21:00', steps: '16 200 pas', highlights: ['Fushimi Inari', 'Bamboo Grove', 'Pontocho'], restaurants: ['% Arabica', 'Pontocho Alley'], spots: ['Torii rouges', 'Togetsukyo Bridge'] },
   { id: 7, date: '17 juil.', city: 'Kyoto / Séoul', title: 'Gion Matsuri → Séoul', image: 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&fit=crop&w=1200&q=80', summary: 'Festival Gion Matsuri, Haruka Express, vol KIX → Incheon, Myeongdong.', timeRange: '08:00 – 23:00', steps: '10 800 pas', highlights: ['Gion Matsuri', 'Haruka', 'Myeongdong'], restaurants: ['Myeongdong Street Food'], spots: ['Shijo Kawaramachi', 'Myeongdong night'] },
-  { id: 8, date: '18 juil.', city: 'Séoul', title: 'Gyeongbokgung → Bukchon → Myeongdong', image: 'https://images.unsplash.com/photo-1543158265-9be72f7c7e19?auto=format&fit=crop&w=1200&q=80', summary: 'Palais royal, village hanok, Insadong et street food Myeongdong.', timeRange: '09:00 – 21:30', steps: '14 900 pas', highlights: ['Gyeongbokgung', 'Bukchon', 'Myeongdong'], restaurants: ['Myeongdong Kyoja', 'Insadong Geujib'], spots: ['Bukchon Hanok', 'Myeongdong neon'] },
+  { id: 8, date: '18 juil.', city: 'Séoul', title: 'Gyeongbokgung → Bukchon → Myeongdong', image: 'https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?auto=format&fit=crop&w=1200&q=80', summary: 'Palais royal, village hanok, Insadong et street food Myeongdong.', timeRange: '09:00 – 21:30', steps: '14 900 pas', highlights: ['Gyeongbokgung', 'Bukchon', 'Myeongdong'], restaurants: ['Myeongdong Kyoja', 'Insadong Geujib'], spots: ['Bukchon Hanok', 'Myeongdong neon'] },
   { id: 9, date: '19 juil.', city: 'Séoul', title: 'N Seoul Tower → Hongdae', image: 'https://images.unsplash.com/photo-1506816561089-5cc37b3aa9b0?auto=format&fit=crop&w=1200&q=80', summary: 'Vue Namsan, marchés, Hongdae et dîner BBQ coréen.', timeRange: '10:00 – 22:00', steps: '13 400 pas', highlights: ['N Seoul Tower', 'Hongdae'], restaurants: ['Wangbijib', 'Hongdae Chicken'], spots: ['Namsan', 'Hongdae'] },
   { id: 10, date: '20 juil.', city: 'Busan', title: 'Séoul → Busan + Haeundae', image: 'https://images.unsplash.com/photo-1569264018996-a5e5a37ed2d0?auto=format&fit=crop&w=1200&q=80', summary: 'KTX vers Busan, Haeundae Beach, Dongbaekseom et The Bay 101.', timeRange: '08:00 – 21:30', steps: '12 100 pas', highlights: ['KTX', 'Haeundae', 'The Bay 101'], restaurants: ['Haeundae Market', 'The Bay 101'], spots: ['Haeundae', 'Skyline Busan'] },
   { id: 11, date: '21 juil.', city: 'Busan', title: 'Temple mer → Gamcheon → Gwangalli', image: 'https://images.unsplash.com/photo-1569264018996-a5e5a37ed2d0?auto=format&fit=crop&w=1200&q=80', summary: 'Temple Haedong Yonggungsa, Gamcheon, Jagalchi et Gwangalli.', timeRange: '09:00 – 22:00', steps: '16 050 pas', highlights: ['Temple mer', 'Gamcheon', 'Gwangalli'], restaurants: ['Jagalchi', 'BIFF Square'], spots: ['Gamcheon', 'Gwangalli Bridge'] },
@@ -179,12 +179,13 @@ const instagramBuzz = [
 ]
 
 const quickLinks = [
-  { key: 'days', label: 'Jours', icon: CalendarDays, color: 'violet' },
-  { key: 'map', label: 'Carte', icon: Map, color: 'blue' },
-  { key: 'food', label: 'Food', icon: UtensilsCrossed, color: 'orange' },
-  { key: 'ai', label: 'ChatGPT', icon: Sparkles, color: 'green' },
-  { key: 'budget', label: 'Budget', icon: Wallet, color: 'pink' },
-  { key: 'tools', label: 'Outils', icon: Briefcase, color: 'teal' },
+  { key: 'days',    label: 'Jours',    icon: CalendarDays,   color: 'violet' },
+  { key: 'map',     label: 'Carte',    icon: Map,            color: 'blue'   },
+  { key: 'explorer',label: 'Explorer', icon: Camera,         color: 'orange' },
+  { key: 'carnet',  label: 'Carnet',   icon: BookOpen,       color: 'amber'  },
+  { key: 'ai',      label: 'ChatGPT',  icon: Sparkles,       color: 'green'  },
+  { key: 'budget',  label: 'Budget',   icon: Wallet,         color: 'pink'   },
+  { key: 'tools',   label: 'Outils',   icon: Briefcase,      color: 'teal'   },
 ]
 
 const usefulInfo = [
@@ -770,6 +771,419 @@ function BudgetPage() {
   )
 }
 
+// ════════════════════════════════════════════════════
+//  DONNÉES EXPLORER
+// ════════════════════════════════════════════════════
+const RESTAURANTS_DB = [
+  // ── Ramen ──
+  { id:'r1', city:'Tokyo', zone:'Shinjuku', name:'Fuunji', type:'Ramen', dish:'Tsukemen signature', price:'¥950', rating:4.8, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066456-d1838622-Reviews-Fuunji-Shinjuku.html', instagram:'https://www.instagram.com/explore/tags/fuunji/', tag:'fuunji', budget:'💰', note:'File d'attente 30min mais exceptionnel' },
+  { id:'r2', city:'Tokyo', zone:'Ikebukuro', name:'Ichiran Ramen', type:'Ramen', dish:'Tonkotsu solo booth', price:'¥980', rating:4.7, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066456-d7079898-Reviews-Ichiran_Ramen_Shinjuku.html', instagram:'https://www.instagram.com/ichiran_global/', tag:'ichiranramen', budget:'💰', note:'Expérience unique en cabine solo' },
+  { id:'r3', city:'Osaka', zone:'Namba', name:'Kinryu Ramen', type:'Ramen', dish:'Ramen Dotonbori 24h/24', price:'¥700', rating:4.5, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g298566-d1234561-Reviews-Kinryu_Ramen-Osaka.html', instagram:'https://www.instagram.com/explore/tags/kinryuramen/', tag:'kinryuramen', budget:'💰', note:'Le dragon devant la boutique est iconique' },
+  { id:'r4', city:'Kyoto', zone:'Fushimi', name:'Ramen Sen no Kaze', type:'Ramen', dish:'Shoyu léger kyotoite', price:'¥850', rating:4.6, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g298564-d2345672-Reviews-Sen_no_Kaze-Kyoto.html', instagram:'https://www.instagram.com/explore/tags/ramenyakyoto/', tag:'ramenyakyoto', budget:'💰', note:'Bouillon clair typique Kyoto' },
+  // ── Sushi ──
+  { id:'s1', city:'Tokyo', zone:'Tsukiji', name:'Sushi Dai', type:'Sushi', dish:'Omakase 10 pièces', price:'¥4000', rating:4.9, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066454-d1234567-Reviews-Sushi_Dai-Tokyo.html', instagram:'https://www.instagram.com/explore/tags/sushidai/', tag:'sushidai', budget:'💰💰', note:'File 2h — vaut chaque minute' },
+  { id:'s2', city:'Tokyo', zone:'Ginza', name:'Sushi Yoshitake', type:'Sushi', dish:'Omakase Michelin ★★★', price:'¥30000', rating:5.0, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066454-d2345678-Reviews-Sushi_Yoshitake-Tokyo.html', instagram:'https://www.instagram.com/explore/tags/sushiyoshitake/', tag:'sushiyoshitake', budget:'💰💰💰', note:'Meilleur sushi de Tokyo selon Michelin' },
+  { id:'s3', city:'Osaka', zone:'Namba', name:'Kaiten Midori Sushi', type:'Sushi', dish:'Kaiten (tapis roulant)', price:'¥150/pièce', rating:4.4, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g298566-d3456789-Reviews-Midori_Sushi-Osaka.html', instagram:'https://www.instagram.com/explore/tags/kaitensushi/', tag:'kaitensushi', budget:'💰', note:'Idéal en famille, choix immense' },
+  { id:'s4', city:'Tokyo', zone:'Shibuya', name:'Uobei Sushi', type:'Sushi', dish:'Sushi commande tablette', price:'¥110/pièce', rating:4.3, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066456-d4567890-Reviews-Uobei_Sushi-Shibuya.html', instagram:'https://www.instagram.com/explore/tags/uobei/', tag:'uobei', budget:'💰', note:'Livré par rail, kids adorent' },
+  // ── Pancakes fluffy ──
+  { id:'p1', city:'Osaka', zone:'Shinsaibashi', name:'Gram Café', type:'Pancakes fluffy', dish:'Premium pancakes (3/jour)', price:'¥750', rating:4.9, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g298566-d5678901-Reviews-Gram-Osaka.html', instagram:'https://www.instagram.com/explore/tags/grampancake/', tag:'grampancake', budget:'💰', note:'Servis 3x/jour seulement — arriver tôt!' },
+  { id:'p2', city:'Tokyo', zone:'Harajuku', name:"Flipper's", type:'Pancakes fluffy', dish:'Soufflé miracle pancake', price:'¥1200', rating:4.8, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066454-d6789012-Reviews-Flippers-Tokyo.html', instagram:'https://www.instagram.com/explore/tags/flipperspancake/', tag:'flipperspancake', budget:'💰', note:'Le plus viral de Tokyo' },
+  { id:'p3', city:'Tokyo', zone:'Shibuya', name:'A Happy Pancake', type:'Pancakes fluffy', dish:'Thick souffle pancake', price:'¥1100', rating:4.7, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066456-d7890123-Reviews-A_Happy_Pancake-Tokyo.html', instagram:'https://www.instagram.com/explore/tags/ahappypancake/', tag:'ahappypancake', budget:'💰', note:'Texture nuage incroyable' },
+  // ── Takoyaki ──
+  { id:'t1', city:'Osaka', zone:'Dotonbori', name:'Kukuru Takoyaki', type:'Takoyaki', dish:'Takoyaki XL croustillant', price:'¥600', rating:4.8, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g298566-d8901234-Reviews-Kukuru-Osaka.html', instagram:'https://www.instagram.com/explore/tags/kukurutakoyaki/', tag:'kukurutakoyaki', budget:'💰', note:'L'incontournable de Dotonbori' },
+  { id:'t2', city:'Osaka', zone:'Shinsekai', name:"Creo-ru", type:'Takoyaki', dish:'Takoyaki au fromage', price:'¥550', rating:4.6, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g298566-d9012345-Reviews-Creo_ru-Osaka.html', instagram:'https://www.instagram.com/explore/tags/creoru/', tag:'creoru', budget:'💰', note:'Version fromage unique à Osaka' },
+  // ── BBQ coréen ──
+  { id:'b1', city:'Séoul', zone:'Mapo', name:'Maple Tree House', type:'BBQ coréen', dish:'Galbi & samgyeopsal premium', price:'₩35000/pers', rating:4.8, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g294197-d1234568-Reviews-Maple_Tree_House-Seoul.html', instagram:'https://www.instagram.com/explore/tags/mapletreehouse/', tag:'mapletreehouse', budget:'💰💰', note:'Bœuf wagyu coréen d'exception' },
+  { id:'b2', city:'Séoul', zone:'Hongdae', name:'Wangbijib', type:'BBQ coréen', dish:'Galbi marinés maison', price:'₩25000/pers', rating:4.7, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g294197-d2345679-Reviews-Wangbijib-Seoul.html', instagram:'https://www.instagram.com/explore/tags/wangbijib/', tag:'wangbijib', budget:'💰💰', note:'Institution de Hongdae depuis 20 ans' },
+  { id:'b3', city:'Busan', zone:'Haeundae', name:'Galmegi Brewing', type:'BBQ coréen', dish:'BBQ + craft beer vue mer', price:'₩20000/pers', rating:4.5, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g297884-d3456780-Reviews-Galmegi-Busan.html', instagram:'https://www.instagram.com/galmegibrewing/', tag:'galmegibrewing', budget:'💰', note:'Vue sur Haeundae en bonus' },
+  // ── Street food ──
+  { id:'sf1', city:'Kyoto', zone:'Nishiki', name:'Nishiki Market', type:'Street food', dish:'Tofu, mochi, sardines grillées', price:'¥200-500', rating:4.7, tripadvisor:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234570-Reviews-Nishiki_Market-Kyoto.html', instagram:'https://www.instagram.com/explore/tags/nishikimarket/', tag:'nishikimarket', budget:'💰', note:'Marché couvert 400 ans d'histoire' },
+  { id:'sf2', city:'Séoul', zone:'Myeongdong', name:'Myeongdong Street', type:'Street food', dish:'Tteokbokki, odeng, hotteok', price:'₩2000-5000', rating:4.6, tripadvisor:'https://www.tripadvisor.fr/Attraction_Review-g294197-d2345680-Reviews-Myeongdong-Seoul.html', instagram:'https://www.instagram.com/explore/tags/myeongdongstreetfood/', tag:'myeongdongstreetfood', budget:'💰', note:'Street food coréen authentique le soir' },
+  { id:'sf3', city:'Séoul', zone:'Gwangjang', name:'Gwangjang Market', type:'Street food', dish:'Bindaetteok, mayak gimbap', price:'₩3000-8000', rating:4.8, tripadvisor:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456781-Reviews-Gwangjang_Market-Seoul.html', instagram:'https://www.instagram.com/explore/tags/gwangjangmarket/', tag:'gwangjangmarket', budget:'💰', note:'Le plus vieux marché de Séoul (1905)' },
+  // ── Desserts ──
+  { id:'d1', city:'Nara', zone:'Centre', name:'Nakatanidou', type:'Desserts', dish:'Mochi frappé à la main', price:'¥400', rating:4.9, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g298198-d1234571-Reviews-Nakatanidou-Nara.html', instagram:'https://www.instagram.com/explore/tags/nakatanidou/', tag:'nakatanidou', budget:'💰', note:'Le spectacle du mochi vaut le détour' },
+  { id:'d2', city:'Tokyo', zone:'Asakusa', name:'Kagetsudo', type:'Desserts', dish:'Melon pan géant', price:'¥250', rating:4.7, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066454-d2345681-Reviews-Kagetsudo-Tokyo.html', instagram:'https://www.instagram.com/explore/tags/kagetsudo/', tag:'kagetsudo', budget:'💰', note:'Pain melon croustillant iconique Asakusa' },
+  { id:'d3', city:'Osaka', zone:'Namba', name:'Rikuro Ojisan', type:'Desserts', dish:'Fromage cake soufflé', price:'¥965', rating:4.8, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g298566-d3456782-Reviews-Rikuro_Ojisan-Osaka.html', instagram:'https://www.instagram.com/explore/tags/rikuroojisan/', tag:'rikuroojisan', budget:'💰', note:'Sorti du four toutes les 15min' },
+  { id:'d4', city:'Kyoto', zone:'Arashiyama', name:'% Arabica Kyoto', type:'Café & desserts', dish:'Café latte vue bambous', price:'¥700', rating:4.9, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g298564-d4567892-Reviews-Arabica-Kyoto.html', instagram:'https://www.instagram.com/arabicakyoto/', tag:'arabicakyoto', budget:'💰', note:'Le café le plus photographié du Japon' },
+  // ── Restaurants coréens ──
+  { id:'k1', city:'Séoul', zone:'Myeongdong', name:'Myeongdong Kyoja', type:'Cuisine coréenne', dish:'Kalguksu & mandu', price:'₩9000', rating:4.8, tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g294197-d1234572-Reviews-Myeongdong_Kyoja-Seoul.html', instagram:'https://www.instagram.com/explore/tags/myeongdongkyoja/', tag:'myeongdongkyoja', budget:'💰', note:'Institution depuis 1966 — file normale' },
+  { id:'k2', city:'Busan', zone:'Nampo', name:'Jagalchi Market', type:'Fruits de mer', dish:'Hoe (poisson cru coréen)', price:'₩15000', rating:4.7, tripadvisor:'https://www.tripadvisor.fr/Attraction_Review-g297884-d2345682-Reviews-Jagalchi_Market-Busan.html', instagram:'https://www.instagram.com/explore/tags/jagalchi/', tag:'jagalchi', budget:'💰💰', note:'Plus grand marché de fruits de mer Corée' },
+]
+
+const TYPES_FOOD = [...new Set(RESTAURANTS_DB.map(r => r.type))]
+const CITIES_FOOD = [...new Set(RESTAURANTS_DB.map(r => r.city))]
+
+const SPOTS_DB = [
+  // ── Osaka ──
+  { city:'Osaka', name:'Dotonbori Bridge', desc:'Néons, Glico Man, rivière — meilleur la nuit', heure:'21h-23h', tag:'dotonbori', ig:'https://www.instagram.com/explore/tags/dotonbori/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234560-Reviews-Dotonbori-Osaka.html' },
+  { city:'Osaka', name:'Glico Running Man', desc:'L'icône la plus photographiée du Japon', heure:'20h-23h', tag:'glicoman', ig:'https://www.instagram.com/explore/tags/glicoman/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234561-Reviews-Glico_Sign-Osaka.html' },
+  { city:'Osaka', name:'Tsutenkaku Tower', desc:'Rétro, panorama 360° sur Shinsekai', heure:'10h-16h', tag:'tsutenkaku', ig:'https://www.instagram.com/tsutenkaku_official/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234562-Reviews-Tsutenkaku-Osaka.html' },
+  { city:'Osaka', name:'Osaka Castle au lever', desc:'Lumière dorée sur le château', heure:'6h-9h', tag:'osakacastle', ig:'https://www.instagram.com/explore/tags/osakacastle/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234563-Reviews-Osaka_Castle-Osaka.html' },
+  // ── Kyoto ──
+  { city:'Kyoto', name:'Fushimi Inari Torii', desc:'Tunnel de 10 000 torii rouges', heure:'5h-8h', tag:'fushimiinari', ig:'https://www.instagram.com/explore/tags/fushimiinari/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234564-Reviews-Fushimi_Inari-Kyoto.html' },
+  { city:'Kyoto', name:'Arashiyama Bambouseraie', desc:'Forêt de bambous géants, lumière filtrée', heure:'7h-9h', tag:'arashiyamabamboo', ig:'https://www.instagram.com/explore/tags/arashiyamabamboo/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234565-Reviews-Arashiyama_Bamboo-Kyoto.html' },
+  { city:'Kyoto', name:'Kinkaku-ji (Pavillon d'Or)', desc:'Reflet parfait sur l'étang', heure:'9h-11h', tag:'kinkakuji', ig:'https://www.instagram.com/explore/tags/kinkakuji/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234566-Reviews-Kinkakuji-Kyoto.html' },
+  { city:'Kyoto', name:'Gion Shirakawa', desc:'Quartier geisha, lanternes et canal', heure:'18h-21h', tag:'gionshirakawa', ig:'https://www.instagram.com/explore/tags/gionshirakawa/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d2345670-Reviews-Gion-Kyoto.html' },
+  { city:'Kyoto', name:'Sannenzaka Ninenzaka', desc:'Ruelle pavée typique Meiji', heure:'8h-10h', tag:'sannenzaka', ig:'https://www.instagram.com/explore/tags/sannenzaka/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d3456780-Reviews-Sannenzaka-Kyoto.html' },
+  // ── Nara ──
+  { city:'Nara', name:'Daims de Nara Park', desc:'Cerfs en liberté dans le parc national', heure:'7h-10h', tag:'naradeer', ig:'https://www.instagram.com/explore/tags/naradeer/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298198-d1234567-Reviews-Nara_Park-Nara.html' },
+  { city:'Nara', name:'Tōdai-ji', desc:'Plus grand bâtiment en bois du monde', heure:'8h-12h', tag:'todaiji', ig:'https://www.instagram.com/explore/tags/todaiji/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298198-d1234568-Reviews-Todaiji-Nara.html' },
+  // ── Séoul ──
+  { city:'Séoul', name:'Gyeongbokgung Palace', desc:'Palais royal, garde royale à 10h et 14h', heure:'9h-11h', tag:'gyeongbokgung', ig:'https://www.instagram.com/explore/tags/gyeongbokgung/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234569-Reviews-Gyeongbokgung-Seoul.html' },
+  { city:'Séoul', name:'Bukchon Hanok Village', desc:'Maisons coréennes traditionnelles', heure:'8h-10h', tag:'bukchonhanokvillage', ig:'https://www.instagram.com/explore/tags/bukchonhanokvillage/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d2345671-Reviews-Bukchon-Seoul.html' },
+  { city:'Séoul', name:'N Seoul Tower', desc:'Vue 360° sur la ville illuminée', heure:'19h-22h', tag:'nseoultower', ig:'https://www.instagram.com/nseoultower/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d320895-Reviews-N_Seoul_Tower-Seoul.html' },
+  { city:'Séoul', name:'Hongdae Street Art', desc:'Street art, musiques live, jeunesse', heure:'18h-23h', tag:'hongdaeseoul', ig:'https://www.instagram.com/explore/tags/hongdaeseoul/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456783-Reviews-Hongdae-Seoul.html' },
+  // ── Busan ──
+  { city:'Busan', name:'Gamcheon Village', desc:'Village arc-en-ciel sur la colline', heure:'10h-14h', tag:'gamcheon', ig:'https://www.instagram.com/explore/tags/gamcheon/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d1234573-Reviews-Gamcheon-Busan.html' },
+  { city:'Busan', name:'Gwangalli Bridge by Night', desc:'Double pont illuminé face à la mer', heure:'20h-23h', tag:'gwangallibridge', ig:'https://www.instagram.com/explore/tags/gwangallibridge/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d2345683-Reviews-Gwangalli_Beach-Busan.html' },
+  { city:'Busan', name:'Haedong Yonggungsa Temple', desc:'Temple bouddhiste au bord de la mer', heure:'7h-9h', tag:'haedong', ig:'https://www.instagram.com/explore/tags/haedong/', tri:'https://www.tripadvisor.fr/Attraction_Review-g297884-d1234574-Reviews-Haedong-Busan.html' },
+  // ── Tokyo ──
+  { city:'Tokyo', name:'Shibuya Crossing', desc:'Le carrefour le plus fréquenté du monde', heure:'18h-20h', tag:'shibuyacrossing', ig:'https://www.instagram.com/explore/tags/shibuyacrossing/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066456-d1234575-Reviews-Shibuya_Crossing-Tokyo.html' },
+  { city:'Tokyo', name:'Senso-ji Asakusa', desc:'Pagode et lanterne géante rouge', heure:'6h-8h', tag:'sensoji', ig:'https://www.instagram.com/explore/tags/sensoji/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d320888-Reviews-Senso_ji-Tokyo.html' },
+  { city:'Tokyo', name:'Shinjuku Kabukicho', desc:'Néons, Golden Gai, énergie unique', heure:'21h-23h', tag:'kabukicho', ig:'https://www.instagram.com/explore/tags/kabukicho/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066456-d1234576-Reviews-Kabukicho-Tokyo.html' },
+  { city:'Tokyo', name:'Takeshita Street Harajuku', desc:'Mode, couleurs, culture pop jeune', heure:'11h-16h', tag:'takeshitastreet', ig:'https://www.instagram.com/explore/tags/takeshitastreet/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234577-Reviews-Takeshita_Street-Tokyo.html' },
+]
+const CITIES_SPOTS = [...new Set(SPOTS_DB.map(s => s.city))]
+
+const INSOLITE_DB = [
+  { emoji:'🦔', city:'Tokyo', name:'Hedgehog Café Harry', desc:'Caresser des hérissons miniatures', price:'¥1500/30min', ig:'https://www.instagram.com/explore/tags/hedgehogcafe/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234578-Reviews-Harry_Hedgehog-Tokyo.html' },
+  { emoji:'🦉', city:'Tokyo', name:'Owl Café Akiba Fukurou', desc:'Hiboux en liberté dans le café', price:'¥1800/1h', ig:'https://www.instagram.com/explore/tags/owlcafe/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234579-Reviews-Owl_Cafe-Tokyo.html' },
+  { emoji:'🐱', city:'Osaka', name:'Cat Café Calico Osaka', desc:'50+ chats, ambiance cosy', price:'¥200/10min', ig:'https://www.instagram.com/explore/tags/catcafeosaka/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234580-Reviews-Calico_Cat_Cafe-Osaka.html' },
+  { emoji:'♨️', city:'Tokyo', name:'Oedo Onsen Monogatari', desc:'Parc onsen thématique Edo, accès famille', price:'¥2980', ig:'https://www.instagram.com/explore/tags/oedoonsen/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234581-Reviews-Oedo_Onsen-Tokyo.html' },
+  { emoji:'🎎', city:'Kyoto', name:'Kimono Rental Yumeyakata', desc:'Louer un kimono et se promener à Gion', price:'¥3000-6000', ig:'https://www.instagram.com/explore/tags/kimonoryokan/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d1234582-Reviews-Yumeyakata-Kyoto.html' },
+  { emoji:'🍵', city:'Kyoto', name:'Cérémonie du thé En', desc:'Cérémonie authentique à Higashiyama', price:'¥3800', ig:'https://www.instagram.com/explore/tags/teaceremonykyoto/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298564-d2345685-Reviews-Tea_Ceremony-Kyoto.html' },
+  { emoji:'🎮', city:'Tokyo', name:'Akihabara Retro Games', desc:'Arcades 3 étages, Taiko no Tatsujin', price:'¥500-2000', ig:'https://www.instagram.com/explore/tags/akihabara/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066454-d1234583-Reviews-Akihabara-Tokyo.html' },
+  { emoji:'🌸', city:'Tokyo', name:'Shinjuku Gyoen Garden', desc:'Jardin national, cerisiers & azalées', price:'¥500', ig:'https://www.instagram.com/explore/tags/shinjukugyoen/', tri:'https://www.tripadvisor.fr/Attraction_Review-g1066456-d1234584-Reviews-Shinjuku_Gyoen-Tokyo.html' },
+  { emoji:'🐺', city:'Nara', name:'Nara Deer selfies', desc:'Les cerfs s'inclinent si tu t'inclines', price:'Gratuit', ig:'https://www.instagram.com/explore/tags/naradeer/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298198-d1234585-Reviews-Nara_Park-Nara.html' },
+  { emoji:'🎡', city:'Séoul', name:'Lotte World Theme Park', desc:'Parc d'attraction indoor + outdoor géant', price:'₩54000', ig:'https://www.instagram.com/explore/tags/lotteworld/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234586-Reviews-Lotte_World-Seoul.html' },
+  { emoji:'🌃', city:'Séoul', name:'Café avec vue N Tower', desc:'Cafés en hauteur sur Namsan', price:'₩8000 conso', ig:'https://www.instagram.com/explore/tags/namsancafe/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d2345686-Reviews-Namsan-Seoul.html' },
+  { emoji:'🎭', city:'Séoul', name:'Nanta Show', desc:'Comédie musicale culinaire sans paroles', price:'₩40000', ig:'https://www.instagram.com/explore/tags/nantashow/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234587-Reviews-Nanta_Show-Seoul.html' },
+]
+
+// ════════════════════════════════════════════════════
+//  EXPLORER PAGE
+// ════════════════════════════════════════════════════
+function ExplorerPage() {
+  const [subTab, setSubTab] = useState('jour')
+  const [activeDay, setActiveDay] = useState(instagramBuzz[0]?.dayId || 1)
+  const [typeFilter, setTypeFilter] = useState('Tous')
+  const [cityFilter, setCityFilter] = useState('Toutes')
+  const [citySpot, setCitySpot] = useState('Osaka')
+  const open = (url) => window.open(url, '_blank', 'noopener,noreferrer')
+  const [copied, setCopied] = useState(null)
+  const copyTag = (tag, id) => {
+    navigator.clipboard.writeText('#' + tag)
+    setCopied(id); setTimeout(() => setCopied(null), 1500)
+  }
+
+  const SUB_TABS = [
+    { key:'jour',  label:'📅 Par jour' },
+    { key:'food',  label:'🍜 Adresses' },
+    { key:'spots', label:'📸 Spots' },
+    { key:'inso',  label:'💡 Insolite' },
+  ]
+
+  const restosFiltered = RESTAURANTS_DB.filter(r =>
+    (typeFilter === 'Tous' || r.type === typeFilter) &&
+    (cityFilter === 'Toutes' || r.city === cityFilter)
+  )
+
+  const item = instagramBuzz.find(d => d.dayId === activeDay) || instagramBuzz[0]
+
+  return (
+    <motion.div key="explorer" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
+      {/* Header */}
+      <div style={{ background:'linear-gradient(135deg,#e1306c,#833ab4)', borderRadius:16, padding:'1rem 1.4rem', color:'#fff', marginBottom:0 }}>
+        <div style={{ fontWeight:800, fontSize:'1.1rem' }}>🌏 Explorer</div>
+        <div style={{ fontSize:'0.8rem', opacity:0.85, marginTop:2 }}>Restaurants · Spots photo · Insolite</div>
+      </div>
+
+      {/* Sous-onglets */}
+      <div style={{ display:'flex', gap:6, overflowX:'auto', padding:'4px 0' }}>
+        {SUB_TABS.map(t => (
+          <button key={t.key} onClick={() => setSubTab(t.key)}
+            style={{ flexShrink:0, padding:'7px 14px', borderRadius:20, fontSize:'0.8rem', fontWeight:700, cursor:'pointer', border:'none', whiteSpace:'nowrap',
+              background: subTab===t.key ? '#e1306c' : '#f0f0f0',
+              color: subTab===t.key ? '#fff' : '#555' }}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* ─── PAR JOUR ─── */}
+      {subTab === 'jour' && (
+        <div>
+          <div style={{ display:'flex', gap:5, overflowX:'auto', padding:'2px 0 8px' }}>
+            {instagramBuzz.map(d => (
+              <button key={d.dayId} onClick={() => setActiveDay(d.dayId)}
+                style={{ flexShrink:0, padding:'4px 10px', borderRadius:20, fontSize:'0.72rem', fontWeight:700, cursor:'pointer', border:'none',
+                  background: activeDay===d.dayId ? '#833ab4' : '#f0f0f0',
+                  color: activeDay===d.dayId ? '#fff' : '#555' }}>
+                {d.date}
+              </button>
+            ))}
+          </div>
+          {item && (
+            <div style={{ background:'#fff', border:'1px solid #f0d0da', borderRadius:14, padding:'1rem' }}>
+              <div style={{ fontWeight:800, fontSize:'1rem', color:'#0b1f3a', marginBottom:8 }}>📍 {item.city} — {item.title}</div>
+              <div style={{ fontWeight:700, fontSize:'0.75rem', color:'#e1306c', textTransform:'uppercase', letterSpacing:1, marginBottom:6 }}>📸 Spots photo</div>
+              {item.spots.map(s => (
+                <div key={s.name} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'6px 0', borderBottom:'1px solid #fce8f0' }}>
+                  <span style={{ fontSize:'0.85rem', fontWeight:600 }}>{s.name}</span>
+                  <button onClick={() => open(s.url)} style={igBtnStyle}>#{s.tag}</button>
+                </div>
+              ))}
+              <div style={{ fontWeight:700, fontSize:'0.75rem', color:'#e1306c', textTransform:'uppercase', letterSpacing:1, margin:'10px 0 6px' }}>🍜 Restaurants</div>
+              {item.restaurants.map(r => {
+                const db = RESTAURANTS_DB.find(x => x.name.toLowerCase().includes(r.name.split(' ')[0].toLowerCase()))
+                return (
+                  <div key={r.name} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'6px 0', borderBottom:'1px solid #fce8f0' }}>
+                    <div>
+                      <div style={{ fontSize:'0.85rem', fontWeight:600 }}>{r.name}</div>
+                      {db && <div style={{ fontSize:'0.72rem', color:'#888' }}>{db.price} · {db.budget}</div>}
+                    </div>
+                    <div style={{ display:'flex', gap:5 }}>
+                      <button onClick={() => open(r.url)} style={igBtnStyle}>#{r.tag}</button>
+                      {db && <button onClick={() => open(db.tripadvisor)} style={triBtnStyle}>TA</button>}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ─── ADRESSES PAR TYPE ─── */}
+      {subTab === 'food' && (
+        <div>
+          <div style={{ display:'flex', gap:5, overflowX:'auto', padding:'2px 0 6px' }}>
+            {['Tous', ...TYPES_FOOD].map(t => (
+              <button key={t} onClick={() => setTypeFilter(t)}
+                style={{ flexShrink:0, padding:'4px 10px', borderRadius:20, fontSize:'0.72rem', fontWeight:700, cursor:'pointer', border:'none',
+                  background: typeFilter===t ? '#e8523a' : '#f0f0f0',
+                  color: typeFilter===t ? '#fff' : '#555' }}>
+                {t}
+              </button>
+            ))}
+          </div>
+          <div style={{ display:'flex', gap:5, overflowX:'auto', padding:'2px 0 8px' }}>
+            {['Toutes', ...CITIES_FOOD].map(c => (
+              <button key={c} onClick={() => setCityFilter(c)}
+                style={{ flexShrink:0, padding:'3px 9px', borderRadius:20, fontSize:'0.7rem', cursor:'pointer', border:'1px solid #ddd',
+                  background: cityFilter===c ? '#0b1f3a' : '#fff',
+                  color: cityFilter===c ? '#fff' : '#555' }}>
+                {c}
+              </button>
+            ))}
+          </div>
+          <div style={{ fontSize:'0.75rem', color:'#888', marginBottom:8 }}>{restosFiltered.length} restaurant{restosFiltered.length>1?'s':''} trouvé{restosFiltered.length>1?'s':''}</div>
+          {restosFiltered.map(r => (
+            <div key={r.id} style={{ background:'#fff', border:'1px solid #eee', borderRadius:14, padding:'0.9rem 1rem', marginBottom:10 }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontWeight:800, fontSize:'0.95rem', color:'#0b1f3a' }}>{r.name}</div>
+                  <div style={{ fontSize:'0.75rem', color:'#e8523a', fontWeight:600 }}>{r.type} · {r.city} · {r.zone}</div>
+                  <div style={{ fontSize:'0.8rem', color:'#555', margin:'3px 0' }}>{r.dish}</div>
+                  <div style={{ fontSize:'0.75rem', color:'#888', fontStyle:'italic' }}>"{r.note}"</div>
+                </div>
+                <div style={{ textAlign:'right', marginLeft:10 }}>
+                  <div style={{ fontWeight:700, color:'#27ae60', fontSize:'0.9rem' }}>{r.price}</div>
+                  <div style={{ fontSize:'0.85rem' }}>{r.budget}</div>
+                  <div style={{ fontSize:'0.75rem', color:'#f5a623' }}>★ {r.rating}</div>
+                </div>
+              </div>
+              <div style={{ display:'flex', gap:6, marginTop:8 }}>
+                <button onClick={() => open(r.instagram)} style={{ ...igBtnStyle, flex:1 }}>📷 Instagram</button>
+                <button onClick={() => open(r.tripadvisor)} style={{ ...triBtnStyle, flex:1 }}>🟢 TripAdvisor</button>
+                <button onClick={() => openMaps(r.name + ' ' + r.city)} style={{ ...mapBtnStyle, flex:1 }}>📍 Maps</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ─── SPOTS PHOTO ─── */}
+      {subTab === 'spots' && (
+        <div>
+          <div style={{ display:'flex', gap:5, overflowX:'auto', padding:'2px 0 8px' }}>
+            {CITIES_SPOTS.map(c => (
+              <button key={c} onClick={() => setCitySpot(c)}
+                style={{ flexShrink:0, padding:'5px 12px', borderRadius:20, fontSize:'0.78rem', fontWeight:700, cursor:'pointer', border:'none',
+                  background: citySpot===c ? '#833ab4' : '#f0f0f0',
+                  color: citySpot===c ? '#fff' : '#555' }}>
+                {c}
+              </button>
+            ))}
+          </div>
+          {SPOTS_DB.filter(s => s.city === citySpot).map(spot => (
+            <div key={spot.name} style={{ background:'#fff', border:'1px solid #eee', borderRadius:14, padding:'0.85rem 1rem', marginBottom:8 }}>
+              <div style={{ fontWeight:800, fontSize:'0.9rem', color:'#0b1f3a' }}>{spot.name}</div>
+              <div style={{ fontSize:'0.78rem', color:'#666', margin:'3px 0' }}>{spot.desc}</div>
+              <div style={{ fontSize:'0.72rem', color:'#833ab4', fontWeight:600, marginBottom:8 }}>⏰ Meilleure heure : {spot.heure}</div>
+              <div style={{ display:'flex', gap:6 }}>
+                <button onClick={() => open(spot.ig)} style={{ ...igBtnStyle, flex:1 }}>📷 #{spot.tag}</button>
+                <button onClick={() => open(spot.tri)} style={{ ...triBtnStyle, flex:1 }}>🟢 TripAdvisor</button>
+                <button onClick={() => { navigator.clipboard.writeText('#'+spot.tag); setCopied(spot.name); setTimeout(()=>setCopied(null),1500) }}
+                  style={{ padding:'5px 10px', borderRadius:10, fontSize:'0.72rem', border:'1px solid #ccc', background: copied===spot.name?'#27ae60':'#fff', color: copied===spot.name?'#fff':'#666', cursor:'pointer', flex:1 }}>
+                  {copied===spot.name?'✓ Copié':'📋 Tag'}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ─── INSOLITE ─── */}
+      {subTab === 'inso' && (
+        <div>
+          <p style={{ fontSize:'0.82rem', color:'#888', marginBottom:10 }}>Expériences uniques que les guides ne montrent pas 🎌</p>
+          {INSOLITE_DB.map(item => (
+            <div key={item.name} style={{ background:'#fff', border:'1px solid #eee', borderRadius:14, padding:'0.85rem 1rem', marginBottom:8 }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontWeight:800, fontSize:'0.9rem', color:'#0b1f3a' }}>{item.emoji} {item.name}</div>
+                  <div style={{ fontSize:'0.75rem', color:'#833ab4', fontWeight:600 }}>{item.city}</div>
+                  <div style={{ fontSize:'0.8rem', color:'#555', marginTop:3 }}>{item.desc}</div>
+                </div>
+                <div style={{ fontWeight:700, color:'#27ae60', fontSize:'0.85rem', marginLeft:10, whiteSpace:'nowrap' }}>{item.price}</div>
+              </div>
+              <div style={{ display:'flex', gap:6, marginTop:8 }}>
+                <button onClick={() => open(item.ig)} style={{ ...igBtnStyle, flex:1 }}>📷 Instagram</button>
+                <button onClick={() => open(item.tri)} style={{ ...triBtnStyle, flex:1 }}>🟢 TripAdvisor</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </motion.div>
+  )
+}
+
+const igBtnStyle  = { padding:'5px 10px', borderRadius:10, fontSize:'0.72rem', fontWeight:700, background:'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', color:'#fff', border:'none', cursor:'pointer' }
+const triBtnStyle = { padding:'5px 10px', borderRadius:10, fontSize:'0.72rem', fontWeight:700, background:'#00af87', color:'#fff', border:'none', cursor:'pointer' }
+const mapBtnStyle = { padding:'5px 10px', borderRadius:10, fontSize:'0.72rem', fontWeight:700, background:'#0b1f3a', color:'#fff', border:'none', cursor:'pointer' }
+
+// ════════════════════════════════════════════════════
+//  CARNET DE VOYAGE (remplace FullWordGuide)
+// ════════════════════════════════════════════════════
+function CarnetPage() {
+  const [selected, setSelected] = useState(wordSections[0]?.id || 1)
+  const [search, setSearch] = useState('')
+  const section = wordSections.find(s => s.id === selected) || wordSections[0]
+  const idx = wordSections.findIndex(s => s.id === selected)
+
+  const filtered = search.trim()
+    ? wordSections.filter(s =>
+        s.title.toLowerCase().includes(search.toLowerCase()) ||
+        s.paragraphs?.some(p => p.toLowerCase().includes(search.toLowerCase()))
+      )
+    : wordSections
+
+  return (
+    <motion.div key="carnet" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }}
+      style={{ display:'flex', flexDirection:'column', minHeight:'100vh', background:'#f9f7f2' }}>
+
+      {/* ── Header ── */}
+      <div style={{ background:'#0b1f3a', padding:'1rem 1.2rem', color:'#fff', position:'sticky', top:0, zIndex:10 }}>
+        <div style={{ fontWeight:800, fontSize:'1.05rem', marginBottom:8 }}>📖 Carnet de voyage</div>
+        <input value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="Rechercher un lieu, une activité…"
+          style={{ width:'100%', padding:'8px 12px', borderRadius:10, border:'none', fontSize:'0.85rem',
+            background:'rgba(255,255,255,0.15)', color:'#fff', outline:'none', boxSizing:'border-box' }} />
+      </div>
+
+      {/* ── Sommaire scrollable ── */}
+      <div style={{ background:'#fff', borderBottom:'1px solid #eee', padding:'8px 12px', overflowX:'auto', display:'flex', gap:6, whiteSpace:'nowrap' }}>
+        {filtered.map(s => (
+          <button key={s.id} onClick={() => { setSelected(s.id); setSearch('') }}
+            style={{ flexShrink:0, padding:'5px 12px', borderRadius:20, fontSize:'0.75rem', fontWeight:700, cursor:'pointer', border:'none',
+              background: selected===s.id ? '#0b1f3a' : '#f0f0f0',
+              color: selected===s.id ? '#fff' : '#444' }}>
+            {s.title?.split('–')[0]?.trim() || s.title}
+          </button>
+        ))}
+      </div>
+
+      {/* ── Contenu pleine page ── */}
+      <div style={{ flex:1, padding:'1.2rem 1rem 2rem', maxWidth:680, margin:'0 auto', width:'100%', boxSizing:'border-box' }}>
+        <h2 style={{ fontSize:'1.2rem', fontWeight:800, color:'#0b1f3a', marginBottom:4, lineHeight:1.3 }}>{section?.title}</h2>
+        <div style={{ height:3, width:60, background:'#e1306c', borderRadius:4, marginBottom:16 }} />
+        <div>
+          {section?.paragraphs?.map((p, i) => {
+            if (!p.trim()) return null
+            const isH = /^(📅|✈️|🚄|🏯|🗾|Jour\s|JOUR|Programme|Le matin|L'après|La soirée|Hébergement|Budget|Transport|Activité|Repas)/.test(p)
+            const isEmoji = /^[📍🍜🚌🎌🌸🏮⛩️🎋🌊🏖️🏔️💴💶🕐]/.test(p)
+            return (
+              <p key={i} style={{
+                fontSize: isH ? '1rem' : '0.9rem',
+                fontWeight: isH ? 700 : 400,
+                color: isH ? '#0b1f3a' : '#444',
+                lineHeight: 1.7,
+                marginBottom: isH ? 12 : 8,
+                paddingLeft: isEmoji && !isH ? 4 : 0,
+                borderLeft: isH ? '3px solid #e1306c' : 'none',
+                paddingLeft: isH ? 10 : (isEmoji ? 4 : 0),
+                background: isH ? '#fff9fb' : 'transparent',
+                borderRadius: isH ? 6 : 0,
+                padding: isH ? '6px 10px' : undefined,
+              }}>{p}</p>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* ── Navigation bas ── */}
+      <div style={{ position:'sticky', bottom:0, background:'#fff', borderTop:'1px solid #eee', padding:'10px 16px', display:'flex', justifyContent:'space-between', gap:10 }}>
+        <button onClick={() => { if(idx > 0) setSelected(wordSections[idx-1].id) }}
+          disabled={idx === 0}
+          style={{ flex:1, padding:'10px', borderRadius:12, border:'1px solid #ddd', background: idx===0?'#f5f5f5':'#0b1f3a', color: idx===0?'#bbb':'#fff', fontWeight:700, fontSize:'0.85rem', cursor: idx===0?'not-allowed':'pointer' }}>
+          ← Précédent
+        </button>
+        <div style={{ display:'flex', alignItems:'center', fontSize:'0.75rem', color:'#888' }}>
+          {idx+1} / {wordSections.length}
+        </div>
+        <button onClick={() => { if(idx < wordSections.length-1) setSelected(wordSections[idx+1].id) }}
+          disabled={idx === wordSections.length-1}
+          style={{ flex:1, padding:'10px', borderRadius:12, border:'1px solid #ddd', background: idx===wordSections.length-1?'#f5f5f5':'#0b1f3a', color: idx===wordSections.length-1?'#bbb':'#fff', fontWeight:700, fontSize:'0.85rem', cursor: idx===wordSections.length-1?'not-allowed':'pointer' }}>
+          Suivant →
+        </button>
+      </div>
+    </motion.div>
+  )
+}
+
+// ════════════════════════════════════════════════════
+//  TOOLS PAGE (réservations + urgence)
+// ════════════════════════════════════════════════════
+function ToolsPage() {
+  return (
+    <motion.div key="tools" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
+      <div className="panel card-panel">
+        <SectionTitle title="Réservations clés" />
+        <div className="simple-list">
+          {reservationItems.map(item => (
+            <button className="simple-row" key={item.title} onClick={() => openMaps(item.maps)}>
+              <span className="simple-left"><item.icon size={18} /><span><b>{item.title}</b><small>{item.text}</small></span></span>
+              <Navigation size={18} />
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="panel card-panel">
+        <SectionTitle title="Urgence & santé" />
+        <div className="input-grid two">
+          <a className="call-card" href="tel:110"><Phone size={18} /> Police Japon 110</a>
+          <a className="call-card" href="tel:119"><Phone size={18} /> Urgence Japon 119</a>
+          <a className="call-card" href="tel:112"><Phone size={18} /> Police Corée 112</a>
+          <a className="call-card" href="tel:119"><HeartPulse size={18} /> Pompiers Corée 119</a>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+
 function loadNotifData(setNotifPos, setNotifData) {
   if (!navigator.geolocation) { setNotifPos('denied'); return }
   setNotifPos('loading')
@@ -807,12 +1221,14 @@ function AppShell() {
   const nextDay = useMemo(() => days[4], [])
 
   const page = {
-    days: <HomePage nextDay={nextDay} spent={spent} total={total} onGo={setTab} />,
-    map: <MapPage />,
-    food: <FoodPage />,
-    ai: <ChatGPTPage />,
-    budget: <BudgetPage />,
-    tools: <ToolsPage />,
+    days:    <HomePage nextDay={nextDay} spent={spent} total={total} onGo={setTab} />,
+    map:     <MapPage />,
+    food:    <FoodPage />,
+    explorer:<ExplorerPage />,
+    carnet:  <CarnetPage />,
+    ai:      <ChatGPTPage />,
+    budget:  <BudgetPage />,
+    tools:   <ToolsPage />,
   }[tab]
 
   return (
