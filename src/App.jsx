@@ -182,7 +182,7 @@ const quickLinks = [
   { key: 'days', label: 'Jours', icon: CalendarDays, color: 'violet' },
   { key: 'map', label: 'Carte', icon: Map, color: 'blue' },
   { key: 'food', label: 'Food', icon: UtensilsCrossed, color: 'orange' },
-  { key: 'ai', label: 'IA Assistant', icon: Sparkles, color: 'green' },
+  { key: 'ai', label: 'ChatGPT', icon: Sparkles, color: 'green' },
   { key: 'budget', label: 'Budget', icon: Wallet, color: 'pink' },
   { key: 'tools', label: 'Outils', icon: Briefcase, color: 'teal' },
 ]
@@ -482,40 +482,95 @@ function FoodPage() {
   )
 }
 
-function AIAssistantPage() {
-  const [question, setQuestion] = useState('')
-  const [answer, setAnswer] = useState('Pose une question sur le voyage : restaurant proche, trajet, idées de visite, etc.')
-  const [loading, setLoading] = useState(false)
+function ChatGPTPage() {
+  const [copied, setCopied] = useState(null)
+  const openChatGPT = () => window.open('https://chatgpt.com', '_blank', 'noopener,noreferrer')
 
-  const ask = async () => {
-    if (!question.trim()) return
-    setLoading(true)
-    try {
-      const r = await fetch('/api/ask', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question })
-      })
-      const data = await r.json()
-      setAnswer(data.answer || data.error || 'Réponse indisponible.')
-    } catch {
-      setAnswer('La route /api/ask devra être activée sur Vercel avec ANTHROPIC_API_KEY.')
-    } finally {
-      setLoading(false)
-    }
+  const copyPrompt = (text, id) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(id)
+      setTimeout(() => setCopied(null), 2000)
+    })
   }
+
+  const buttons = [
+    {
+      id: 'photo',
+      icon: '📷',
+      title: 'Traduire une photo',
+      sub: 'Ouvre ChatGPT, puis ajoute la photo d'un menu, panneau ou ticket.',
+      prompt: 'Traduis cette photo en français. C'est un menu ou une carte de restaurant. Résume les plats, indique les prix si visibles, et conseille-moi les meilleurs choix pour une famille.',
+      color: '#e8523a',
+    },
+    {
+      id: 'voice',
+      icon: '🎙️',
+      title: 'Traduction vocale',
+      sub: 'Ouvre ChatGPT et utilise le mode vocal pour parler français, japonais ou coréen.',
+      prompt: 'Tu vas servir de traducteur vocal français ↔ japonais/coréen pendant mon voyage. Traduis simplement, naturellement, et garde les phrases courtes.',
+      color: '#3a7bd5',
+    },
+    {
+      id: 'search',
+      icon: '🔍',
+      title: 'Recherche avec ChatGPT',
+      sub: 'Ouvre ChatGPT pour chercher un restaurant, un trajet ou une idée proche de toi.',
+      prompt: 'Je suis en voyage au Japon et en Corée avec ma famille. Propose-moi les meilleurs restaurants, visites ou trajets proches de ma position, simples et adaptés à une famille.',
+      color: '#27ae60',
+    },
+  ]
 
   return (
     <motion.div key="ai" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="page-stack">
-      <div className="panel card-panel">
-        <SectionTitle title="IA Assistant" />
-        <p className="soft">Assistant de voyage embarqué : transports, restaurants, itinéraires, conseils terrain.</p>
-        <textarea className="text-control" rows={4} value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Ex : Où dîner ce soir à Kyoto près de Gion ?" />
-        <button className="primary-action" onClick={ask}>{loading ? 'Envoi...' : 'Envoyer la question'} <Send size={17} /></button>
+
+      {/* Header */}
+      <div style={{ background:'#0b1f3a', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff', display:'flex', alignItems:'center', gap:14 }}>
+        <span style={{ fontSize:'2rem' }}>🤖</span>
+        <div>
+          <div style={{ fontWeight:800, fontSize:'1.1rem' }}>Assistant ChatGPT</div>
+          <div style={{ fontSize:'0.82rem', opacity:0.75, marginTop:2 }}>Traduis, cherche, explore — via ChatGPT</div>
+        </div>
       </div>
-      <div className="panel card-panel">
-        <SectionTitle title="Réponse" />
-        <p className="answer-box">{answer}</p>
+
+      {/* 3 boutons */}
+      {buttons.map(btn => (
+        <div key={btn.id} style={{ background:'#fff', border:`2px solid ${btn.color}`, borderRadius:16, padding:'1rem 1.2rem' }}>
+          <div style={{ display:'flex', alignItems:'flex-start', gap:12, marginBottom:12 }}>
+            <span style={{ fontSize:'1.8rem', lineHeight:1 }}>{btn.icon}</span>
+            <div>
+              <div style={{ fontWeight:700, fontSize:'1rem', color:'#0b1f3a' }}>{btn.title}</div>
+              <div style={{ fontSize:'0.82rem', color:'#666', marginTop:3 }}>{btn.sub}</div>
+            </div>
+          </div>
+
+          {/* Prompt copiable */}
+          <div style={{ background:'#f8f8f8', borderRadius:10, padding:'0.7rem 0.9rem', marginBottom:12, fontSize:'0.8rem', color:'#444', lineHeight:1.5, fontStyle:'italic' }}>
+            "{btn.prompt}"
+          </div>
+
+          <div style={{ display:'flex', gap:8 }}>
+            <button onClick={() => copyPrompt(btn.prompt, btn.id)}
+              style={{ flex:1, padding:'0.55rem', borderRadius:10, border:`1.5px solid ${btn.color}`,
+                background: copied===btn.id ? btn.color : '#fff',
+                color: copied===btn.id ? '#fff' : btn.color,
+                fontWeight:700, fontSize:'0.82rem', cursor:'pointer', transition:'all 0.2s' }}>
+              {copied===btn.id ? '✓ Copié !' : '📋 Copier le prompt'}
+            </button>
+            <button onClick={openChatGPT}
+              style={{ flex:1, padding:'0.55rem', borderRadius:10, border:'none',
+                background: btn.color, color:'#fff',
+                fontWeight:700, fontSize:'0.82rem', cursor:'pointer' }}>
+              Ouvrir ChatGPT →
+            </button>
+          </div>
+        </div>
+      ))}
+
+      {/* Astuce */}
+      <div style={{ background:'#fffbea', border:'1px solid #f0d060', borderRadius:12, padding:'0.9rem 1.1rem', fontSize:'0.82rem', color:'#7a6010' }}>
+        <b>💡 Astuce :</b> Copie le prompt → ouvre ChatGPT → colle-le. Pour la photo, appuie sur l'icône 📎 dans ChatGPT pour ajouter ton image.
       </div>
+
     </motion.div>
   )
 }
@@ -715,252 +770,6 @@ function BudgetPage() {
   )
 }
 
-function TranslatorPhotoBlock() {
-  const [preview, setPreview] = useState('')
-  const [file, setFile] = useState(null)
-  const [result, setResult] = useState('La traduction apparaîtra ici.')
-  const [loading, setLoading] = useState(false)
-
-  const onFile = (e) => {
-    const f = e.target.files?.[0]
-    if (!f) return
-    setFile(f)
-    setPreview(URL.createObjectURL(f))
-  }
-
-  const translate = async () => {
-    if (!file) return setResult('Choisis une photo de menu avant de traduire.')
-    setLoading(true)
-    const reader = new FileReader()
-    reader.onloadend = async () => {
-      try {
-        const r = await fetch('/api/translate-photo', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ image: reader.result, targetLanguage: 'français' })
-        })
-        const d = await r.json()
-        setResult(d.translation || d.error || 'Traduction indisponible.')
-      } catch {
-        setResult('La route /api/translate-photo devra être branchée sur Vercel.')
-      } finally {
-        setLoading(false)
-      }
-    }
-    reader.readAsDataURL(file)
-  }
-
-  return (
-    <div className="panel card-panel">
-      <SectionTitle title="Traducteur photo" />
-      <label className="upload-box">
-        <Camera size={26} />
-        <span>Prendre une photo ou choisir une image</span>
-        <small>Carte restaurant, panneau, étiquette</small>
-        <input type="file" accept="image/*" capture="environment" onChange={onFile} hidden />
-      </label>
-      {preview && <img className="preview-img" src={preview} alt="Aperçu" />}
-      <button className="primary-action" onClick={translate}>{loading ? 'Traduction...' : 'Traduire la photo'} <Languages size={17} /></button>
-      <p className="answer-box">{result}</p>
-    </div>
-  )
-}
-
-function VoiceBlock() {
-  const [source, setSource] = useState('fr-FR')
-  const [target, setTarget] = useState('japonais')
-  const [transcript, setTranscript] = useState('')
-  const [translation, setTranslation] = useState('La traduction apparaîtra ici.')
-  const labels = { 'fr-FR': 'français', 'ja-JP': 'japonais', 'ko-KR': 'coréen', 'en-US': 'anglais' }
-
-  const listen = () => {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition
-    if (!SR) {
-      setTranslation('La reconnaissance vocale navigateur n’est pas disponible ici. Chrome Android est le plus fiable.')
-      return
-    }
-    const rec = new SR()
-    rec.lang = source
-    rec.onresult = async (e) => {
-      const text = e.results?.[0]?.[0]?.transcript || ''
-      setTranscript(text)
-      try {
-        const r = await fetch('/api/voice-translate', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text, from: labels[source], to: target })
-        })
-        const d = await r.json()
-        setTranslation(d.translation || d.error || 'Traduction indisponible.')
-      } catch {
-        setTranslation(`Route /api/voice-translate à brancher. Texte reconnu : ${text}`)
-      }
-    }
-    rec.start()
-  }
-
-  const speak = () => {
-    if (!window.speechSynthesis || !translation) return
-    const utterance = new SpeechSynthesisUtterance(translation)
-    utterance.lang = target === 'japonais' ? 'ja-JP' : target === 'coréen' ? 'ko-KR' : 'fr-FR'
-    window.speechSynthesis.speak(utterance)
-  }
-
-  return (
-    <div className="panel card-panel">
-      <SectionTitle title="Traducteur vocal" />
-      <div className="voice-preset-grid">
-        <button className="pill-btn" onClick={() => { setSource('fr-FR'); setTarget('japonais') }}>🇫🇷 → 🇯🇵</button>
-        <button className="pill-btn" onClick={() => { setSource('ja-JP'); setTarget('français') }}>🇯🇵 → 🇫🇷</button>
-        <button className="pill-btn" onClick={() => { setSource('fr-FR'); setTarget('coréen') }}>🇫🇷 → 🇰🇷</button>
-        <button className="pill-btn" onClick={() => { setSource('ko-KR'); setTarget('français') }}>🇰🇷 → 🇫🇷</button>
-      </div>
-      <div className="input-grid two">
-        <select className="text-input" value={source} onChange={(e) => setSource(e.target.value)}>
-          <option value="fr-FR">Français</option><option value="ja-JP">Japonais</option><option value="ko-KR">Coréen</option>
-        </select>
-        <select className="text-input" value={target} onChange={(e) => setTarget(e.target.value)}>
-          <option value="français">Français</option><option value="japonais">Japonais</option><option value="coréen">Coréen</option>
-        </select>
-      </div>
-      <button className="primary-action" onClick={listen}><Mic size={17} /> Appuyer et parler</button>
-      <div className="two-boxes">
-        <div className="mini-box"><small>Texte reconnu</small><p>{transcript || 'La phrase reconnue apparaîtra ici.'}</p></div>
-        <div className="mini-box"><small>Traduction</small><p>{translation}</p></div>
-      </div>
-      <button className="secondary-action" onClick={speak}><Volume2 size={17} /> Lire la traduction</button>
-    </div>
-  )
-}
-
-function BuzzBlock() {
-  const [activeDay, setActiveDay] = useState(instagramBuzz[0].dayId)
-  const item = instagramBuzz.find(d => d.dayId === activeDay) || instagramBuzz[0]
-  const open = (url) => window.open(url, '_blank', 'noopener,noreferrer')
-
-  return (
-    <div className="panel card-panel">
-      <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:'0.5rem' }}>
-        <Camera size={18} style={{ color:'#e1306c' }} />
-        <span style={{ fontWeight:700, fontSize:'1rem' }}>Instagram · Spots &amp; Restos par jour</span>
-      </div>
-      <p className="soft" style={{ marginBottom:'0.8rem' }}>Sélectionne un jour pour voir les comptes et hashtags les plus viraux du voyage.</p>
-
-      {/* Sélecteur de jour */}
-      <div style={{ display:'flex', gap:6, overflowX:'auto', paddingBottom:6, marginBottom:'1rem' }}>
-        {instagramBuzz.map(d => (
-          <button key={d.dayId} onClick={() => setActiveDay(d.dayId)}
-            style={{ flexShrink:0, padding:'4px 10px', borderRadius:20, fontSize:'0.75rem', fontWeight:600, cursor:'pointer',
-              background: activeDay===d.dayId ? '#e1306c' : '#f0f0f0',
-              color: activeDay===d.dayId ? '#fff' : '#444',
-              border: 'none' }}>
-            {d.date}
-          </button>
-        ))}
-      </div>
-
-      {/* Détail du jour */}
-      <div style={{ background:'#fff9fb', border:'1px solid #f0d0da', borderRadius:12, padding:'0.8rem 1rem' }}>
-        <p style={{ fontWeight:700, marginBottom:6, color:'#0b1f3a' }}>📍 {item.city} — {item.title}</p>
-
-        {/* Spots photo */}
-        <p style={{ fontSize:'0.78rem', color:'#e1306c', fontWeight:700, marginBottom:4, textTransform:'uppercase', letterSpacing:1 }}>📸 Spots photo</p>
-        {item.spots.map(s => (
-          <div key={s.name} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'5px 0', borderBottom:'1px solid #f5e8ed' }}>
-            <span style={{ fontSize:'0.85rem', color:'#333' }}>{s.name}</span>
-            <div style={{ display:'flex', gap:6 }}>
-              <button onClick={() => open(s.url)}
-                style={{ background:'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', color:'#fff', border:'none', borderRadius:8, padding:'3px 10px', fontSize:'0.72rem', cursor:'pointer', fontWeight:600 }}>
-                #{s.tag}
-              </button>
-              {s.handle && (
-                <button onClick={() => open(`https://www.instagram.com/${s.handle}/`)}
-                  style={{ background:'#e1306c', color:'#fff', border:'none', borderRadius:8, padding:'3px 10px', fontSize:'0.72rem', cursor:'pointer', fontWeight:600 }}>
-                  @{s.handle}
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
-
-        {/* Restaurants */}
-        <p style={{ fontSize:'0.78rem', color:'#e1306c', fontWeight:700, margin:'10px 0 4px', textTransform:'uppercase', letterSpacing:1 }}>🍜 Restaurants</p>
-        {item.restaurants.map(r => (
-          <div key={r.name} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'5px 0', borderBottom:'1px solid #f5e8ed' }}>
-            <span style={{ fontSize:'0.85rem', color:'#333' }}>{r.name}</span>
-            <div style={{ display:'flex', gap:6 }}>
-              <button onClick={() => open(r.url)}
-                style={{ background:'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)', color:'#fff', border:'none', borderRadius:8, padding:'3px 10px', fontSize:'0.72rem', cursor:'pointer', fontWeight:600 }}>
-                #{r.tag}
-              </button>
-              {r.handle && (
-                <button onClick={() => open(`https://www.instagram.com/${r.handle}/`)}
-                  style={{ background:'#e1306c', color:'#fff', border:'none', borderRadius:8, padding:'3px 10px', fontSize:'0.72rem', cursor:'pointer', fontWeight:600 }}>
-                  @{r.handle}
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-
-function FullWordGuide() {
-  const [selected, setSelected] = useState(1)
-  const section = wordSections.find((s) => s.id === selected) || wordSections[0]
-  return (
-    <div className="panel card-panel">
-      <SectionTitle title="Carnet Word complet par jour" />
-      <p className="soft">Tous les textes du fichier Word sont intégrés ici par section/jour, avec les photos extraites du document. Sélectionne une journée pour consulter le détail complet.</p>
-      <select className="text-input word-select" value={selected} onChange={(e) => setSelected(Number(e.target.value))}>
-        {wordSections.map((s) => <option key={s.id} value={s.id}>{s.title}</option>)}
-      </select>
-      <div className="word-detail">
-        <h4>{section.title}</h4>
-
-        <div className="word-text">
-          {section.paragraphs.map((p, idx) => {
-            const isTitle = /^([📍>]*\s*)?(jour|JOUR|📅|✈️|🚄|🏯|Tokyo|Le |le |\d{1,2}\s+juillet|Programme)/.test(p)
-            return <p key={idx} className={isTitle ? 'word-line word-heading' : 'word-line'}>{p}</p>
-          })}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function ToolsPage() {
-  return (
-    <motion.div key="tools" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="page-stack">
-      <div className="panel card-panel">
-        <SectionTitle title="Réservations clés" />
-        <div className="simple-list">
-          {reservationItems.map((item) => (
-            <button className="simple-row" key={item.title} onClick={() => openMaps(item.maps)}>
-              <span className="simple-left"><item.icon size={18} /> <span><b>{item.title}</b><small>{item.text}</small></span></span>
-              <Navigation size={18} />
-            </button>
-          ))}
-        </div>
-      </div>
-      <FullWordGuide />
-      <div className="panel card-panel">
-        <SectionTitle title="Urgence & santé" />
-        <div className="input-grid two">
-          <a className="call-card" href="tel:110"><Phone size={18} /> Police Japon 110</a>
-          <a className="call-card" href="tel:119"><Phone size={18} /> Urgence Japon 119</a>
-          <a className="call-card" href="tel:112"><Phone size={18} /> Police Corée 112</a>
-          <a className="call-card" href="tel:119"><HeartPulse size={18} /> Pompiers Corée 119</a>
-        </div>
-      </div>
-      <BuzzBlock />
-      <TranslatorPhotoBlock />
-      <VoiceBlock />
-    </motion.div>
-  )
-}
-
 function loadNotifData(setNotifPos, setNotifData) {
   if (!navigator.geolocation) { setNotifPos('denied'); return }
   setNotifPos('loading')
@@ -1001,7 +810,7 @@ function AppShell() {
     days: <HomePage nextDay={nextDay} spent={spent} total={total} onGo={setTab} />,
     map: <MapPage />,
     food: <FoodPage />,
-    ai: <AIAssistantPage />,
+    ai: <ChatGPTPage />,
     budget: <BudgetPage />,
     tools: <ToolsPage />,
   }[tab]
