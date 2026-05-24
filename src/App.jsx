@@ -6,12 +6,13 @@ import {
   Menu, Bell, SunMedium, ChevronRight, MapPin, Clock3, Footprints,
   Camera, WalletCards, Globe, Smartphone, Hotel, Plane, Train, Phone,
   Languages, Mic, Volume2, Search, Send, PlusCircle, Trash2, Download,
-  Flame, Route, Navigation, HeartPulse, FileText
+  Flame, Route, Navigation, HeartPulse, FileText, Calculator
 } from 'lucide-react'
 
 const assets = {
   splash: '/splash.png',
   banner: '/banner.jpg',
+  logo: '/icon-192.png',
 }
 
 const days = [
