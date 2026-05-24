@@ -330,9 +330,9 @@ function UsefulCard({ info }) {
 
 
 const weatherCodes = {
-  0: 'Ciel dégagé', 1: 'Principalement clair', 2: 'Partiellement nuageux', 3: 'Couvert',
-  45: 'Brouillard', 48: 'Brouillard givrant', 51: 'Bruine faible', 53: 'Bruine', 55: 'Bruine forte',
-  61: 'Pluie faible', 63: 'Pluie', 65: 'Pluie forte', 71: 'Neige faible', 73: 'Neige', 75: 'Neige forte',
+  0: `Ciel dégagé`, 1: 'Principalement clair', 2: 'Partiellement nuageux', 3: 'Couvert',
+  45: `Brouillard`, 48: 'Brouillard givrant', 51: 'Bruine faible', 53: 'Bruine', 55: 'Bruine forte',
+  61: `Pluie faible`, 63: 'Pluie', 65: 'Pluie forte', 71: 'Neige faible', 73: 'Neige', 75: 'Neige forte',
   80: 'Averses faibles', 81: 'Averses', 82: 'Averses fortes', 95: 'Orage'
 }
 
@@ -500,7 +500,7 @@ function ChatGPTPage() {
       icon: '📷',
       title: 'Traduire une photo',
       sub: "Ouvre ChatGPT, puis ajoute la photo d'un menu, panneau ou ticket.",
-      prompt: 'Traduis cette photo en français. C'est un menu ou une carte de restaurant. Résume les plats, indique les prix si visibles, et conseille-moi les meilleurs choix pour une famille.',
+      prompt: `Traduis cette photo en français. C'est un menu ou une carte de restaurant. Résume les plats, indique les prix si visibles, et conseille-moi les meilleurs choix pour une famille.`,
       color: '#e8523a',
     },
     {
