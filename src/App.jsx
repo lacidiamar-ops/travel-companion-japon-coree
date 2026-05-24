@@ -885,9 +885,6 @@ const MEAL_TIMES = ['🌅 PDJ', '☀️ Déjeuner', '🍡 Snacking', '🌙 Dîne
 const TYPES_FOOD = [...new Set(RESTAURANTS_DB.map(r => r.type))]
 const CITIES_FOOD = [...new Set(RESTAURANTS_DB.map(r => r.city))]
 
-const TYPES_FOOD = [...new Set(RESTAURANTS_DB.map(r => r.type))]
-const CITIES_FOOD = [...new Set(RESTAURANTS_DB.map(r => r.city))]
-
 const SPOTS_DB = [
   // ════ OSAKA ════
   { cat:'📸 Instagram', city:'Osaka', name:'Dotonbori Nuit', desc:'Néons, Glico Man, reflets sur la rivière Dotonbori', heure:'20h-23h', tag:'dotonbori', ig:'https://www.instagram.com/explore/tags/dotonbori/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234560-Reviews-Dotonbori-Osaka.html', prix:'Gratuit' },
@@ -931,7 +928,7 @@ const SPOTS_DB = [
   { cat:'📸 Instagram', city:'Séoul', name:'Seongsu Murals', desc:'Quartier hipster, cafés arty, murals streetart industriel', heure:'11h-18h', tag:'seongsuseoul', ig:'https://www.instagram.com/explore/tags/seongsuseoul/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456783-Reviews-Seongsu-Seoul.html', prix:'Gratuit' },
   { cat:'📸 Instagram', city:'Séoul', name:'Lotte Tower Sky Seoul', desc:'123e étage, vue panoramique, sky bridge vitré', heure:'9h-23h', tag:'lottetower', ig:'https://www.instagram.com/explore/tags/lottetower/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234615-Reviews-Lotte_Tower-Seoul.html', prix:'₩27000' },
   { cat:'🎪 Insolite', city:'Séoul', name:'Lotte World Theme Park', desc:"Parc d'attraction indoor + outdoor géant, Corée en miniature", heure:'9h-21h', tag:'lotteworld', ig:'https://www.instagram.com/explore/tags/lotteworld/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234586-Reviews-Lotte_World-Seoul.html', prix:'₩54000' },
-  { cat:'🎪 Insolite', city:'Séoul', name:'Trick Eye Museum', desc:'Musée illusions optiques, photos trompe-l'oeil ultra virales', heure:'10h-20h', tag:'trickeye', ig:'https://www.instagram.com/explore/tags/trickeye/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d5678901-Reviews-Trick_Eye-Seoul.html', prix:'₩15000' },
+  { cat:'🎪 Insolite', city:'Séoul', name:'Trick Eye Museum', desc:`Musée illusions optiques, photos trompe-l'oeil ultra virales`, heure:'10h-20h', tag:'trickeye', ig:'https://www.instagram.com/explore/tags/trickeye/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d5678901-Reviews-Trick_Eye-Seoul.html', prix:'₩15000' },
   { cat:'🎪 Insolite', city:'Séoul', name:'Nanta Show Hongdae', desc:'Spectacle culinaire percussions sans paroles, interactif', heure:'17h & 20h', tag:'nantashow', ig:'https://www.instagram.com/explore/tags/nantashow/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234587-Reviews-Nanta_Show-Seoul.html', prix:'₩40000' },
   { cat:'🏛️ Atypique', city:'Séoul', name:'Ihwa Mural Village', desc:'Village mural sur colline Naksan, art de rue authentique', heure:'10h-18h', tag:'ihwamural', ig:'https://www.instagram.com/explore/tags/ihwamural/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234616-Reviews-Ihwa_Village-Seoul.html', prix:'Gratuit' },
   { cat:'🏛️ Atypique', city:'Séoul', name:'Gwangjang Market 1905', desc:"Plus vieux marché couvert de Corée, ambiance d'époque", heure:'8h-23h', tag:'gwangjangmarket', ig:'https://www.instagram.com/explore/tags/gwangjangmarket/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456781-Reviews-Gwangjang-Seoul.html', prix:'Gratuit' },
