@@ -1839,12 +1839,12 @@ function TransportPage() {
 
 // ════ CHECKLIST PRÉ-DÉPART ════
 const CHECKLIST_DEF = [
-  { cat:'📄 Documents', items:['Passeports valides 6+ mois','Assurance voyage souscrite','Billets avion imprimés ou téléchargés','JR Pass commandé','Réservations hôtels confirmées','Carnet de vaccination','Photocopies documents (cloud + papier)','Photos d'identité (x4 par personne)'] },
+  { cat:'📄 Documents', items:['Passeports valides 6+ mois','Assurance voyage souscrite','Billets avion imprimés ou téléchargés','JR Pass commandé','Réservations hôtels confirmées','Carnet de vaccination','Photocopies documents (cloud + papier)',"Photos d'identité (x4 par personne)"] },
   { cat:'💳 Argent & Paiements', items:['Yens japonais (¥) — prévoir ~¥50 000/pers/semaine','Wons coréens (₩) — prévoir ~₩200 000/pers','CB Visa/Mastercard sans frais étrangers','Prévenir sa banque du voyage','Télécharger app banque','Code PIN à 4 chiffres connu'] },
   { cat:'📱 Tech & Connectivité', items:['SIM internationale ou Pocket WiFi réservé','Maps Japon + Corée téléchargées hors-ligne','App Suica / T-money','Adaptateur prise japonaise (Type A)','Batterie externe chargée (max 100Wh en cabine)','Chargeurs tous appareils','Écouteurs (film dans avion)'] },
   { cat:'👕 Bagages', items:['Valise ≤ 23kg + bagage cabine ≤ 10kg','Chaussures confortables (BEAUCOUP de marche)','Imperméable / coupe-vent','Vêtements été + 1 pull (clim forte Japon)','Chaussettes propres (déchausser souvent)','Maillots de bain (onsen, plage Busan)','Crème solaire SPF50+'] },
-  { cat:'💊 Santé', items:['Médicaments habituels + ordonnances','Paracétamol / ibuprofène','Pansements + désinfectant','Anti-diarrhéique (changement alimentation)','Crème anti-moustiques','Masques chirurgicaux (courant en Asie)','Carte européenne d'assurance maladie'] },
-  { cat:'✈️ Jour J', items:['Arriver CDG 3h avant (vol Rome 09 juil.)','Peluche / jeu enfant pour l'avion','Collations avion','Valider JR Pass à l'arrivée','Retirer espèces au distributeur aéroport','Suica / T-money à acheter','Note des numéros d'hôtel premiers jours'] },
+  { cat:'💊 Santé', items:['Médicaments habituels + ordonnances','Paracétamol / ibuprofène','Pansements + désinfectant','Anti-diarrhéique (changement alimentation)','Crème anti-moustiques','Masques chirurgicaux (courant en Asie)',"Carte européenne d'assurance maladie"] },
+  { cat:'✈️ Jour J', items:['Arriver CDG 3h avant (vol Rome 09 juil.)',"Peluche / jeu enfant pour l'avion",'Collations avion',"Valider JR Pass à l'arrivée",'Retirer espèces au distributeur aéroport','Suica / T-money à acheter',"Note des numéros d'hôtel premiers jours"] },
 ]
 
 function ChecklistPage() {
