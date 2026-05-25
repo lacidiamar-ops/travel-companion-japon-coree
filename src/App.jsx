@@ -281,7 +281,7 @@ function SplashScreen({ onStart }) {
 function QuickAction({ item, active, onClick }) {
   const Icon = item.icon
   return (
-    <button className={`quick-action ${item.color} ${active ? `active' : ''}'} onClick={onClick}>
+    <button className={`quick-action ${item.color} ${active ? `active' : ''}`} onClick={onClick}>
       <span className="quick-icon"><Icon size={28} /></span>
       <span>{item.label}</span>
     </button>
@@ -556,7 +556,7 @@ function ChatGPTPage() {
 
       {/* 3 boutons */}
       {buttons.map(btn => (
-        <div key={btn.id} style={{ background:'#fff', border:'2px solid ${btn.color}`, borderRadius:16, padding:`1rem 1.2rem' }}>
+        <div key={btn.id} style={{ background:'#fff', border:`2px solid ${btn.color}`, borderRadius:16, padding:`1rem 1.2rem' }}>
           <div style={{ display:'flex', alignItems:'flex-start', gap:12, marginBottom:12 }}>
             <span style={{ fontSize:'1.8rem', lineHeight:1 }}>{btn.icon}</span>
             <div>
@@ -572,7 +572,7 @@ function ChatGPTPage() {
 
           <div style={{ display:'flex', gap:8 }}>
             <button onClick={() => copyPrompt(btn.prompt, btn.id)}
-              style={{ flex:1, padding:'0.55rem', borderRadius:10, border:'1.5px solid ${btn.color}`,
+              style={{ flex:1, padding:'0.55rem', borderRadius:10, border:`1.5px solid ${btn.color}`,
                 background: copied===btn.id ? btn.color : '#fff',
                 color: copied===btn.id ? '#fff' : btn.color,
                 fontWeight:700, fontSize:'0.82rem', cursor:'pointer', transition:'all 0.2s' }}>
@@ -1405,9 +1405,9 @@ function ConverterPage() {
             {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.label} ({c.symbol})</option>)}
           </select>
           <div style={{ flex:1, padding:'10px', borderRadius:10, background: result ? '#e8f5e9' : '#f5f5f5',
-            border:`2px solid ${result ? `#27ae60' : '#ddd'}', fontSize:'1.3rem', fontWeight:800,
+            border:`2px solid ${result ? `#27ae60' : '#ddd'}`, fontSize:'1.3rem', fontWeight:800,
             textAlign:'right', color:'#27ae60', display:'flex', alignItems:'center', justifyContent:'flex-end' }}>
-            {result ? `${toCur?.symbol}${Number(result).toLocaleString(`fr-FR')}' : '—'}
+            {result ? `${toCur?.symbol}${Number(result).toLocaleString(`fr-FR')}` : '—'}
           </div>
         </div>
 
@@ -1864,7 +1864,7 @@ function ChecklistPage() {
       <div style={{ background:'linear-gradient(135deg,#27ae60,#2ecc71)', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
         <div style={{ fontWeight:800, fontSize:'1.1rem' }}>✅ Checklist pré-départ</div>
         <div style={{ marginTop:8, background:'rgba(255,255,255,0.25)', borderRadius:8, height:10 }}>
-          <div style={{ background:'#fff', height:10, borderRadius:8, width:'${(done/total)*100}%`, transition:`width 0.4s' }} />
+          <div style={{ background:'#fff', height:10, borderRadius:8, width:`${(done/total)*100}%`, transition:`width 0.4s' }} />
         </div>
         <div style={{ fontSize:'0.82rem', marginTop:4 }}>{done} / {total} éléments cochés</div>
       </div>
@@ -2513,7 +2513,7 @@ function MetroPage() {
                 </div>
                 <div style={{ fontSize:'0.76rem', color:'#555', marginTop:2 }}>{st.note}</div>
               </div>
-              <button onClick={() => open(`https://www.google.com/maps/search/${encodeURIComponent(st.name+` station '+city)}')}
+              <button onClick={() => open(`https://www.google.com/maps/search/${encodeURIComponent(st.name+` station '+city)}`)}
                 style={{ background:'#0b1f3a', color:'#fff', border:'none', borderRadius:8, padding:'5px 10px', cursor:'pointer', fontSize:'0.72rem', flexShrink:0, marginLeft:8 }}>
                 📍
               </button>
@@ -2668,7 +2668,7 @@ function AppShell() {
         {quickLinks.map((item) => {
           const Icon = item.icon
           return (
-            <button key={item.key} className={`bottom-item ${tab === item.key ? `active' : ''}'} onClick={() => setTab(item.key)}>
+            <button key={item.key} className={`bottom-item ${tab === item.key ? `active' : ''}`} onClick={() => setTab(item.key)}>
               <Icon size={21} />
               <span>{item.label === 'IA Assistant' ? 'IA' : item.label}</span>
             </button>
