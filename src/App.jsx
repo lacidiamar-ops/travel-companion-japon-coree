@@ -6,7 +6,7 @@ import {
   Menu, Bell, SunMedium, ChevronRight, MapPin, Clock3, Footprints,
   Camera, WalletCards, Globe, Smartphone, Hotel, Plane, Train, Phone,
   Languages, Mic, Volume2, Search, Send, PlusCircle, Trash2, Download,
-  Flame, Route, Navigation, HeartPulse, FileText, Calculator
+  Flame, Route, Navigation, HeartPulse, FileText, Calculator, CheckSquare, Clock
 } from 'lucide-react'
 
 const assets = {
@@ -186,10 +186,13 @@ const quickLinks = [
 ]
 // Onglets secondaires accessibles via le menu hamburger uniquement
 const secondaryLinks = [
-  { key: 'map',      label: 'Carte',         icon: Map,        color: 'blue'   },
-  { key: 'ai',       label: 'ChatGPT',       icon: Sparkles,   color: 'green'  },
-  { key: 'converter',label: 'Convertisseur', icon: Calculator, color: 'indigo' },
-  { key: 'phrases',  label: 'Phrases utiles',icon: Languages,  color: 'rose'   },
+  { key: 'map',       label: 'Carte',          icon: Map,        color: 'blue'   },
+  { key: 'ai',        label: 'ChatGPT',        icon: Sparkles,   color: 'green'  },
+  { key: 'converter', label: 'Convertisseur',  icon: Calculator, color: 'indigo' },
+  { key: 'phrases',   label: 'Phrases utiles', icon: Languages,  color: 'rose'   },
+  { key: 'transport', label: 'Transports',     icon: Train,      color: 'blue'   },
+  { key: 'checklist', label: 'Checklist',      icon: CheckSquare,color: 'green'  },
+  { key: 'notes',     label: 'Mes notes',      icon: FileText,   color: 'amber'  },
 ]
 
 const usefulInfo = [
@@ -413,6 +416,7 @@ function HomePage({ nextDay, spent, total, onGo }) {
   return (
     <motion.div key="home" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="page-stack">
       <BudgetOverviewCard spent={spent} total={total} onOpen={() => onGo('budget')} />
+      <CountdownCard />
       <WeatherLiveCard />
 
       <div className="panel card-panel">
@@ -1674,6 +1678,289 @@ function PhrasesPage() {
 }
 
 
+// ════ COMPTE À REBOURS ════
+function CountdownCard() {
+  const DEPART = new Date('2025-07-11T08:00:00')
+  const [now, setNow] = React.useState(new Date())
+  React.useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 1000)
+    return () => clearInterval(t)
+  }, [])
+  const diff = DEPART - now
+  if (diff <= 0) return (
+    <div style={{ background:'linear-gradient(135deg,#27ae60,#2ecc71)', borderRadius:16, padding:'1rem 1.4rem', color:'#fff', textAlign:'center' }}>
+      <div style={{ fontSize:'1.5rem' }}>✈️ Bon voyage Famille Lacidi !</div>
+    </div>
+  )
+  const j = Math.floor(diff / 86400000)
+  const h = Math.floor((diff % 86400000) / 3600000)
+  const m = Math.floor((diff % 3600000) / 60000)
+  const s = Math.floor((diff % 60000) / 1000)
+  return (
+    <div style={{ background:'linear-gradient(135deg,#0b1f3a,#1a3a6b)', borderRadius:16, padding:'1rem 1.4rem', color:'#fff' }}>
+      <div style={{ fontSize:'0.8rem', opacity:0.7, marginBottom:6 }}>✈️ Départ pour le Japon & la Corée</div>
+      <div style={{ display:'flex', justifyContent:'center', gap:12, textAlign:'center' }}>
+        {[[j,'jours'],[h,'heures'],[m,'min'],[s,'sec']].map(([v,l]) => (
+          <div key={l}>
+            <div style={{ fontSize:'1.8rem', fontWeight:900, lineHeight:1 }}>{String(v).padStart(2,'0')}</div>
+            <div style={{ fontSize:'0.65rem', opacity:0.7 }}>{l}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ textAlign:'center', fontSize:'0.72rem', opacity:0.6, marginTop:6 }}>11 juillet 2025 — Osaka</div>
+    </div>
+  )
+}
+
+// ════ PAGE TRANSPORTS ════
+const TRANSPORT_INFO = [
+  {
+    title: '🚅 JR Pass — Shinkansen',
+    color: '#e8523a',
+    items: [
+      "Achetez le JR Pass AVANT de partir en France — moins cher et obligatoire à l'avance",
+      "Pass 14 jours recommandé pour votre itinéraire (Osaka → Tokyo via Kyoto)",
+      "Valider le pass au guichet JR à l'arrivée à l'aéroport",
+      "Couvre : Shinkansen (sauf Nozomi/Mizuho), trains JR, bus JR",
+      "Réserver les sièges Shinkansen gratuitement au guichet JR (ou via app JR)",
+      "Prix adulte 14j : ~46 390 ¥ | Enfant (6-11 ans) : 50% de réduction",
+    ]
+  },
+  {
+    title: '💳 IC Card — Suica / Pasmo',
+    color: '#3a7bd5',
+    items: [
+      "Carte rechargeable pour métro, bus, et paiements (combinis, vending machines)",
+      "Suica : achetez à l'aéroport Haneda ou Narita (dépôt ¥500 remboursable)",
+      "Fonctionne dans tout le Japon — Osaka, Kyoto, Tokyo",
+      "Rechargez aux distributeurs dans toutes les stations",
+      "Alternative : Apple Pay Suica sur iPhone (sans carte physique)",
+      "Remboursez à votre départ au guichet JR : ¥500 + solde restant",
+    ]
+  },
+  {
+    title: '🚇 Métro Osaka / Tokyo / Séoul',
+    color: '#27ae60',
+    items: [
+      "Osaka : ligne Midosuji (rouge) = axe principal Namba ↔ Umeda",
+      "Osaka Pass 24h/48h recommandé pour les journées touristiques intensives",
+      "Tokyo : 13 lignes JR + métro Tokyo = utiliser Google Maps pour naviguer",
+      "Séoul : T-money Card (≈ Suica coréen) valable métro + bus + taxi",
+      "T-money : achetez à l'aéroport Incheon, rechargez partout (₩1000 minimum)",
+      "Séoul métro très simple : annonces en français dans les grandes stations",
+      "Dernière rame de métro : ~23h30 Tokyo / ~24h Séoul",
+    ]
+  },
+  {
+    title: '✈️ Vols intérieurs & Ferries',
+    color: '#8e44ad',
+    items: [
+      "Kyoto → Séoul : aucun vol direct — prendre le Shinkansen jusqu'à Osaka/Kansai Airport",
+      "Vol Osaka (KIX) → Séoul (ICN) : ~1h30 — Air Korea, Peach, Jeju Air",
+      "Séoul → Tokyo : vol Gimpo (GMP) → Haneda (HND) = plus pratique que Incheon",
+      "Ferry Busan → Fukuoka (Japon) : option si vous souhaitez revenir par mer",
+      "Réservez les vols intérieurs sur Skyscanner ou Jeju Air directement",
+    ]
+  },
+  {
+    title: '🚌 Bus & Navettes aéroport',
+    color: '#f39c12',
+    items: [
+      "Osaka Kansai (KIX) → Namba : Haruka Express JR (50min, couvert JR Pass)",
+      "Tokyo Haneda → centre : Monorail ou Keikyu (30min, ¥300-500)",
+      "Seoul Incheon → centre : AREX Express (40min, ₩9500) ou bus limousine",
+      "Busan Gimhae → centre : bus 307 (40min, ₩1700) ou métro ligne 2",
+      "Gardez ¥1000 en cash à l'arrivée pour les navettes avant de recharger votre IC Card",
+    ]
+  },
+  {
+    title: '💡 Conseils pratiques',
+    color: '#0b1f3a',
+    items: [
+      "Google Maps fonctionne parfaitement pour les transports au Japon et en Corée",
+      "Téléchargez les cartes hors-ligne Google Maps avant le départ",
+      "Apps utiles : Japan Official Travel App, Naver Map (Corée), Kakao Map (Corée)",
+      "Les taxis sont chers mais propres — évitez aux heures de pointe",
+      "Ne mangez pas dans le métro au Japon (impoli)",
+      "Files séparées montée/descente sur les quais — respectez l'ordre",
+    ]
+  },
+]
+
+function TransportPage() {
+  const [open, setOpen] = React.useState(null)
+  return (
+    <motion.div key="transport" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
+      <div style={{ background:'linear-gradient(135deg,#0b1f3a,#1a3a6b)', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
+        <div style={{ fontWeight:800, fontSize:'1.1rem' }}>🚆 Guide Transports</div>
+        <div style={{ fontSize:'0.8rem', opacity:0.75, marginTop:2 }}>JR Pass · IC Card · Métro · Aéroport</div>
+      </div>
+      {TRANSPORT_INFO.map((section, i) => (
+        <div key={section.title} style={{ background:'#fff', borderRadius:14, border:`2px solid ${section.color}`, overflow:'hidden' }}>
+          <button onClick={() => setOpen(open===i ? null : i)}
+            style={{ width:'100%', display:'flex', justifyContent:'space-between', alignItems:'center',
+              padding:'0.9rem 1.1rem', background:'none', border:'none', cursor:'pointer', textAlign:'left' }}>
+            <span style={{ fontWeight:800, fontSize:'0.95rem', color:section.color }}>{section.title}</span>
+            <span style={{ fontSize:'1.2rem', color:section.color }}>{open===i ? '▲' : '▼'}</span>
+          </button>
+          {open===i && (
+            <div style={{ padding:'0 1.1rem 1rem' }}>
+              {section.items.map((item, j) => (
+                <div key={j} style={{ display:'flex', gap:8, padding:'5px 0', borderBottom:'1px solid #f5f5f5', fontSize:'0.84rem', color:'#333', lineHeight:1.5 }}>
+                  <span style={{ color:section.color, flexShrink:0 }}>•</span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </motion.div>
+  )
+}
+
+// ════ CHECKLIST PRÉ-DÉPART ════
+const CHECKLIST_DEF = [
+  { cat:'📄 Documents', items:['Passeports valides 6+ mois','Assurance voyage souscrite','Billets avion imprimés ou téléchargés','JR Pass commandé','Réservations hôtels confirmées','Carnet de vaccination','Photocopies documents (cloud + papier)','Photos d'identité (x4 par personne)'] },
+  { cat:'💳 Argent & Paiements', items:['Yens japonais (¥) — prévoir ~¥50 000/pers/semaine','Wons coréens (₩) — prévoir ~₩200 000/pers','CB Visa/Mastercard sans frais étrangers','Prévenir sa banque du voyage','Télécharger app banque','Code PIN à 4 chiffres connu'] },
+  { cat:'📱 Tech & Connectivité', items:['SIM internationale ou Pocket WiFi réservé','Maps Japon + Corée téléchargées hors-ligne','App Suica / T-money','Adaptateur prise japonaise (Type A)','Batterie externe chargée (max 100Wh en cabine)','Chargeurs tous appareils','Écouteurs (film dans avion)'] },
+  { cat:'👕 Bagages', items:['Valise ≤ 23kg + bagage cabine ≤ 10kg','Chaussures confortables (BEAUCOUP de marche)','Imperméable / coupe-vent','Vêtements été + 1 pull (clim forte Japon)','Chaussettes propres (déchausser souvent)','Maillots de bain (onsen, plage Busan)','Crème solaire SPF50+'] },
+  { cat:'💊 Santé', items:['Médicaments habituels + ordonnances','Paracétamol / ibuprofène','Pansements + désinfectant','Anti-diarrhéique (changement alimentation)','Crème anti-moustiques','Masques chirurgicaux (courant en Asie)','Carte européenne d'assurance maladie'] },
+  { cat:'✈️ Jour J', items:['Arriver aéroport 3h avant','Peluche / jeu enfant pour l'avion','Collations avion','Valider JR Pass à l'arrivée','Retirer espèces au distributeur aéroport','Suica / T-money à acheter','Note des numéros d'hôtel premiers jours'] },
+]
+
+function ChecklistPage() {
+  const [checks, setChecks] = useLocalStorage('checklist_items', {})
+  const [openCat, setOpenCat] = React.useState(CHECKLIST_DEF[0].cat)
+
+  const toggle = (cat, item) => {
+    const key = cat+'|'+item
+    setChecks(prev => ({ ...prev, [key]: !prev[key] }))
+  }
+
+  const total = CHECKLIST_DEF.reduce((s,c) => s + c.items.length, 0)
+  const done  = Object.values(checks).filter(Boolean).length
+
+  return (
+    <motion.div key="checklist" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
+      <div style={{ background:'linear-gradient(135deg,#27ae60,#2ecc71)', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
+        <div style={{ fontWeight:800, fontSize:'1.1rem' }}>✅ Checklist pré-départ</div>
+        <div style={{ marginTop:8, background:'rgba(255,255,255,0.25)', borderRadius:8, height:10 }}>
+          <div style={{ background:'#fff', height:10, borderRadius:8, width:`${(done/total)*100}%`, transition:'width 0.4s' }} />
+        </div>
+        <div style={{ fontSize:'0.82rem', marginTop:4 }}>{done} / {total} éléments cochés</div>
+      </div>
+
+      {CHECKLIST_DEF.map(cat => {
+        const catDone = cat.items.filter(item => checks[cat.cat+'|'+item]).length
+        return (
+          <div key={cat.cat} style={{ background:'#fff', borderRadius:14, overflow:'hidden', border:'1px solid #eee' }}>
+            <button onClick={() => setOpenCat(openCat===cat.cat ? null : cat.cat)}
+              style={{ width:'100%', display:'flex', justifyContent:'space-between', alignItems:'center',
+                padding:'0.9rem 1.1rem', background:'none', border:'none', cursor:'pointer', textAlign:'left' }}>
+              <span style={{ fontWeight:700, fontSize:'0.95rem', color:'#0b1f3a' }}>{cat.cat}</span>
+              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                <span style={{ fontSize:'0.78rem', color: catDone===cat.items.length?'#27ae60':'#888' }}>
+                  {catDone}/{cat.items.length}
+                </span>
+                <span>{openCat===cat.cat?'▲':'▼'}</span>
+              </div>
+            </button>
+            {openCat===cat.cat && (
+              <div style={{ padding:'0 0.8rem 0.8rem' }}>
+                {cat.items.map(item => {
+                  const checked = !!checks[cat.cat+'|'+item]
+                  return (
+                    <button key={item} onClick={() => toggle(cat.cat, item)}
+                      style={{ width:'100%', display:'flex', alignItems:'center', gap:10, padding:'8px 4px',
+                        borderBottom:'1px solid #f5f5f5', background:'none', border:'none', cursor:'pointer', textAlign:'left' }}>
+                      <div style={{ width:22, height:22, borderRadius:6, flexShrink:0,
+                        background: checked?'#27ae60':'#fff', border:`2px solid ${checked?'#27ae60':'#ccc'}`,
+                        display:'flex', alignItems:'center', justifyContent:'center' }}>
+                        {checked && <span style={{ color:'#fff', fontSize:'0.8rem', fontWeight:700 }}>✓</span>}
+                      </div>
+                      <span style={{ fontSize:'0.85rem', color: checked?'#aaa':'#333', textDecoration: checked?'line-through':'none', textAlign:'left' }}>
+                        {item}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </motion.div>
+  )
+}
+
+// ════ NOTES PAR JOUR ════
+function NotesPage() {
+  const [notes, setNotes] = useLocalStorage('voyage_notes', {})
+  const [activeDay, setActiveDay] = React.useState(days[0].id)
+  const day = days.find(d => d.id === activeDay) || days[0]
+
+  return (
+    <motion.div key="notes" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }}
+      style={{ display:'flex', flexDirection:'column', minHeight:'100vh', background:'#f9f7f2' }}>
+
+      <div style={{ background:'#0b1f3a', padding:'1rem 1.2rem', color:'#fff', position:'sticky', top:0, zIndex:10 }}>
+        <div style={{ fontWeight:800, fontSize:'1.05rem' }}>📝 Mes notes de voyage</div>
+        <div style={{ fontSize:'0.78rem', opacity:0.7, marginTop:2 }}>Souvenirs, adresses, remarques par journée</div>
+      </div>
+
+      {/* Sélecteur jour */}
+      <div style={{ background:'#fff', borderBottom:'1px solid #eee', padding:'6px 12px', overflowX:'auto', display:'flex', gap:6 }}>
+        {days.map(d => (
+          <button key={d.id} onClick={() => setActiveDay(d.id)}
+            style={{ flexShrink:0, padding:'4px 10px', borderRadius:20, fontSize:'0.72rem', fontWeight:700, cursor:'pointer', border:'none', whiteSpace:'nowrap',
+              background: activeDay===d.id ? '#0b1f3a' : '#f0f0f0',
+              color: activeDay===d.id ? '#fff' : '#555' }}>
+            {d.date} {notes[d.id] ? '📝' : ''}
+          </button>
+        ))}
+      </div>
+
+      {/* Zone de note */}
+      <div style={{ flex:1, padding:'1rem', display:'flex', flexDirection:'column', gap:10 }}>
+        <div style={{ background:'#fff', borderRadius:14, padding:'0.9rem 1rem', border:'1px solid #e0e0e0' }}>
+          <div style={{ fontWeight:700, color:'#0b1f3a', marginBottom:4 }}>{day.date} — {day.city}</div>
+          <div style={{ fontSize:'0.8rem', color:'#888', marginBottom:8 }}>{day.title}</div>
+          <textarea
+            value={notes[activeDay] || ''}
+            onChange={e => setNotes(prev => ({ ...prev, [activeDay]: e.target.value }))}
+            placeholder="Tes souvenirs, impressions, bonnes adresses, anecdotes..."
+            style={{ width:'100%', minHeight:200, padding:'0.8rem', borderRadius:10, border:'1px solid #ddd',
+              fontSize:'0.9rem', lineHeight:1.6, resize:'vertical', boxSizing:'border-box',
+              fontFamily:'inherit', outline:'none', background:'#fafafa' }}
+          />
+          <div style={{ textAlign:'right', fontSize:'0.72rem', color:'#bbb', marginTop:4 }}>
+            {(notes[activeDay]||'').length} caractères — sauvegardé automatiquement
+          </div>
+        </div>
+
+        {/* Notes récentes */}
+        {days.filter(d => notes[d.id] && d.id !== activeDay).length > 0 && (
+          <div style={{ background:'#fff', borderRadius:14, padding:'0.9rem 1rem', border:'1px solid #e0e0e0' }}>
+            <div style={{ fontWeight:700, color:'#0b1f3a', marginBottom:8, fontSize:'0.9rem' }}>📋 Autres jours avec notes</div>
+            {days.filter(d => notes[d.id] && d.id !== activeDay).map(d => (
+              <button key={d.id} onClick={() => setActiveDay(d.id)}
+                style={{ width:'100%', textAlign:'left', background:'#f9f9f9', border:'1px solid #eee',
+                  borderRadius:10, padding:'0.6rem 0.8rem', marginBottom:6, cursor:'pointer' }}>
+                <div style={{ fontWeight:700, fontSize:'0.82rem', color:'#0b1f3a' }}>{d.date} — {d.city}</div>
+                <div style={{ fontSize:'0.75rem', color:'#888', marginTop:2, overflow:'hidden', whiteSpace:'nowrap', textOverflow:'ellipsis' }}>
+                  {notes[d.id].slice(0,80)}...
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </motion.div>
+  )
+}
+
+
 function loadNotifData(setNotifPos, setNotifData) {
   if (!navigator.geolocation) { setNotifPos('denied'); return }
   setNotifPos('loading')
@@ -1721,6 +2008,9 @@ function AppShell() {
     tools:     <ToolsPage />,
     converter: <ConverterPage />,
     phrases:   <PhrasesPage />,
+    transport: <TransportPage />,
+    checklist: <ChecklistPage />,
+    notes:     <NotesPage />,
   }[tab]
 
   return (
