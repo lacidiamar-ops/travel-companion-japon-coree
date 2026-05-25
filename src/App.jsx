@@ -200,6 +200,7 @@ const secondaryLinks = [
   { key: 'shopping',  label: 'Shopping',       icon: ShoppingBag,color: 'orange' },
   { key: 'sante',     label: 'Santé & Urgence',icon: HeartPulse, color: 'red'    },
   { key: 'sim',       label: 'SIM & Wifi',     icon: Wifi,       color: 'teal'   },
+  { key: 'metro',     label: 'Plans Métro',    icon: MapPin,     color: 'violet'  },
 ]
 
 const usefulInfo = [
@@ -2291,6 +2292,241 @@ function SimPage() {
 }
 
 
+// ════ PLANS MÉTRO ════
+const METRO_DATA = {
+  Osaka: {
+    flag: '🇯🇵',
+    color: '#e8523a',
+    mapUrl: 'https://www.osakametro.co.jp/en/guide/map/img/rosenzu_en.png',
+    pdfUrl: 'https://www.osakametro.co.jp/en/guide/map/',
+    googleMaps: 'https://maps.app.goo.gl/osaka-metro',
+    appStore: 'https://www.osakametro.co.jp/en/guide/app/',
+    tip: 'Utilisez la ligne Midosuji (rouge) pour rejoindre Namba ↔ Umeda. Achetez un Osaka 1-Day Pass (¥800) pour les journées intenses.',
+    lines: [
+      { name: 'Midosuji', color: '#e60012', num: 'M', stations: ['Shin-Osaka','Umeda','Shinsaibashi','Namba','Tennoji'] },
+      { name: 'Tanimachi', color: '#b36419', num: 'T', stations: ['Higashi-Umeda','Tanimachi 4-chome','Shitennoji','Tennoji'] },
+      { name: 'Yotsubashi', color: '#0066b3', num: 'Y', stations: ['Nishi-Umeda','Yotsubashi','Namba (Namba Walk)'] },
+      { name: 'Chuo', color: '#00a7db', num: 'C', stations: ['Cosmosquare','Osaka Port','Honmachi','Tanimachi 4-chome'] },
+    ],
+    keyStations: [
+      { name: 'Namba (難波)', lines: ['M','Y','Se'], note: 'Centre Dotonbori, hôtel, shopping' },
+      { name: 'Umeda (梅田)', lines: ['M','T','Y'], note: 'Gare JR, département Hankyu' },
+      { name: 'Tennoji (天王寺)', lines: ['M','T'], note: 'Zoo, Abeno Harukas, Shinsekai' },
+      { name: 'Shin-Osaka (新大阪)', lines: ['M'], note: 'Shinkansen vers Tokyo/Kyoto' },
+      { name: 'Osaka Port (大阪港)', lines: ['C'], note: 'Aquarium Kaiyukan' },
+    ]
+  },
+  Kyoto: {
+    flag: '🇯🇵',
+    color: '#8e44ad',
+    mapUrl: 'https://www.city.kyoto.lg.jp/kotsu/cmsfiles/contents/0000016/16373/subway_map_e.pdf',
+    pdfUrl: 'https://www.city.kyoto.lg.jp/kotsu/page/0000016373.html',
+    googleMaps: 'https://maps.app.goo.gl/kyoto-subway',
+    appStore: 'https://onepass.city.kyoto.lg.jp/',
+    tip: 'Kyoto a seulement 2 lignes de métro. Utilisez le bus pour Fushimi Inari (Bus 5) et Arashiyama (Bus 28). Achetez le Kyoto 1-Day Bus Pass (¥700).',
+    lines: [
+      { name: 'Karasuma (Nord-Sud)', color: '#00885a', num: 'K', stations: ['Kokusaikaikan','Kitaoji','Kinkakuji-michi','Imadegawa','Kyoto Shiyakusho-mae','Kyoto (JR)','Toji','Takeda'] },
+      { name: 'Tozai (Est-Ouest)', color: '#e0832a', num: 'T', stations: ['Rokujizo','Daigo','Yamashina','Higashiyama','Kyoto Shiyakusho-mae','Karasuma-Oike','Nijo','Uzumasa Tenjingawa'] },
+    ],
+    keyStations: [
+      { name: 'Kyoto (京都)', lines: ['K','JR'], note: 'Gare principale, Shinkansen' },
+      { name: 'Karasuma-Oike (烏丸御池)', lines: ['K','T'], note: 'Correspondance, centre-ville' },
+      { name: 'Higashiyama (東山)', lines: ['T'], note: 'Kiyomizudera, Sannenzaka' },
+      { name: 'Shijo (四条)', lines: ['K'], note: 'Gion, Pontocho, shopping' },
+      { name: 'Kitaoji (北大路)', lines: ['K'], note: 'Bus vers Kinkaku-ji' },
+    ]
+  },
+  Tokyo: {
+    flag: '🇯🇵',
+    color: '#c0392b',
+    mapUrl: 'https://www.tokyometro.jp/en/subwaymap/img/metromap_en.png',
+    pdfUrl: 'https://www.tokyometro.jp/en/subwaymap/',
+    googleMaps: 'https://maps.app.goo.gl/tokyo-metro',
+    appStore: 'https://www.tokyometro.jp/en/app/',
+    tip: 'Tokyo a 13 lignes. Utilisez Google Maps pour naviguer — il indique toujours le bon quai. La Yamanote Line (verte JR, ¥200 flatrate) fait le tour des spots principaux.',
+    lines: [
+      { name: 'Yamanote (JR)', color: '#9acd32', num: 'JY', stations: ['Shinjuku','Harajuku','Shibuya','Osaki','Shinagawa','Tokyo','Akihabara','Ueno','Ikebukuro','Shinjuku'] },
+      { name: 'Ginza', color: '#f39700', num: 'G', stations: ['Asakusa','Ueno','Ginza','Shimbashi','Shibuya'] },
+      { name: 'Hibiya', color: '#9caeb7', num: 'H', stations: ['Naka-Meguro','Ebisu','Roppongi','Ginza','Akihabara','Ueno'] },
+      { name: 'Hanzomon', color: '#8f76d6', num: 'Z', stations: ['Shibuya','Omotesando','Hanzomon','Kudanshita','Otemachi'] },
+      { name: 'Chiyoda', color: '#00bb85', num: 'C', stations: ['Yoyogi-Uehara','Omotesando','Akasaka','Otemachi','Ayase'] },
+    ],
+    keyStations: [
+      { name: 'Shinjuku (新宿)', lines: ['JY','M','O'], note: 'Hub principal, Kabukicho, Golden Gai' },
+      { name: 'Shibuya (渋谷)', lines: ['JY','G','H','Z'], note: 'Crossing, shopping, jeunesse' },
+      { name: 'Asakusa (浅草)', lines: ['G','A'], note: 'Senso-ji, marché, vieux Tokyo' },
+      { name: 'Harajuku (原宿)', lines: ['JY','C'], note: 'Takeshita Street, Meiji Jingu' },
+      { name: 'Ueno (上野)', lines: ['JY','G','H','A'], note: 'Musées, zoo, marché Ameyoko' },
+      { name: 'Akihabara (秋葉原)', lines: ['JY','H'], note: 'Électronique, manga, retrogaming' },
+      { name: 'Roppongi (六本木)', lines: ['H','O'], note: 'Musées art, vie nocturne' },
+    ]
+  },
+  Séoul: {
+    flag: '🇰🇷',
+    color: '#2471a3',
+    mapUrl: 'https://www.seoulmetro.co.kr/en/file/linemap_en.gif',
+    pdfUrl: 'https://www.seoulmetro.co.kr/en/page.do?menuIdx=551',
+    googleMaps: 'https://maps.app.goo.gl/seoul-metro',
+    appStore: 'https://www.kakaocorp.com/page/service/service/KakaoMap',
+    tip: 'Séoul a 9 lignes numérotées + AREX (aéroport). Utilisez la T-money Card (rechargeable). Les annonces sont aussi en anglais et français dans les grandes stations.',
+    lines: [
+      { name: 'Ligne 1', color: '#0052A4', num: '1', stations: ['Incheon','Bupyeong','Guro','Seoul Station','Yongsan','Cheongnyangni'] },
+      { name: 'Ligne 2', color: '#00A84D', num: '2', stations: ['Hongdae','Sinchon','Ewha','City Hall','Dongdaemun','Gangnam','Jamsil','Hongdae (boucle)'] },
+      { name: 'Ligne 3', color: '#EF7C1C', num: '3', stations: ['Gupabal','Gyeongbokgung','Anguk','Jongno 3-ga','Dongdaemun','Express Bus Terminal'] },
+      { name: 'Ligne 4', color: '#009BCD', num: '4', stations: ['Danggogae','Miasageori','Seoul Station','Myeongdong','Dongdaemun History'] },
+      { name: 'Ligne 9', color: '#BDB092', num: '9', stations: ['Gimpo Airport','Yeongdeungpo','Noryangjin','Express Bus Terminal','Sinnonhyeon','Bongeunsa'] },
+    ],
+    keyStations: [
+      { name: 'Myeongdong (명동)', lines: ['4'], note: 'Shopping, street food, cosmétiques' },
+      { name: 'Gyeongbokgung (경복궁)', lines: ['3'], note: 'Palais royal, Bukchon' },
+      { name: 'Hongdae (홍대입구)', lines: ['2','AREX'], note: 'Clubs, K-indie, street art' },
+      { name: 'Gangnam (강남)', lines: ['2'], note: 'Quartier luxe, K-pop, Gangnam Style' },
+      { name: 'Dongdaemun (동대문)', lines: ['1','2','4'], note: 'Marché 24h, shopping mode' },
+      { name: 'Seoul Station (서울역)', lines: ['1','4','AREX'], note: 'Gare KTX, navette aéroport' },
+      { name: 'Insadong (인사동)', lines: ['3→Anguk'], note: 'Artisanat, galeries, thé' },
+    ]
+  },
+  Busan: {
+    flag: '🇰🇷',
+    color: '#27ae60',
+    mapUrl: 'https://www.humetro.busan.kr/eng/file/linemap_en.jpg',
+    pdfUrl: 'http://www.humetro.busan.kr/eng/main/index.do',
+    googleMaps: 'https://maps.app.goo.gl/busan-metro',
+    appStore: 'https://www.kakaocorp.com/page/service/service/KakaoMap',
+    tip: 'Busan a 4 lignes. La Ligne 1 (orange) relie Haeundae au centre. Achetez la T-money à l'aéroport — fonctionne partout. Taxi peu cher pour les courtes distances.',
+    lines: [
+      { name: 'Ligne 1', color: '#E05B2C', num: '1', stations: ['Nopo','Seomyeon','Busan Station','Nampo','Jagalchi','Toseong'] },
+      { name: 'Ligne 2', color: '#30A9DE', num: '2', stations: ['Jangsan','Haeundae','Centum City','Seomyeon','Sasang','Yangsan'] },
+      { name: 'Ligne 3', color: '#9B6B29', num: '3', stations: ['Daejeo','Deokcheon','Yeonsan','Suyeong','Baekyangsan'] },
+      { name: 'Ligne 4 (Gireum)', color: '#2DBF2D', num: '4', stations: ['Minam','Banyeo','Anpyeong','Danggam'] },
+    ],
+    keyStations: [
+      { name: 'Haeundae (해운대)', lines: ['2'], note: 'Plage, The Bay 101, Centum City' },
+      { name: 'Nampo (남포)', lines: ['1'], note: 'BIFF Square, Jagalchi Market' },
+      { name: 'Seomyeon (서면)', lines: ['1','2'], note: 'Hub principal de Busan' },
+      { name: 'Busan Station (부산역)', lines: ['1'], note: 'Gare KTX depuis/vers Séoul' },
+      { name: 'Centum City (센텀시티)', lines: ['2'], note: 'Shinsegae le + grand mall' },
+      { name: 'Suyeong (수영)', lines: ['2','3'], note: 'Gwangalli Beach à pied' },
+    ]
+  },
+}
+
+function MetroPage() {
+  const [city, setCity] = useState('Osaka')
+  const [showMap, setShowMap] = useState(false)
+  const metro = METRO_DATA[city]
+  const open = (url) => window.open(url, '_blank', 'noopener,noreferrer')
+
+  return (
+    <motion.div key="metro" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }}
+      style={{ background:'#f5f5f5', minHeight:'100vh' }}>
+
+      {/* Header */}
+      <div style={{ background:'#0b1f3a', padding:'1rem 1.2rem', color:'#fff', position:'sticky', top:0, zIndex:10 }}>
+        <div style={{ fontWeight:800, fontSize:'1.05rem', marginBottom:10 }}>🚇 Plans Métro</div>
+        <div style={{ display:'flex', gap:6, overflowX:'auto' }}>
+          {Object.keys(METRO_DATA).map(c => (
+            <button key={c} onClick={() => { setCity(c); setShowMap(false) }}
+              style={{ flexShrink:0, padding:'5px 14px', borderRadius:20, fontSize:'0.8rem', fontWeight:700, cursor:'pointer', border:'none', whiteSpace:'nowrap',
+                background: city===c ? METRO_DATA[c].color : 'rgba(255,255,255,0.15)',
+                color: '#fff' }}>
+              {METRO_DATA[c].flag} {c}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ padding:'0.8rem', display:'flex', flexDirection:'column', gap:10 }}>
+
+        {/* Conseil + liens officiels */}
+        <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:`2px solid ${metro.color}` }}>
+          <div style={{ fontWeight:800, color:metro.color, fontSize:'0.95rem', marginBottom:6 }}>
+            {metro.flag} Métro {city}
+          </div>
+          <div style={{ fontSize:'0.83rem', color:'#444', lineHeight:1.6, marginBottom:12 }}>
+            💡 {metro.tip}
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
+            <button onClick={() => open(metro.pdfUrl)}
+              style={{ background:metro.color, color:'#fff', border:'none', borderRadius:10, padding:'8px', cursor:'pointer', fontWeight:700, fontSize:'0.78rem' }}>
+              🗺️ Carte officielle
+            </button>
+            <button onClick={() => open(metro.googleMaps)}
+              style={{ background:'#4285f4', color:'#fff', border:'none', borderRadius:10, padding:'8px', cursor:'pointer', fontWeight:700, fontSize:'0.78rem' }}>
+              📍 Google Maps
+            </button>
+            <button onClick={() => open(metro.appStore)}
+              style={{ background:'#333', color:'#fff', border:'none', borderRadius:10, padding:'8px', cursor:'pointer', fontWeight:700, fontSize:'0.78rem' }}>
+              📱 App officielle
+            </button>
+            <button onClick={() => open(`https://maps.app.goo.gl/?q=${city}+metro+map`)}
+              style={{ background:'#ff6d00', color:'#fff', border:'none', borderRadius:10, padding:'8px', cursor:'pointer', fontWeight:700, fontSize:'0.78rem' }}>
+              🔍 Maps Transit
+            </button>
+          </div>
+        </div>
+
+        {/* Lignes principales */}
+        <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'1px solid #eee' }}>
+          <div style={{ fontWeight:800, color:'#0b1f3a', marginBottom:10 }}>🚉 Lignes principales</div>
+          {metro.lines.map(line => (
+            <div key={line.name} style={{ marginBottom:14 }}>
+              <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:6 }}>
+                <div style={{ background:line.color, color:'#fff', width:28, height:28, borderRadius:'50%',
+                  display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:'0.75rem', flexShrink:0 }}>
+                  {line.num}
+                </div>
+                <span style={{ fontWeight:700, fontSize:'0.88rem', color:'#0b1f3a' }}>{line.name}</span>
+              </div>
+              {/* Ligne visuelle avec stations */}
+              <div style={{ display:'flex', alignItems:'center', overflowX:'auto', paddingBottom:4, gap:0 }}>
+                {line.stations.map((st, i) => (
+                  <React.Fragment key={st}>
+                    <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0 }}>
+                      <div style={{ width:10, height:10, borderRadius:'50%', background:line.color, border:'2px solid #fff', boxShadow:`0 0 0 2px ${line.color}` }} />
+                      <div style={{ fontSize:'0.6rem', color:'#555', marginTop:3, whiteSpace:'nowrap', maxWidth:60, textAlign:'center', lineHeight:1.2 }}>{st}</div>
+                    </div>
+                    {i < line.stations.length-1 && (
+                      <div style={{ height:3, width:20, background:line.color, flexShrink:0, marginBottom:14 }} />
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Stations clés du voyage */}
+        <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'1px solid #eee' }}>
+          <div style={{ fontWeight:800, color:'#0b1f3a', marginBottom:10 }}>⭐ Stations clés pour votre voyage</div>
+          {metro.keyStations.map(st => (
+            <div key={st.name} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 0', borderBottom:'1px solid #f0f0f0' }}>
+              <div style={{ flex:1 }}>
+                <div style={{ fontWeight:700, fontSize:'0.88rem', color:'#0b1f3a' }}>{st.name}</div>
+                <div style={{ fontSize:'0.75rem', color:'#888', marginTop:1 }}>
+                  {st.lines.map(l => (
+                    <span key={l} style={{ background: metro.lines.find(ml=>ml.num===l)?.color||metro.color,
+                      color:'#fff', borderRadius:10, padding:'1px 7px', fontSize:'0.65rem', fontWeight:700, marginRight:4 }}>
+                      {l}
+                    </span>
+                  ))}
+                </div>
+                <div style={{ fontSize:'0.76rem', color:'#555', marginTop:2 }}>{st.note}</div>
+              </div>
+              <button onClick={() => open(`https://www.google.com/maps/search/${encodeURIComponent(st.name+' station '+city)}`)}
+                style={{ background:'#0b1f3a', color:'#fff', border:'none', borderRadius:8, padding:'5px 10px', cursor:'pointer', fontSize:'0.72rem', flexShrink:0, marginLeft:8 }}>
+                📍
+              </button>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </motion.div>
+  )
+}
+
+
 function loadNotifData(setNotifPos, setNotifData) {
   if (!navigator.geolocation) { setNotifPos('denied'); return }
   setNotifPos('loading')
@@ -2346,6 +2582,7 @@ function AppShell() {
     shopping:  <ShoppingPage />,
     sante:     <SantePage />,
     sim:       <SimPage />,
+    metro:     <MetroPage />,
   }[tab]
 
   return (
