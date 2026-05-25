@@ -1813,7 +1813,7 @@ function TransportPage() {
         <div style={{ fontSize:'0.8rem', opacity:0.75, marginTop:2 }}>JR Pass · IC Card · Métro · Aéroport</div>
       </div>
       {TRANSPORT_INFO.map((section, i) => (
-        <div key={section.title} style={{ background:'#fff', borderRadius:14, border:'2px solid ${section.color}`, overflow:'hidden' }}>
+        <div key={section.title} style={{ background:'#fff', borderRadius:14, border:`2px solid ${section.color}`, overflow:'hidden' }}>
           <button onClick={() => setOpen(open===i ? null : i)}
             style={{ width:'100%', display:'flex', justifyContent:'space-between', alignItems:'center',
               padding:'0.9rem 1.1rem', background:'none', border:'none', cursor:'pointer', textAlign:'left' }}>
@@ -2194,7 +2194,7 @@ function SantePage() {
         <div style={{ fontSize:'0.8rem', opacity:0.75, marginTop:2 }}>Numéros · Hôpitaux · Pharmacies · Conseils</div>
       </div>
       {SECTIONS.map(section => (
-        <div key={section.title} style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'2px solid ${section.color}20` }}>
+        <div key={section.title} style={{ background:'#fff', borderRadius:14, padding:'1rem', border:`2px solid ${section.color}20` }}>
           <div style={{ fontWeight:800, color:section.color, marginBottom:10, fontSize:'0.95rem' }}>{section.title}</div>
           {section.items.map((item, i) => (
             <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'6px 0', borderBottom:'1px solid #f5f5f5' }}>
@@ -2266,7 +2266,7 @@ function SimPage() {
         💡 <b>Notre conseil :</b> L'eSIM Airalo est la solution la plus simple pour toute la famille — Japon + Corée en une seule souscription depuis votre téléphone.
       </div>
       {OPTIONS.map(opt => (
-        <div key={opt.title} style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'2px solid ${opt.color}` }}>
+        <div key={opt.title} style={{ background:'#fff', borderRadius:14, padding:'1rem', border:`2px solid ${opt.color}` }}>
           <div style={{ fontWeight:800, color:opt.color, fontSize:'0.95rem', marginBottom:8 }}>{opt.title}</div>
           <div style={{ fontSize:'0.82rem', fontWeight:700, color:'#27ae60', marginBottom:6 }}>{opt.prix}</div>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:8 }}>
@@ -2438,7 +2438,7 @@ function MetroPage() {
       <div style={{ padding:'0.8rem', display:'flex', flexDirection:'column', gap:10 }}>
 
         {/* Conseil + liens officiels */}
-        <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'2px solid ${metro.color}` }}>
+        <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:`2px solid ${metro.color}` }}>
           <div style={{ fontWeight:800, color:metro.color, fontSize:'0.95rem', marginBottom:6 }}>
             {metro.flag} Métro {city}
           </div>
