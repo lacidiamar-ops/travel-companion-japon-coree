@@ -19,7 +19,26 @@ const assets = {
 const days = [
   { id: 0, date: '09 juil.', city: 'Paris → Rome', title: 'Départ Paris — Nuit à Paris CDG', image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1200&q=80', summary: "Départ de chez vous, trajet jusqu'à Paris CDG. Nuit à l'hôtel de l'aéroport pour un départ serein le lendemain matin.", timeRange: '06:00 – 23:00', steps: '-', highlights: ['CDG Aéroport', 'Hôtel transit Paris', 'Préparatifs finaux'], restaurants: ['Restaurant hôtel CDG', 'Brasserie aéroport'], spots: ['Tour Eiffel (si temps)', 'CDG Terminal 2'] },
   { id: -1, date: '10 juil.', city: 'Rome → Osaka', title: 'Paris ✈️ Rome ✈️ Osaka — Grand envol !', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80', summary: "Vol Paris CDG → Rome Fiumicino, correspondance, puis Rome → Osaka Kansai (KIX). Arrivée à Osaka en soirée locale. Premier contact avec le Japon !", timeRange: '06:00 – 23:59', steps: '~25h de voyage', highlights: ['CDG Terminal', 'Rome Fiumicino FCO', 'Osaka Kansai KIX', 'Première nuit Osaka'], restaurants: ['Repas à bord', 'Snack aéroport Rome'], spots: ['Vue aérienne Japon', 'Arrivée Kansai Airport'] },
-  { id: 1, date: '11 juil.', city: 'Osaka', title: 'Arrivée Osaka — Check-in & Dotonbori', image: 'https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&w=1200&q=80', summary: "Arrivée KIX, navette Haruka jusqu'à Namba, check-in Candeo Hotel. Première soirée à Dotonbori : Glico Man, takoyaki, néons.", timeRange: '11:00 – 22:00', steps: '13 850 pas', highlights: ['Kansai Airport', 'Navette Haruka', 'Dotonbori', 'Glico Man'], restaurants: ['Kukuru Takoyaki', 'Creo-ru', 'Rikuro Ojisan'], spots: ['Glico Running Man', 'Tombori Riverwalk'] },
+  { id: 1, date: '11 juil.', city: 'Haneda → Osaka', title: 'Arrivée Haneda → Shinkansen → Dotonbori', image: 'https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&w=1200&q=80', summary: "Arrivée Tokyo Haneda Terminal 3 vers 11h. Monorail jusqu'à Hamamatsucho puis JR Yamanote/Keihin-Tohoku jusqu'à Tokyo Station (~500-700¥, 25-30 min). Shinkansen Tokaido (Nozomi ou Hikari) vers Shin-Osaka (2h30-3h). Métro Midosuji direction Namba → descente Nippombashi sortie 2 → 5 min à pied jusqu'au Candeo Hotel Osaka Namba. Check-in 18h. Soirée Dotonbori : croisière Tombori River Cruise (2000¥, 20 min), photos Glico Running Man et crabe géant Kani Doraku, street food (takoyaki, kushikatsu, brochettes wagyu, gyoza), ruelle Hozenji Yokocho et dessert cheesecake Rikuro Ojisan.", timeRange: '11:00 – 22:15', steps: '~10 000 pas', highlights: ['Haneda Terminal 3', 'Tokyo Monorail', 'Tokyo Station', 'Shinkansen Tokaido', 'Shin-Osaka', 'Midosuji Line', 'Candeo Hotel Namba', 'Tombori Cruise', 'Glico Man', 'Hozenji Yokocho'], restaurants: ['Kukuru Takoyaki', 'Daruma Kushikatsu', 'Kani Doraku Dotonbori', 'Rikuro Ojisan no Mise Namba', 'Hozenji Yokocho izakaya'], spots: ['Glico Running Man', 'Crabe Kani Doraku', 'Tombori Riverwalk', 'Hozenji Yokocho'], itinerary: [
+    { time: '11:00', icon: '✈️', step: "Arrivée Haneda Terminal 3 (sortie arrivées)" },
+    { time: '11:15', icon: '🚝', step: "Suivre panneaux Tokyo Monorail (モノレール) → direction Hamamatsucho" },
+    { time: '11:45', icon: '🚆', step: "À Hamamatsucho : JR Yamanote ou Keihin-Tohoku → Tokyo Station" },
+    { time: '13:00', icon: '🏯', step: "Tokyo Station : suivre Shinkansen → Tokaido → Shin-Osaka (machines anglais ou guichet JR)" },
+    { time: '14:00', icon: '🚄', step: "Embarquement Shinkansen Nozomi ou Hikari (regarder écrans + numéro de voiture au sol)" },
+    { time: '17:00', icon: '🚇', step: "Arrivée Shin-Osaka → Midosuji Line rouge direction Namba" },
+    { time: '17:20', icon: '🚉', step: "Descendre à Nippombashi → sortie 2 → marche 3-5 min" },
+    { time: '17:30', icon: '🏨', step: "Arrivée Candeo Hotel Osaka Namba" },
+    { time: '18:00', icon: '🛏️', step: "Check-in hôtel, déposer bagages, repos rapide" },
+    { time: '19:00', icon: '🚶', step: "Départ à pied vers Dotonbori (10-15 min)" },
+    { time: '19:15', icon: '🎫', step: "Guichet Tombori River Cruise — quai près Don Quijote roue jaune" },
+    { time: '19:25', icon: '📸', step: "Photos Glico Running Man + crabe géant Kani Doraku" },
+    { time: '19:45', icon: '🍡', step: "Street food : takoyaki, gyoza, karaage, kushikatsu, brochettes wagyu" },
+    { time: '20:00', icon: '🛥️', step: "Embarquement Tombori River Cruise (20 min, ~2000¥/adulte)" },
+    { time: '20:30', icon: '🌃', step: "Promenade Tombori Riverwalk : artistes, musique, stands" },
+    { time: '21:15', icon: '🏮', step: "Hozenji Yokocho : ruelle traditionnelle, lanternes, verser eau pour porter chance" },
+    { time: '21:45', icon: '🧁', step: "Dessert : cheesecake fluffy Rikuro Ojisan no Mise Namba" },
+    { time: '22:15', icon: '🛏️', step: "Retour à pied au Candeo Hotel" }
+  ] },
   { id: 2, date: '12 juil.', city: 'Osaka', title: 'Namba Yasaka → Osaka Castle → Shinsekai', image: 'https://images.unsplash.com/photo-1601823984263-b87b59798b70?auto=format&fit=crop&w=1200&q=80', summary: 'Tête de lion, château d’Osaka, Tempozan, Tsutenkaku et kushikatsu.', timeRange: '08:30 – 21:00', steps: '15 100 pas', highlights: ['Namba Yasaka', 'Osaka Castle', 'Shinsekai'], restaurants: ['Daruma Kushikatsu', 'Tempozan Food Court'], spots: ['Tsutenkaku', 'Osaka Castle'] },
   { id: 3, date: '13 juil.', city: 'Osaka', title: 'Universal Studios Japan', image: 'https://images.unsplash.com/photo-1542640244-7e672d6cef4e?auto=format&fit=crop&w=1200&q=80', summary: 'Super Nintendo World, Harry Potter, Jurassic Park et Umeda en soirée.', timeRange: '06:30 – 22:00', steps: '20 500 pas', highlights: ['USJ', 'Nintendo', 'Harry Potter'], restaurants: ['USJ snacks', 'Ichiran Shinjuku'], spots: ['Super Nintendo World', 'Hogwarts'] },
   { id: 4, date: '14 juil.', city: 'Nara / Kyoto', title: 'Nara → arrivée Gion', image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80', summary: 'Daims de Nara puis installation à Kyoto et soirée Gion.', timeRange: '08:00 – 21:30', steps: '14 600 pas', highlights: ['Nara Park', 'Kasuga Taisha', 'Gion'], restaurants: ['Nakatanidou', 'Gyoza ChaoChao'], spots: ['Daims', 'Yasaka Shrine'] },
@@ -306,6 +325,7 @@ function BudgetOverviewCard({ spent, total, onOpen }) {
 }
 
 function DayPreviewCard({ day, onOpen }) {
+  const [showItin, setShowItin] = useState(false)
   return (
     <div className="next-day-card">
       <img src={day.image} alt={day.title} />
@@ -323,6 +343,25 @@ function DayPreviewCard({ day, onOpen }) {
             <span className="chip sand"><Footprints size={15} /> {day.steps}</span>
             <button className="chip blue" onClick={onOpen}><Camera size={15} /> Spots photo</button>
           </div>
+          {day.itinerary && day.itinerary.length > 0 && (
+            <div style={{ marginTop:12 }}>
+              <button onClick={() => setShowItin(v => !v)}
+                style={{ width:'100%', padding:'8px 12px', borderRadius:10, border:'1.5px solid #0b1f3a', background: showItin ? '#0b1f3a' : '#fff', color: showItin ? '#fff' : '#0b1f3a', fontSize:'0.85rem', fontWeight:700, cursor:'pointer' }}>
+                {showItin ? '▲ Masquer' : '🗓️ Voir l\'itinéraire détaillé'} ({day.itinerary.length} étapes)
+              </button>
+              {showItin && (
+                <div style={{ marginTop:10, background:'#f8f9fb', borderRadius:12, padding:'12px 14px', border:'1px solid #e8eaef' }}>
+                  {day.itinerary.map((it, idx) => (
+                    <div key={idx} style={{ display:'flex', gap:10, padding:'6px 0', borderBottom: idx < day.itinerary.length-1 ? '1px solid #e8eaef' : 'none' }}>
+                      <div style={{ minWidth:52, fontWeight:800, color:'#e8523a', fontSize:'0.82rem' }}>{it.time}</div>
+                      <div style={{ fontSize:'1.05rem' }}>{it.icon}</div>
+                      <div style={{ flex:1, fontSize:'0.83rem', color:'#333', lineHeight:1.4 }}>{it.step}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -432,16 +471,13 @@ function HomePage({ nextDay, spent, total, onGo }) {
       </div>
 
       {showAll && (
-        <div className="days-list">
-          {days.map((day) => (
-            <div key={day.id} className="small-day-card" onClick={() => onGo('map')}>
-              <img src={day.image} alt={day.title} />
-              <div>
-                <b>{day.date} · {day.city}</b>
-                <p>{day.title}</p>
-              </div>
-            </div>
-          ))}
+        <div className="panel card-panel">
+          <SectionTitle title="📓 Carnet de voyage — Tous les jours" />
+          <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+            {days.map((day) => (
+              <DayPreviewCard key={day.id} day={day} onOpen={() => onGo('food')} />
+            ))}
+          </div>
         </div>
       )}
 
