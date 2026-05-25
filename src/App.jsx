@@ -1495,10 +1495,10 @@ const PHRASES_DB = [
   {
     cat: '🚇 Transport', phrases: [
       { fr: 'Où est la station de métro ?', jp: '地下鉄の駅はどこですか？', jpRom: 'Chikatetsu no eki wa doko desu ka?', kr: '지하철역이 어디예요?', krRom: 'Jihacheolyeogi eodieyo?' },
-      { fr: 'Un billet pour... s'il vous plaît', jp: '...まで一枚ください', jpRom: '...made ichimai kudasai', kr: '...까지 한 장 주세요', krRom: '...kkaji han jang juseyo' },
-      { fr: 'Où est l'arrêt de bus ?', jp: 'バス停はどこですか？', jpRom: 'Basu tei wa doko desu ka?', kr: '버스 정류장이 어디예요?', krRom: 'Beoseu jeongnyujang eodieyo?' },
+      { fr: `Un billet pour... s'il vous plaît`, jp: '...まで一枚ください', jpRom: '...made ichimai kudasai', kr: '...까지 한 장 주세요', krRom: '...kkaji han jang juseyo' },
+      { fr: `Où est l'arrêt de bus ?`, jp: 'バス停はどこですか？', jpRom: 'Basu tei wa doko desu ka?', kr: '버스 정류장이 어디예요?', krRom: 'Beoseu jeongnyujang eodieyo?' },
       { fr: 'À quelle heure part le train ?', jp: '電車は何時に出ますか？', jpRom: 'Densha wa nanji ni demasu ka?', kr: '기차가 몇 시에 출발해요?', krRom: 'Gichaga myeot sie chulbalhaeyo?' },
-      { fr: 'C'est loin à pied ?', jp: '歩いて遠いですか？', jpRom: 'Aruite tooi desu ka?', kr: '걸어서 멀어요?', krRom: 'Georeo seo meoreoyo?' },
+      { fr: `C'est loin à pied ?`, jp: '歩いて遠いですか？', jpRom: 'Aruite tooi desu ka?', kr: '걸어서 멀어요?', krRom: 'Georeo seo meoreoyo?' },
       { fr: 'Appelez-moi un taxi', jp: 'タクシーを呼んでください', jpRom: 'Takushi wo yonde kudasai', kr: '택시 불러 주세요', krRom: 'Taeksi bulleo juseyo' },
       { fr: 'Je veux aller à...', jp: '...に行きたいです', jpRom: '...ni ikitai desu', kr: '...에 가고 싶어요', krRom: '...e gago sipeoyo' },
     ]
@@ -1506,20 +1506,20 @@ const PHRASES_DB = [
   {
     cat: '🍜 Restaurant', phrases: [
       { fr: 'Une table pour 4 personnes', jp: '4人用のテーブルをお願いします', jpRom: 'Yonin you no teburu wo onegaishimasu', kr: '4인 테이블 부탁드려요', krRom: 'Sa-in teibeul butakdeuryeoyo' },
-      { fr: 'Le menu s'il vous plaît', jp: 'メニューをください', jpRom: 'Menyu wo kudasai', kr: '메뉴판 주세요', krRom: 'Menyupan juseyo' },
-      { fr: 'C'est délicieux !', jp: 'おいしい！', jpRom: 'Oishii!', kr: '맛있어요!', krRom: 'Massisseoyo!' },
-      { fr: 'L'addition s'il vous plaît', jp: 'お会計をお願いします', jpRom: 'Okaikei wo onegaishimasu', kr: '계산서 주세요', krRom: 'Gyesanseo juseyo' },
+      { fr: `Le menu s'il vous plaît`, jp: 'メニューをください', jpRom: 'Menyu wo kudasai', kr: '메뉴판 주세요', krRom: 'Menyupan juseyo' },
+      { fr: `C'est délicieux !`, jp: 'おいしい！', jpRom: 'Oishii!', kr: '맛있어요!', krRom: 'Massisseoyo!' },
+      { fr: `L'addition s'il vous plaît`, jp: 'お会計をお願いします', jpRom: 'Okaikei wo onegaishimasu', kr: '계산서 주세요', krRom: 'Gyesanseo juseyo' },
       { fr: 'Je suis allergique à...', jp: '...アレルギーがあります', jpRom: '...arerugii ga arimasu', kr: '...알레르기가 있어요', krRom: '...allereugi ga isseoyo' },
-      { fr: 'Sans gluten s'il vous plaît', jp: 'グルテンなしでお願いします', jpRom: 'Guruten nashi de onegaishimasu', kr: '글루텐 없이 해주세요', krRom: 'Geulluten eopsi haejuseyo' },
+      { fr: `Sans gluten s'il vous plaît`, jp: 'グルテンなしでお願いします', jpRom: 'Guruten nashi de onegaishimasu', kr: '글루텐 없이 해주세요', krRom: 'Geulluten eopsi haejuseyo' },
       { fr: 'Je ne mange pas de porc', jp: '豚肉は食べません', jpRom: 'Butaniku wa tabemasen', kr: '돼지고기를 안 먹어요', krRom: 'Dwaejigogireul an meogoyo' },
-      { fr: 'C'est trop piquant', jp: '辛すぎます', jpRom: 'Kara sugimasu', kr: '너무 매워요', krRom: 'Neomu maewoyo' },
-      { fr: 'De l'eau s'il vous plaît', jp: 'お水をください', jpRom: 'Omizu wo kudasai', kr: '물 주세요', krRom: 'Mul juseyo' },
+      { fr: `C'est trop piquant`, jp: '辛すぎます', jpRom: 'Kara sugimasu', kr: '너무 매워요', krRom: 'Neomu maewoyo' },
+      { fr: `De l'eau s'il vous plaît`, jp: 'お水をください', jpRom: 'Omizu wo kudasai', kr: '물 주세요', krRom: 'Mul juseyo' },
     ]
   },
   {
     cat: '🛍️ Shopping', phrases: [
       { fr: 'Combien ça coûte ?', jp: 'いくらですか？', jpRom: 'Ikura desu ka?', kr: '얼마예요?', krRom: 'Eolmayeyo?' },
-      { fr: 'C'est trop cher', jp: '高すぎます', jpRom: 'Taka sugimasu', kr: '너무 비싸요', krRom: 'Neomu bissayo' },
+      { fr: `C'est trop cher`, jp: '高すぎます', jpRom: 'Taka sugimasu', kr: '너무 비싸요', krRom: 'Neomu bissayo' },
       { fr: 'Avez-vous une taille plus grande ?', jp: 'もっと大きいサイズはありますか？', jpRom: 'Motto ookii saizu wa arimasu ka?', kr: '더 큰 사이즈 있어요?', krRom: 'Deo keun saiseu isseoyo?' },
       { fr: 'Je peux essayer ?', jp: '試着できますか？', jpRom: 'Shichaku dekimasu ka?', kr: '입어봐도 돼요?', krRom: 'Ibeoboado dwaeyo?' },
       { fr: 'Je prends celui-ci', jp: 'これをください', jpRom: 'Kore wo kudasai', kr: '이걸로 할게요', krRom: 'Igeolro halgeyo' },
@@ -1529,11 +1529,11 @@ const PHRASES_DB = [
   },
   {
     cat: '🏨 Hôtel', phrases: [
-      { fr: 'J'ai une réservation', jp: '予約があります', jpRom: 'Yoyaku ga arimasu', kr: '예약했어요', krRom: 'Yeyak haesseoyo' },
+      { fr: `J'ai une réservation`, jp: '予約があります', jpRom: 'Yoyaku ga arimasu', kr: '예약했어요', krRom: 'Yeyak haesseoyo' },
       { fr: 'Check-in / Check-out', jp: 'チェックイン / チェックアウト', jpRom: 'Chekkuin / Chekku auto', kr: '체크인 / 체크아웃', krRom: 'Chekeu-in / Chekeu-aut' },
       { fr: 'Où est ma chambre ?', jp: '私の部屋はどこですか？', jpRom: 'Watashi no heya wa doko desu ka?', kr: '제 방이 어디예요?', krRom: 'Je bangi eodieyo?' },
       { fr: 'Le wifi ne fonctionne pas', jp: 'ワイファイが使えません', jpRom: 'Waifai ga tsukaemasen', kr: '와이파이가 안 돼요', krRom: 'Waipai ga an dwaeyo' },
-      { fr: 'Pouvez-vous m'appeler un taxi ?', jp: 'タクシーを呼んでもらえますか？', jpRom: 'Takushi wo yonde moraemasu ka?', kr: '택시 불러주실 수 있어요?', krRom: 'Taeksi bulleojusil su isseoyo?' },
+      { fr: `Pouvez-vous m'appeler un taxi ?`, jp: 'タクシーを呼んでもらえますか？', jpRom: 'Takushi wo yonde moraemasu ka?', kr: '택시 불러주실 수 있어요?', krRom: 'Taeksi bulleojusil su isseoyo?' },
       { fr: 'Avez-vous un coffre-fort ?', jp: 'セーフを使えますか？', jpRom: 'Sefu wo tsukaemasu ka?', kr: '금고 있어요?', krRom: 'Geumgo isseoyo?' },
     ]
   },
@@ -1542,11 +1542,11 @@ const PHRASES_DB = [
       { fr: 'Au secours !', jp: '助けて！', jpRom: 'Tasukete!', kr: '도와주세요!', krRom: 'Dowajuseyo!' },
       { fr: 'Appelez la police !', jp: '警察を呼んでください！', jpRom: 'Keisatsu wo yonde kudasai!', kr: '경찰을 불러주세요!', krRom: 'Gyeongchal eul bulleojuseyo!' },
       { fr: 'Appelez une ambulance !', jp: '救急車を呼んでください！', jpRom: 'Kyukyusha wo yonde kudasai!', kr: '구급차를 불러주세요!', krRom: 'Gugeupcha reul bulleojuseyo!' },
-      { fr: 'J'ai besoin d'un médecin', jp: '医者が必要です', jpRom: 'Isha ga hitsuyou desu', kr: '의사가 필요해요', krRom: 'Uisaga piryohaeyo' },
+      { fr: `J'ai besoin d'un médecin`, jp: '医者が必要です', jpRom: 'Isha ga hitsuyou desu', kr: '의사가 필요해요', krRom: 'Uisaga piryohaeyo' },
       { fr: 'Je me suis perdu(e)', jp: '迷子になりました', jpRom: 'Maigo ni narimashita', kr: '길을 잃었어요', krRom: 'Gireul ireoosseoyo' },
-      { fr: 'On m'a volé mon sac', jp: 'バッグを盗まれました', jpRom: 'Baggu wo nusumaremashita', kr: '가방을 도둑맞았어요', krRom: 'Gabangeul dodungmajasseoyo' },
-      { fr: 'Où est l'hôpital le plus proche ?', jp: '一番近い病院はどこですか？', jpRom: 'Ichiban chikai byouin wa doko desu ka?', kr: '가장 가까운 병원이 어디예요?', krRom: 'Gajang gakkaun byeongwoni eodieyo?' },
-      { fr: 'J'ai mal ici', jp: 'ここが痛いです', jpRom: 'Koko ga itai desu', kr: '여기가 아파요', krRom: 'Yeogiga apayo' },
+      { fr: `On m'a volé mon sac`, jp: 'バッグを盗まれました', jpRom: 'Baggu wo nusumaremashita', kr: '가방을 도둑맞았어요', krRom: 'Gabangeul dodungmajasseoyo' },
+      { fr: `Où est l'hôpital le plus proche ?`, jp: '一番近い病院はどこですか？', jpRom: 'Ichiban chikai byouin wa doko desu ka?', kr: '가장 가까운 병원이 어디예요?', krRom: 'Gajang gakkaun byeongwoni eodieyo?' },
+      { fr: `J'ai mal ici`, jp: 'ここが痛いです', jpRom: 'Koko ga itai desu', kr: '여기가 아파요', krRom: 'Yeogiga apayo' },
       { fr: 'Urgences Japon : 110 (police) 119 (ambulance)', jp: '110番 (警察) / 119番 (救急)', jpRom: 'Hyakujuuban / Hyakujuukyuuban', kr: '한국 : 112 (경찰) / 119 (구급)', krRom: 'Ilil-i (Gyeongchal) / Ilil-gu (Gugeup)' },
     ]
   },
@@ -1555,7 +1555,7 @@ const PHRASES_DB = [
       { fr: 'Où est... ?', jp: '...はどこですか？', jpRom: '...wa doko desu ka?', kr: '...이/가 어디예요?', krRom: '...i/ga eodieyo?' },
       { fr: 'Tout droit', jp: 'まっすぐ', jpRom: 'Massugu', kr: '직진', krRom: 'Jikjin' },
       { fr: 'À gauche / À droite', jp: '左 / 右', jpRom: 'Hidari / Migi', kr: '왼쪽 / 오른쪽', krRom: 'Oenjjok / Oreunjjok' },
-      { fr: 'Près d'ici / Loin', jp: '近く / 遠い', jpRom: 'Chikaku / Tooi', kr: '가까워요 / 멀어요', krRom: 'Gakkawoyo / Meoreoyo' },
+      { fr: `Près d'ici / Loin`, jp: '近く / 遠い', jpRom: 'Chikaku / Tooi', kr: '가까워요 / 멀어요', krRom: 'Gakkawoyo / Meoreoyo' },
       { fr: 'Pouvez-vous me montrer sur la carte ?', jp: '地図で見せてもらえますか？', jpRom: 'Chizu de misete moraemasu ka?', kr: '지도에서 보여주실 수 있어요?', krRom: 'Jidoeseo boyeojusil su isseoyo?' },
     ]
   },
@@ -1563,7 +1563,7 @@ const PHRASES_DB = [
     cat: '💬 Enfants', phrases: [
       { fr: 'Mon enfant est perdu', jp: '子供がいなくなりました', jpRom: 'Kodomo ga inakunarimashita', kr: '아이를 잃어버렸어요', krRom: 'Aireul ireobeoryeosseoyo' },
       { fr: 'Y a-t-il un espace enfants ?', jp: 'キッズスペースはありますか？', jpRom: 'Kizzu supeesu wa arimasu ka?', kr: '어린이 공간이 있어요?', krRom: 'Eorini gonggani isseoyo?' },
-      { fr: 'Tarif enfant s'il vous plaît', jp: '子供料金をお願いします', jpRom: 'Kodomo ryoukin wo onegaishimasu', kr: '어린이 요금으로 해주세요', krRom: 'Eorini yogeumeuro haejuseyo' },
+      { fr: `Tarif enfant s'il vous plaît`, jp: '子供料金をお願いします', jpRom: 'Kodomo ryoukin wo onegaishimasu', kr: '어린이 요금으로 해주세요', krRom: 'Eorini yogeumeuro haejuseyo' },
       { fr: 'Avez-vous une chaise haute ?', jp: 'ベビーチェアはありますか？', jpRom: 'Bebi chea wa arimasu ka?', kr: '유아 의자 있어요?', krRom: 'Yua uija isseoyo?' },
     ]
   },
@@ -2393,7 +2393,7 @@ const METRO_DATA = {
     pdfUrl: 'http://www.humetro.busan.kr/eng/main/index.do',
     googleMaps: 'https://maps.app.goo.gl/busan-metro',
     appStore: 'https://www.kakaocorp.com/page/service/service/KakaoMap',
-    tip: 'Busan a 4 lignes. La Ligne 1 (orange) relie Haeundae au centre. Achetez la T-money à l'aéroport — fonctionne partout. Taxi peu cher pour les courtes distances.',
+    tip: `Busan a 4 lignes. La Ligne 1 (orange) relie Haeundae au centre. Achetez la T-money à l'aéroport — fonctionne partout. Taxi peu cher pour les courtes distances.`,
     lines: [
       { name: 'Ligne 1', color: '#E05B2C', num: '1', stations: ['Nopo','Seomyeon','Busan Station','Nampo','Jagalchi','Toseong'] },
       { name: 'Ligne 2', color: '#30A9DE', num: '2', stations: ['Jangsan','Haeundae','Centum City','Seomyeon','Sasang','Yangsan'] },
