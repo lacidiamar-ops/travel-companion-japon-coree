@@ -520,7 +520,7 @@ function ChatGPTPage() {
       icon: '📷',
       title: 'Traduire une photo',
       sub: "Ouvre ChatGPT, puis ajoute la photo d'un menu, panneau ou ticket.",
-      prompt: `Traduis cette photo en français. C`est un menu ou une carte de restaurant. Résume les plats, indique les prix si visibles, et conseille-moi les meilleurs choix pour une famille.`,
+      prompt: 'Traduis cette photo en français. C'est un menu ou une carte de restaurant. Résume les plats, indique les prix si visibles, et conseille-moi les meilleurs choix pour une famille.`,
       color: '#e8523a',
     },
     {
@@ -642,7 +642,7 @@ function BudgetPage() {
       categorie: form.categorie, label: form.label.trim(),
       amount: raw, devise: ZONE_CURRENCY[form.pays].code, eur: eurVal,
     }, ...prev])
-    setForm(f => ({ ...f, label:`', amount:'` }))
+    setForm(f => ({ ...f, label:'', amount:'' }))
   }
 
   const removeExpense = (id) => setExpenses(prev => prev.filter(x => x.id !== id))
@@ -672,7 +672,7 @@ function BudgetPage() {
         </div>
         <div style={{ background:'rgba(255,255,255,0.15)', borderRadius:10, height:10, marginBottom:8 }}>
           <div style={{ background: totalLeft<0?'#ff6b6b':'#7dffb0', height:10, borderRadius:10,
-            width:`${Math.min(100, totalBudget ? (totalSpent/totalBudget)*100 : 0)}%`, transition:`width 0.4s' }} />
+            width:`${Math.min(100, totalBudget ? (totalSpent/totalBudget)*100 : 0)}%`, transition:'width 0.4s' }} />
         </div>
         <div style={{ display:'flex', justifyContent:'space-between', fontSize:'0.88rem' }}>
           <span>Dépensé : <b>{totalSpent.toFixed(2)} €</b></span>
@@ -704,7 +704,7 @@ function BudgetPage() {
                 </div>
               </div>
               <div style={{ background:'#e8e8e8', borderRadius:8, height:8, marginBottom:6 }}>
-                <div style={{ background:ENV_COLORS[env], height:8, borderRadius:8, width:`${pct}%`, transition:`width 0.4s' }} />
+                <div style={{ background:ENV_COLORS[env], height:8, borderRadius:8, width:`${pct}%`, transition:'width 0.4s' }} />
               </div>
               <div style={{ display:'flex', justifyContent:'space-between', fontSize:'0.78rem', color:'#666' }}>
                 <span>Dépensé : <b style={{ color:ENV_COLORS[env] }}>{spentEnv.toFixed(2)} €</b></span>
@@ -945,7 +945,7 @@ const SPOTS_DB = [
   { cat:'📸 Instagram', city:'Séoul', name:'Seongsu Murals', desc:'Quartier hipster, cafés arty, murals streetart industriel', heure:'11h-18h', tag:'seongsuseoul', ig:'https://www.instagram.com/explore/tags/seongsuseoul/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456783-Reviews-Seongsu-Seoul.html', prix:'Gratuit' },
   { cat:'📸 Instagram', city:'Séoul', name:'Lotte Tower Sky Seoul', desc:'123e étage, vue panoramique, sky bridge vitré', heure:'9h-23h', tag:'lottetower', ig:'https://www.instagram.com/explore/tags/lottetower/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234615-Reviews-Lotte_Tower-Seoul.html', prix:'₩27000' },
   { cat:'🎪 Insolite', city:'Séoul', name:'Lotte World Theme Park', desc:"Parc d'attraction indoor + outdoor géant, Corée en miniature", heure:'9h-21h', tag:'lotteworld', ig:'https://www.instagram.com/explore/tags/lotteworld/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234586-Reviews-Lotte_World-Seoul.html', prix:'₩54000' },
-  { cat:'🎪 Insolite', city:'Séoul', name:'Trick Eye Museum', desc:`Musée illusions optiques, photos trompe-l`oeil ultra virales', heure:`10h-20h`, tag:'trickeye', ig:'https://www.instagram.com/explore/tags/trickeye/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d5678901-Reviews-Trick_Eye-Seoul.html', prix:'₩15000' },
+  { cat:'🎪 Insolite', city:'Séoul', name:'Trick Eye Museum', desc:'Musée illusions optiques, photos trompe-l'oeil ultra virales', heure:'10h-20h', tag:'trickeye', ig:'https://www.instagram.com/explore/tags/trickeye/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d5678901-Reviews-Trick_Eye-Seoul.html', prix:'₩15000' },
   { cat:'🎪 Insolite', city:'Séoul', name:'Nanta Show Hongdae', desc:'Spectacle culinaire percussions sans paroles, interactif', heure:'17h & 20h', tag:'nantashow', ig:'https://www.instagram.com/explore/tags/nantashow/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234587-Reviews-Nanta_Show-Seoul.html', prix:'₩40000' },
   { cat:'🏛️ Atypique', city:'Séoul', name:'Ihwa Mural Village', desc:'Village mural sur colline Naksan, art de rue authentique', heure:'10h-18h', tag:'ihwamural', ig:'https://www.instagram.com/explore/tags/ihwamural/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234616-Reviews-Ihwa_Village-Seoul.html', prix:'Gratuit' },
   { cat:'🏛️ Atypique', city:'Séoul', name:'Gwangjang Market 1905', desc:"Plus vieux marché couvert de Corée, ambiance d'époque", heure:'8h-23h', tag:'gwangjangmarket', ig:'https://www.instagram.com/explore/tags/gwangjangmarket/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456781-Reviews-Gwangjang-Seoul.html', prix:'Gratuit' },
@@ -1272,7 +1272,7 @@ function CarnetPage() {
             const isEmoji = /^[📍🍜🚌🎌🌸🏮⛩️🎋🌊🏖️🏔️💴💶🕐]/.test(p)
             return (
               <p key={i} style={{
-                fontSize: isH ? `1rem` : '0.9rem',
+                fontSize: isH ? '1rem' : '0.9rem',
                 fontWeight: isH ? 700 : 400,
                 color: isH ? '#0b1f3a' : '#444',
                 lineHeight: 1.7,
@@ -1406,7 +1406,7 @@ function ConverterPage() {
           <div style={{ flex:1, padding:'10px', borderRadius:10, background: result ? '#e8f5e9' : '#f5f5f5',
             border:`2px solid ${result ? `#27ae60' : '#ddd'}`, fontSize:'1.3rem', fontWeight:800,
             textAlign:'right', color:'#27ae60', display:'flex', alignItems:'center', justifyContent:'flex-end' }}>
-            {result ? `${toCur?.symbol}${Number(result).toLocaleString(`fr-FR')}` : '—'}
+            {result ? `${toCur?.symbol}${Number(result).toLocaleString('fr-FR')}` : '—'}
           </div>
         </div>
 
@@ -1494,10 +1494,10 @@ const PHRASES_DB = [
   {
     cat: '🚇 Transport', phrases: [
       { fr: 'Où est la station de métro ?', jp: '地下鉄の駅はどこですか？', jpRom: 'Chikatetsu no eki wa doko desu ka?', kr: '지하철역이 어디예요?', krRom: 'Jihacheolyeogi eodieyo?' },
-      { fr: `Un billet pour... s`il vous plaît', jp: `...まで一枚ください`, jpRom: '...made ichimai kudasai', kr: '...까지 한 장 주세요', krRom: '...kkaji han jang juseyo' },
-      { fr: `Où est l`arrêt de bus ?', jp: `バス停はどこですか？`, jpRom: 'Basu tei wa doko desu ka?', kr: '버스 정류장이 어디예요?', krRom: 'Beoseu jeongnyujang eodieyo?' },
+      { fr: "Un billet pour... s'il vous plaît", jp: '...まで一枚ください', jpRom: '...made ichimai kudasai', kr: '...까지 한 장 주세요', krRom: '...kkaji han jang juseyo' },
+      { fr: "Où est l'arrêt de bus ?", jp: 'バス停はどこですか？', jpRom: 'Basu tei wa doko desu ka?', kr: '버스 정류장이 어디예요?', krRom: 'Beoseu jeongnyujang eodieyo?' },
       { fr: 'À quelle heure part le train ?', jp: '電車は何時に出ますか？', jpRom: 'Densha wa nanji ni demasu ka?', kr: '기차가 몇 시에 출발해요?', krRom: 'Gichaga myeot sie chulbalhaeyo?' },
-      { fr: `C`est loin à pied ?', jp: `歩いて遠いですか？`, jpRom: 'Aruite tooi desu ka?', kr: '걸어서 멀어요?', krRom: 'Georeo seo meoreoyo?' },
+      { fr: "C'est loin à pied ?", jp: '歩いて遠いですか？', jpRom: 'Aruite tooi desu ka?', kr: '걸어서 멀어요?', krRom: 'Georeo seo meoreoyo?' },
       { fr: 'Appelez-moi un taxi', jp: 'タクシーを呼んでください', jpRom: 'Takushi wo yonde kudasai', kr: '택시 불러 주세요', krRom: 'Taeksi bulleo juseyo' },
       { fr: 'Je veux aller à...', jp: '...に行きたいです', jpRom: '...ni ikitai desu', kr: '...에 가고 싶어요', krRom: '...e gago sipeoyo' },
     ]
@@ -1505,20 +1505,20 @@ const PHRASES_DB = [
   {
     cat: '🍜 Restaurant', phrases: [
       { fr: 'Une table pour 4 personnes', jp: '4人用のテーブルをお願いします', jpRom: 'Yonin you no teburu wo onegaishimasu', kr: '4인 테이블 부탁드려요', krRom: 'Sa-in teibeul butakdeuryeoyo' },
-      { fr: `Le menu s`il vous plaît', jp: `メニューをください`, jpRom: 'Menyu wo kudasai', kr: '메뉴판 주세요', krRom: 'Menyupan juseyo' },
-      { fr: `C`est délicieux !', jp: `おいしい！`, jpRom: 'Oishii!', kr: '맛있어요!', krRom: 'Massisseoyo!' },
-      { fr: `L`addition s'il vous plaît', jp: `お会計をお願いします`, jpRom: 'Okaikei wo onegaishimasu', kr: '계산서 주세요', krRom: 'Gyesanseo juseyo' },
+      { fr: "Le menu s'il vous plaît", jp: 'メニューをください', jpRom: 'Menyu wo kudasai', kr: '메뉴판 주세요', krRom: 'Menyupan juseyo' },
+      { fr: "C'est délicieux !", jp: 'おいしい！', jpRom: 'Oishii!', kr: '맛있어요!', krRom: 'Massisseoyo!' },
+      { fr: 'L'addition s'il vous plaît', jp: 'お会計をお願いします', jpRom: 'Okaikei wo onegaishimasu', kr: '계산서 주세요', krRom: 'Gyesanseo juseyo' },
       { fr: 'Je suis allergique à...', jp: '...アレルギーがあります', jpRom: '...arerugii ga arimasu', kr: '...알레르기가 있어요', krRom: '...allereugi ga isseoyo' },
-      { fr: `Sans gluten s`il vous plaît', jp: `グルテンなしでお願いします`, jpRom: 'Guruten nashi de onegaishimasu', kr: '글루텐 없이 해주세요', krRom: 'Geulluten eopsi haejuseyo' },
+      { fr: "Sans gluten s'il vous plaît", jp: 'グルテンなしでお願いします', jpRom: 'Guruten nashi de onegaishimasu', kr: '글루텐 없이 해주세요', krRom: 'Geulluten eopsi haejuseyo' },
       { fr: 'Je ne mange pas de porc', jp: '豚肉は食べません', jpRom: 'Butaniku wa tabemasen', kr: '돼지고기를 안 먹어요', krRom: 'Dwaejigogireul an meogoyo' },
-      { fr: `C`est trop piquant', jp: `辛すぎます`, jpRom: 'Kara sugimasu', kr: '너무 매워요', krRom: 'Neomu maewoyo' },
-      { fr: `De l`eau s'il vous plaît', jp: `お水をください`, jpRom: 'Omizu wo kudasai', kr: '물 주세요', krRom: 'Mul juseyo' },
+      { fr: "C'est trop piquant", jp: '辛すぎます', jpRom: 'Kara sugimasu', kr: '너무 매워요', krRom: 'Neomu maewoyo' },
+      { fr: 'De l'eau s'il vous plaît', jp: 'お水をください', jpRom: 'Omizu wo kudasai', kr: '물 주세요', krRom: 'Mul juseyo' },
     ]
   },
   {
     cat: '🛍️ Shopping', phrases: [
       { fr: 'Combien ça coûte ?', jp: 'いくらですか？', jpRom: 'Ikura desu ka?', kr: '얼마예요?', krRom: 'Eolmayeyo?' },
-      { fr: `C`est trop cher', jp: `高すぎます`, jpRom: 'Taka sugimasu', kr: '너무 비싸요', krRom: 'Neomu bissayo' },
+      { fr: "C'est trop cher", jp: '高すぎます', jpRom: 'Taka sugimasu', kr: '너무 비싸요', krRom: 'Neomu bissayo' },
       { fr: 'Avez-vous une taille plus grande ?', jp: 'もっと大きいサイズはありますか？', jpRom: 'Motto ookii saizu wa arimasu ka?', kr: '더 큰 사이즈 있어요?', krRom: 'Deo keun saiseu isseoyo?' },
       { fr: 'Je peux essayer ?', jp: '試着できますか？', jpRom: 'Shichaku dekimasu ka?', kr: '입어봐도 돼요?', krRom: 'Ibeoboado dwaeyo?' },
       { fr: 'Je prends celui-ci', jp: 'これをください', jpRom: 'Kore wo kudasai', kr: '이걸로 할게요', krRom: 'Igeolro halgeyo' },
@@ -1528,11 +1528,11 @@ const PHRASES_DB = [
   },
   {
     cat: '🏨 Hôtel', phrases: [
-      { fr: `J`ai une réservation', jp: `予約があります`, jpRom: 'Yoyaku ga arimasu', kr: '예약했어요', krRom: 'Yeyak haesseoyo' },
+      { fr: 'J'ai une réservation', jp: '予約があります', jpRom: 'Yoyaku ga arimasu', kr: '예약했어요', krRom: 'Yeyak haesseoyo' },
       { fr: 'Check-in / Check-out', jp: 'チェックイン / チェックアウト', jpRom: 'Chekkuin / Chekku auto', kr: '체크인 / 체크아웃', krRom: 'Chekeu-in / Chekeu-aut' },
       { fr: 'Où est ma chambre ?', jp: '私の部屋はどこですか？', jpRom: 'Watashi no heya wa doko desu ka?', kr: '제 방이 어디예요?', krRom: 'Je bangi eodieyo?' },
       { fr: 'Le wifi ne fonctionne pas', jp: 'ワイファイが使えません', jpRom: 'Waifai ga tsukaemasen', kr: '와이파이가 안 돼요', krRom: 'Waipai ga an dwaeyo' },
-      { fr: `Pouvez-vous m`appeler un taxi ?', jp: `タクシーを呼んでもらえますか？`, jpRom: 'Takushi wo yonde moraemasu ka?', kr: '택시 불러주실 수 있어요?', krRom: 'Taeksi bulleojusil su isseoyo?' },
+      { fr: 'Pouvez-vous m'appeler un taxi ?', jp: 'タクシーを呼んでもらえますか？', jpRom: 'Takushi wo yonde moraemasu ka?', kr: '택시 불러주실 수 있어요?', krRom: 'Taeksi bulleojusil su isseoyo?' },
       { fr: 'Avez-vous un coffre-fort ?', jp: 'セーフを使えますか？', jpRom: 'Sefu wo tsukaemasu ka?', kr: '금고 있어요?', krRom: 'Geumgo isseoyo?' },
     ]
   },
@@ -1541,11 +1541,11 @@ const PHRASES_DB = [
       { fr: 'Au secours !', jp: '助けて！', jpRom: 'Tasukete!', kr: '도와주세요!', krRom: 'Dowajuseyo!' },
       { fr: 'Appelez la police !', jp: '警察を呼んでください！', jpRom: 'Keisatsu wo yonde kudasai!', kr: '경찰을 불러주세요!', krRom: 'Gyeongchal eul bulleojuseyo!' },
       { fr: 'Appelez une ambulance !', jp: '救急車を呼んでください！', jpRom: 'Kyukyusha wo yonde kudasai!', kr: '구급차를 불러주세요!', krRom: 'Gugeupcha reul bulleojuseyo!' },
-      { fr: `J`ai besoin d'un médecin', jp: `医者が必要です`, jpRom: 'Isha ga hitsuyou desu', kr: '의사가 필요해요', krRom: 'Uisaga piryohaeyo' },
+      { fr: 'J'ai besoin d'un médecin', jp: '医者が必要です', jpRom: 'Isha ga hitsuyou desu', kr: '의사가 필요해요', krRom: 'Uisaga piryohaeyo' },
       { fr: 'Je me suis perdu(e)', jp: '迷子になりました', jpRom: 'Maigo ni narimashita', kr: '길을 잃었어요', krRom: 'Gireul ireoosseoyo' },
-      { fr: `On m`a volé mon sac', jp: `バッグを盗まれました`, jpRom: 'Baggu wo nusumaremashita', kr: '가방을 도둑맞았어요', krRom: 'Gabangeul dodungmajasseoyo' },
-      { fr: `Où est l`hôpital le plus proche ?', jp: `一番近い病院はどこですか？`, jpRom: 'Ichiban chikai byouin wa doko desu ka?', kr: '가장 가까운 병원이 어디예요?', krRom: 'Gajang gakkaun byeongwoni eodieyo?' },
-      { fr: `J`ai mal ici', jp: `ここが痛いです`, jpRom: 'Koko ga itai desu', kr: '여기가 아파요', krRom: 'Yeogiga apayo' },
+      { fr: 'On m'a volé mon sac', jp: 'バッグを盗まれました', jpRom: 'Baggu wo nusumaremashita', kr: '가방을 도둑맞았어요', krRom: 'Gabangeul dodungmajasseoyo' },
+      { fr: 'Où est l'hôpital le plus proche ?', jp: '一番近い病院はどこですか？', jpRom: 'Ichiban chikai byouin wa doko desu ka?', kr: '가장 가까운 병원이 어디예요?', krRom: 'Gajang gakkaun byeongwoni eodieyo?' },
+      { fr: 'J'ai mal ici', jp: 'ここが痛いです', jpRom: 'Koko ga itai desu', kr: '여기가 아파요', krRom: 'Yeogiga apayo' },
       { fr: 'Urgences Japon : 110 (police) 119 (ambulance)', jp: '110番 (警察) / 119番 (救急)', jpRom: 'Hyakujuuban / Hyakujuukyuuban', kr: '한국 : 112 (경찰) / 119 (구급)', krRom: 'Ilil-i (Gyeongchal) / Ilil-gu (Gugeup)' },
     ]
   },
@@ -1554,7 +1554,7 @@ const PHRASES_DB = [
       { fr: 'Où est... ?', jp: '...はどこですか？', jpRom: '...wa doko desu ka?', kr: '...이/가 어디예요?', krRom: '...i/ga eodieyo?' },
       { fr: 'Tout droit', jp: 'まっすぐ', jpRom: 'Massugu', kr: '직진', krRom: 'Jikjin' },
       { fr: 'À gauche / À droite', jp: '左 / 右', jpRom: 'Hidari / Migi', kr: '왼쪽 / 오른쪽', krRom: 'Oenjjok / Oreunjjok' },
-      { fr: `Près d`ici / Loin', jp: `近く / 遠い`, jpRom: 'Chikaku / Tooi', kr: '가까워요 / 멀어요', krRom: 'Gakkawoyo / Meoreoyo' },
+      { fr: 'Près d'ici / Loin', jp: '近く / 遠い', jpRom: 'Chikaku / Tooi', kr: '가까워요 / 멀어요', krRom: 'Gakkawoyo / Meoreoyo' },
       { fr: 'Pouvez-vous me montrer sur la carte ?', jp: '地図で見せてもらえますか？', jpRom: 'Chizu de misete moraemasu ka?', kr: '지도에서 보여주실 수 있어요?', krRom: 'Jidoeseo boyeojusil su isseoyo?' },
     ]
   },
@@ -1562,7 +1562,7 @@ const PHRASES_DB = [
     cat: '💬 Enfants', phrases: [
       { fr: 'Mon enfant est perdu', jp: '子供がいなくなりました', jpRom: 'Kodomo ga inakunarimashita', kr: '아이를 잃어버렸어요', krRom: 'Aireul ireobeoryeosseoyo' },
       { fr: 'Y a-t-il un espace enfants ?', jp: 'キッズスペースはありますか？', jpRom: 'Kizzu supeesu wa arimasu ka?', kr: '어린이 공간이 있어요?', krRom: 'Eorini gonggani isseoyo?' },
-      { fr: `Tarif enfant s`il vous plaît', jp: `子供料金をお願いします`, jpRom: 'Kodomo ryoukin wo onegaishimasu', kr: '어린이 요금으로 해주세요', krRom: 'Eorini yogeumeuro haejuseyo' },
+      { fr: 'Tarif enfant s'il vous plaît', jp: '子供料金をお願いします', jpRom: 'Kodomo ryoukin wo onegaishimasu', kr: '어린이 요금으로 해주세요', krRom: 'Eorini yogeumeuro haejuseyo' },
       { fr: 'Avez-vous une chaise haute ?', jp: 'ベビーチェアはありますか？', jpRom: 'Bebi chea wa arimasu ka?', kr: '유아 의자 있어요?', krRom: 'Yua uija isseoyo?' },
     ]
   },
@@ -1808,12 +1808,12 @@ function TransportPage() {
   const [open, setOpen] = React.useState(null)
   return (
     <motion.div key="transport" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
-      <div style={{ background:`linear-gradient(135deg,#0b1f3a,#1a3a6b)`, borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
+      <div style={{ background:`linear-gradient(135deg,#0b1f3a,#1a3a6b)', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
         <div style={{ fontWeight:800, fontSize:'1.1rem' }}>🚆 Guide Transports</div>
         <div style={{ fontSize:'0.8rem', opacity:0.75, marginTop:2 }}>JR Pass · IC Card · Métro · Aéroport</div>
       </div>
       {TRANSPORT_INFO.map((section, i) => (
-        <div key={section.title} style={{ background:'#fff', borderRadius:14, border:'2px solid ${section.color}`, overflow:`hidden' }}>
+        <div key={section.title} style={{ background:'#fff', borderRadius:14, border:'2px solid ${section.color}`, overflow:'hidden' }}>
           <button onClick={() => setOpen(open===i ? null : i)}
             style={{ width:'100%', display:'flex', justifyContent:'space-between', alignItems:'center',
               padding:'0.9rem 1.1rem', background:'none', border:'none', cursor:'pointer', textAlign:'left' }}>
@@ -1839,11 +1839,11 @@ function TransportPage() {
 // ════ CHECKLIST PRÉ-DÉPART ════
 const CHECKLIST_DEF = [
   { cat:'📄 Documents', items:['Passeports valides 6+ mois','Assurance voyage souscrite','Billets avion imprimés ou téléchargés','JR Pass commandé','Réservations hôtels confirmées','Carnet de vaccination','Photocopies documents (cloud + papier)',"Photos d'identité (x4 par personne)"] },
-  { cat:`💳 Argent & Paiements`, items:['Yens japonais (¥) — prévoir ~¥50 000/pers/semaine','Wons coréens (₩) — prévoir ~₩200 000/pers','CB Visa/Mastercard sans frais étrangers','Prévenir sa banque du voyage','Télécharger app banque','Code PIN à 4 chiffres connu'] },
+  { cat:`💳 Argent & Paiements', items:['Yens japonais (¥) — prévoir ~¥50 000/pers/semaine','Wons coréens (₩) — prévoir ~₩200 000/pers','CB Visa/Mastercard sans frais étrangers','Prévenir sa banque du voyage','Télécharger app banque','Code PIN à 4 chiffres connu'] },
   { cat:'📱 Tech & Connectivité', items:['SIM internationale ou Pocket WiFi réservé','Maps Japon + Corée téléchargées hors-ligne','App Suica / T-money','Adaptateur prise japonaise (Type A)','Batterie externe chargée (max 100Wh en cabine)','Chargeurs tous appareils','Écouteurs (film dans avion)'] },
   { cat:'👕 Bagages', items:['Valise ≤ 23kg + bagage cabine ≤ 10kg','Chaussures confortables (BEAUCOUP de marche)','Imperméable / coupe-vent','Vêtements été + 1 pull (clim forte Japon)','Chaussettes propres (déchausser souvent)','Maillots de bain (onsen, plage Busan)','Crème solaire SPF50+'] },
   { cat:'💊 Santé', items:['Médicaments habituels + ordonnances','Paracétamol / ibuprofène','Pansements + désinfectant','Anti-diarrhéique (changement alimentation)','Crème anti-moustiques','Masques chirurgicaux (courant en Asie)',"Carte européenne d'assurance maladie"] },
-  { cat:`✈️ Jour J`, items:['Arriver CDG 3h avant (vol Rome 09 juil.)',"Peluche / jeu enfant pour l'avion",'Collations avion`,"Valider JR Pass à l`arrivée",'Retirer espèces au distributeur aéroport','Suica / T-money à acheter',"Note des numéros d'hôtel premiers jours"] },
+  { cat:`✈️ Jour J', items:['Arriver CDG 3h avant (vol Rome 09 juil.)',"Peluche / jeu enfant pour l'avion",'Collations avion',"Valider JR Pass à l'arrivée",'Retirer espèces au distributeur aéroport','Suica / T-money à acheter',"Note des numéros d'hôtel premiers jours"] },
 ]
 
 function ChecklistPage() {
@@ -1863,7 +1863,7 @@ function ChecklistPage() {
       <div style={{ background:'linear-gradient(135deg,#27ae60,#2ecc71)', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
         <div style={{ fontWeight:800, fontSize:'1.1rem' }}>✅ Checklist pré-départ</div>
         <div style={{ marginTop:8, background:'rgba(255,255,255,0.25)', borderRadius:8, height:10 }}>
-          <div style={{ background:'#fff', height:10, borderRadius:8, width:`${(done/total)*100}%`, transition:`width 0.4s' }} />
+          <div style={{ background:'#fff', height:10, borderRadius:8, width:`${(done/total)*100}%`, transition:'width 0.4s' }} />
         </div>
         <div style={{ fontSize:'0.82rem', marginTop:4 }}>{done} / {total} éléments cochés</div>
       </div>
@@ -2144,7 +2144,7 @@ function SantePage() {
   const open = (url) => window.open(url, '_blank', 'noopener,noreferrer')
   const SECTIONS = [
     {
-      title: `🚨 Numéros d`urgence', color:`#e53935`,
+      title: '🚨 Numéros d'urgence', color:'#e53935`,
       items:[
         { label:'🇯🇵 Police Japon', val:'110', action:'tel:110' },
         { label:'🇯🇵 Ambulance/Pompiers Japon', val:'119', action:'tel:119' },
@@ -2157,7 +2157,7 @@ function SantePage() {
     {
       title: '🏥 Hôpitaux avec English/French', color:'#e53935',
       items:[
-        { label:`Tokyo — St. Luke`s International', val:`Chuo-ku`, action:'https://www.luke.ac.jp/eng/' },
+        { label:'Tokyo — St. Luke's International', val:'Chuo-ku', action:'https://www.luke.ac.jp/eng/' },
         { label:'Tokyo — International Clinic', val:'Roppongi', action:'https://www.intlclinic.com/' },
         { label:'Osaka — Otemae Hospital', val:'Chuo-ku Osaka', action:'https://www.otemae.osakafu-hosp.jp/' },
         { label:'Séoul — Severance Hospital', val:'Sinchon, Séoul', action:'https://www.severance.or.kr/eng/' },
@@ -2224,7 +2224,7 @@ function SimPage() {
       color:'#27ae60',
       pros:['Pas de configuration compliquée','Fonctionne en Japon ET Corée','Données illimitées souvent incluses','Prix fixe prévisible'],
       cons:['Perdez votre numéro FR temporairement','Appels FR souvent non inclus'],
-      recomm:`Airalo (eSIM) ou Ubigi — achetez l`eSIM avant le départ sur leur app',
+      recomm:'Airalo (eSIM) ou Ubigi — achetez l'eSIM avant le départ sur leur app',
       prix:`~15€ pour 10Go / 30 jours Japon+Corée`,
       lien:'https://www.airalo.com/',
     },
@@ -2234,13 +2234,13 @@ function SimPage() {
       pros:['Plusieurs appareils connectés simultanément','Gardez votre numéro FR actif','Excellente couverture Japon'],
       cons:['Batterie à recharger chaque soir','Objet à ne pas perdre (caution)','Récupération/retour à l'aéroport'],
       recomm:'Global WiFi ou IIJmio — réservez en ligne avant le départ',
-      prix:`~500¥/jour — livré à l`aéroport à l'arrivée',
+      prix:'~500¥/jour — livré à l'aéroport à l'arrivée',
       lien:'https://www.globalwifi.com.au/',
     },
     {
       title: '📱 SIM Locale Japon (au KIX)',
       color:'#8e44ad',
-      pros:[`Achat simple à l`aéroport','Bon débit 4G/5G','Pas de caution'],
+      pros:['Achat simple à l'aéroport','Bon débit 4G/5G','Pas de caution'],
       cons:['Valable Japon uniquement','Racheter une SIM pour la Corée'],
       recomm:'IIJmio ou Mobal — distributeurs aéroport Kansai (KIX) arrivée',
       prix:'~¥3000 pour 15Go / 30 jours',
@@ -2392,9 +2392,9 @@ const METRO_DATA = {
     pdfUrl: 'http://www.humetro.busan.kr/eng/main/index.do',
     googleMaps: 'https://maps.app.goo.gl/busan-metro',
     appStore: 'https://www.kakaocorp.com/page/service/service/KakaoMap',
-    tip: `Busan a 4 lignes. La Ligne 1 (orange) relie Haeundae au centre. Achetez la T-money à l`aéroport — fonctionne partout. Taxi peu cher pour les courtes distances.',
+    tip: `Busan a 4 lignes. La Ligne 1 (orange) relie Haeundae au centre. Achetez la T-money à l'aéroport — fonctionne partout. Taxi peu cher pour les courtes distances.',
     lines: [
-      { name: `Ligne 1`, color: '#E05B2C', num: '1', stations: ['Nopo','Seomyeon','Busan Station','Nampo','Jagalchi','Toseong'] },
+      { name: `Ligne 1', color: '#E05B2C', num: '1', stations: ['Nopo','Seomyeon','Busan Station','Nampo','Jagalchi','Toseong'] },
       { name: 'Ligne 2', color: '#30A9DE', num: '2', stations: ['Jangsan','Haeundae','Centum City','Seomyeon','Sasang','Yangsan'] },
       { name: 'Ligne 3', color: '#9B6B29', num: '3', stations: ['Daejeo','Deokcheon','Yeonsan','Suyeong','Baekyangsan'] },
       { name: 'Ligne 4 (Gireum)', color: '#2DBF2D', num: '4', stations: ['Minam','Banyeo','Anpyeong','Danggam'] },
@@ -2667,7 +2667,7 @@ function AppShell() {
         {quickLinks.map((item) => {
           const Icon = item.icon
           return (
-            <button key={item.key} className={`bottom-item ${tab === item.key ? `active' : ''}`} onClick={() => setTab(item.key)}>
+            <button key={item.key} className={`bottom-item ${tab === item.key ? 'active' : ''}`} onClick={() => setTab(item.key)}>
               <Icon size={21} />
               <span>{item.label === 'IA Assistant' ? 'IA' : item.label}</span>
             </button>
