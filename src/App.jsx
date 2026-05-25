@@ -281,7 +281,7 @@ function SplashScreen({ onStart }) {
 function QuickAction({ item, active, onClick }) {
   const Icon = item.icon
   return (
-    <button className={`quick-action ${item.color} ${active ? `active' : ''}`} onClick={onClick}>
+    <button className={`quick-action ${item.color} ${active ? 'active' : ''}`} onClick={onClick}>
       <span className="quick-icon"><Icon size={28} /></span>
       <span>{item.label}</span>
     </button>
