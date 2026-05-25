@@ -2050,18 +2050,18 @@ function FavorisPage() {
 // ════ SHOPPING ════
 const SHOPPING_DB = [
   { cat:'🍫 Douceurs à ramener', emoji:'🍫', items:[
-    { name:'Kit Kat saveurs Japon', desc:'Matcha, wasabi, sakura, patate douce — introuvables en France', ou:'Combinis, aéroport KIX', prix:'¥600/boîte' },
+    { name:'Kit Kat saveurs Japon', desc:"Matcha, wasabi, sakura, patate douce — introuvables en France", ou:'Combinis, aéroport KIX', prix:'¥600/boîte' },
     { name:'Pocky & Pretz éditions limitées', desc:'Saveurs saisonnières et régionales exclusives', ou:'7-Eleven, Lawson', prix:'¥150-300' },
     { name:'Daifuku & Wagashi frais', desc:'Mochi à la crème, dorayaki — à consommer sur place', ou:'Patisseries locales, marchés', prix:'¥200-500' },
     { name:'Thé Matcha Ito En', desc:'Meilleur rapport qualité/prix, grandes boîtes', ou:'Supermarchés, aéroport', prix:'¥800-2000' },
     { name:'Confiseries coréennes', desc:'Choco Pie, Pepero, Yakgwa — snacks emblématiques', ou:'Myeongdong, supermarchés KR', prix:'₩2000-5000' },
   ]},
   { cat:'💄 Beauté & Cosmétiques', emoji:'💄', items:[
-    { name:'Masques visage coréens', desc:'Tony Moly, Innisfree, Mediheal — 10x moins chers qu'en France', ou:'Myeongdong, Olive Young', prix:'₩500-2000/masque' },
+    { name:'Masques visage coréens', desc:"Tony Moly, Innisfree, Mediheal — 10x moins chers qu'en France", ou:'Myeongdong, Olive Young', prix:'₩500-2000/masque' },
     { name:'Crème BB & cushion', desc:'Formules coréennes très couvrantes et légères', ou:'Olive Young (toutes villes)', prix:'₩15000-35000' },
     { name:'Sérum Snail Repair', desc:'Crème escargot réparatrice — best-seller mondial', ou:'Innisfree, Nature Republic', prix:'₩20000-40000' },
     { name:'Produits Shiseido / Kose', desc:'Cosmétiques japonais premium à prix japonais', ou:'Drugstores JP (Matsumoto Kiyoshi)', prix:'¥1500-5000' },
-    { name:'Parfum Issey Miyake', desc:'Prix duty-free bien plus bas qu'en France', ou:'Aéroports JP/KR', prix:'¥8000-15000' },
+    { name:'Parfum Issey Miyake', desc:"Prix duty-free bien plus bas qu'en France", ou:"Aéroports JP/KR", prix:'¥8000-15000' },
   ]},
   { cat:'🎌 Souvenirs Japon', emoji:'🎌', items:[
     { name:'Netsuke & figurines Maneki-neko', desc:'Chats porte-bonheur en céramique', ou:'Asakusa, Nishiki Market', prix:'¥500-3000' },
@@ -2074,13 +2074,13 @@ const SHOPPING_DB = [
   { cat:'🇰🇷 Souvenirs Corée', emoji:'🇰🇷', items:[
     { name:'Poupées Hahoetal (masques)', desc:'Masques traditionnels coréens, très colorés', ou:'Insadong, marchés', prix:'₩5000-20000' },
     { name:'Céramique Celadon', desc:'Poterie vert jade emblématique de la Corée', ou:'Insadong, Gyeongbokgung', prix:'₩15000-50000' },
-    { name:'Épices ramyeon bag', desc:'Assortiment de ramyeon introuvable en France', ou:'Gwangjang Market, combinis', prix:'₩5000-15000' },
+    { name:'Épices ramyeon bag', desc:"Assortiment de ramyeon introuvable en France", ou:'Gwangjang Market, combinis', prix:'₩5000-15000' },
     { name:'Cartes K-pop officielles', desc:'Photocards des groupes BTS, Blackpink, etc.', ou:'SM Town, Myeongdong', prix:'₩3000-20000' },
     { name:'Chaussettes coréennes', desc:'Design unique, imprimés drôles — cadeau parfait', ou:'Partout (marchés, boutiques)', prix:'₩1000-3000' },
   ]},
   { cat:'💡 Pratique & Tech', emoji:'💡', items:[
-    { name:'Adaptateur prise Japon (Type A)', desc:'Prises plates en J — si pas encore acheté', ou:'Aéroport CDG ou Amazon', prix:'€5-15' },
-    { name:'Batterie externe Anker', desc:'Moins chère en Asie qu'en France', ou:'Akihabara, Yodobashi Camera', prix:'¥3000-6000' },
+    { name:'Adaptateur prise Japon (Type A)', desc:"Prises plates en J — si pas encore acheté", ou:'Aéroport CDG ou Amazon', prix:'€5-15' },
+    { name:'Batterie externe Anker', desc:"Moins chère en Asie qu'en France", ou:'Akihabara, Yodobashi Camera', prix:'¥3000-6000' },
     { name:'Parapluie pliable Japonais', desc:'Qualité supérieure, très légers et compacts', ou:'Combinis JP (¥500 basique!)', prix:'¥500-2000' },
     { name:'Ventilateur de poche', desc:'Indispensable en juillet — chaleur intense', ou:'Combinis, Dollar stores JP/KR', prix:'¥300-1500' },
   ]},
