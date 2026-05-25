@@ -281,7 +281,7 @@ function SplashScreen({ onStart }) {
 function QuickAction({ item, active, onClick }) {
   const Icon = item.icon
   return (
-    <button className={`quick-action ${item.color} ${active ? 'active' : ''}`} onClick={onClick}>
+    <button className={`quick-action ${item.color} ${active ? `active' : ''}'} onClick={onClick}>
       <span className="quick-icon"><Icon size={28} /></span>
       <span>{item.label}</span>
     </button>
@@ -345,9 +345,9 @@ function UsefulCard({ info }) {
 
 
 const weatherCodes = {
-  0: `Ciel dégagé`, 1: 'Principalement clair', 2: 'Partiellement nuageux', 3: 'Couvert',
-  45: `Brouillard`, 48: 'Brouillard givrant', 51: 'Bruine faible', 53: 'Bruine', 55: 'Bruine forte',
-  61: `Pluie faible`, 63: 'Pluie', 65: 'Pluie forte', 71: 'Neige faible', 73: 'Neige', 75: 'Neige forte',
+  0: `Ciel dégagé`, 1: `Principalement clair', 2: 'Partiellement nuageux', 3: 'Couvert',
+  45: `Brouillard`, 48: `Brouillard givrant', 51: 'Bruine faible', 53: 'Bruine', 55: 'Bruine forte',
+  61: `Pluie faible`, 63: `Pluie', 65: 'Pluie forte', 71: 'Neige faible', 73: 'Neige', 75: 'Neige forte',
   80: 'Averses faibles', 81: 'Averses', 82: 'Averses fortes', 95: 'Orage'
 }
 
@@ -368,7 +368,7 @@ function WeatherLiveCard() {
       try {
         const [weatherRes, geoRes] = await Promise.all([
           fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto`),
-          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, { headers: { 'Accept-Language': 'fr' } })
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, { headers: { `Accept-Language': 'fr' } })
         ])
         const data = await weatherRes.json()
         const geo  = await geoRes.json()
@@ -521,7 +521,7 @@ function ChatGPTPage() {
       icon: '📷',
       title: 'Traduire une photo',
       sub: "Ouvre ChatGPT, puis ajoute la photo d'un menu, panneau ou ticket.",
-      prompt: `Traduis cette photo en français. C'est un menu ou une carte de restaurant. Résume les plats, indique les prix si visibles, et conseille-moi les meilleurs choix pour une famille.`,
+      prompt: `Traduis cette photo en français. C`est un menu ou une carte de restaurant. Résume les plats, indique les prix si visibles, et conseille-moi les meilleurs choix pour une famille.`,
       color: '#e8523a',
     },
     {
@@ -556,7 +556,7 @@ function ChatGPTPage() {
 
       {/* 3 boutons */}
       {buttons.map(btn => (
-        <div key={btn.id} style={{ background:'#fff', border:`2px solid ${btn.color}`, borderRadius:16, padding:'1rem 1.2rem' }}>
+        <div key={btn.id} style={{ background:'#fff', border:'2px solid ${btn.color}`, borderRadius:16, padding:`1rem 1.2rem' }}>
           <div style={{ display:'flex', alignItems:'flex-start', gap:12, marginBottom:12 }}>
             <span style={{ fontSize:'1.8rem', lineHeight:1 }}>{btn.icon}</span>
             <div>
@@ -572,7 +572,7 @@ function ChatGPTPage() {
 
           <div style={{ display:'flex', gap:8 }}>
             <button onClick={() => copyPrompt(btn.prompt, btn.id)}
-              style={{ flex:1, padding:'0.55rem', borderRadius:10, border:`1.5px solid ${btn.color}`,
+              style={{ flex:1, padding:'0.55rem', borderRadius:10, border:'1.5px solid ${btn.color}`,
                 background: copied===btn.id ? btn.color : '#fff',
                 color: copied===btn.id ? '#fff' : btn.color,
                 fontWeight:700, fontSize:'0.82rem', cursor:'pointer', transition:'all 0.2s' }}>
@@ -614,7 +614,7 @@ function BudgetPage() {
   // ── UI states ──
   const [showRates, setShowRates] = useState(false)
   const [form, setForm] = useState({
-    date: new Date().toISOString().slice(0,10), pays:'Japon', categorie:'Restaurant', label:`', amount:'`
+    date: new Date().toISOString().slice(0,10), pays:'Japon', categorie:'Restaurant', label:'', amount:'`
   })
 
   // ── Calculs dérivés — toujours à jour ──
@@ -673,7 +673,7 @@ function BudgetPage() {
         </div>
         <div style={{ background:'rgba(255,255,255,0.15)', borderRadius:10, height:10, marginBottom:8 }}>
           <div style={{ background: totalLeft<0?'#ff6b6b':'#7dffb0', height:10, borderRadius:10,
-            width:`${Math.min(100, totalBudget ? (totalSpent/totalBudget)*100 : 0)}%`, transition:'width 0.4s' }} />
+            width:`${Math.min(100, totalBudget ? (totalSpent/totalBudget)*100 : 0)}%`, transition:`width 0.4s' }} />
         </div>
         <div style={{ display:'flex', justifyContent:'space-between', fontSize:'0.88rem' }}>
           <span>Dépensé : <b>{totalSpent.toFixed(2)} €</b></span>
@@ -686,26 +686,26 @@ function BudgetPage() {
       {/* ── Enveloppes ── */}
       <div className="panel card-panel">
         <SectionTitle title="Enveloppes par catégorie" />
-        <p className="soft" style={{ marginBottom:'0.8rem` }}>Modifie les montants. Les dépenses s'imputent automatiquement sur chaque enveloppe.</p>
+        <p className="soft" style={{ marginBottom:'0.8rem' }}>Modifie les montants. Les dépenses s'imputent automatiquement sur chaque enveloppe.</p>
         {ENV_LIST.map(env => {
           const budgetEnv = Number(envBudgets[env]) || 0
           const spentEnv  = spentByEnv(env)
           const leftEnv   = budgetEnv - spentEnv
           const pct       = budgetEnv > 0 ? Math.min(100, (spentEnv/budgetEnv)*100) : 0
           return (
-            <div key={env} style={{ border:`2px solid ${ENV_COLORS[env]}`, borderRadius:12, padding:`0.8rem 1rem', marginBottom:10 }}>
+            <div key={env} style={{ border:`2px solid ${ENV_COLORS[env]}`, borderRadius:12, padding:`0.8rem 1rem`, marginBottom:10 }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6 }}>
                 <span style={{ fontWeight:700, color:ENV_COLORS[env] }}>{ENV_EMOJI[env]} {env}</span>
                 <div style={{ display:'flex', alignItems:'center', gap:4 }}>
                   <input type="number" value={budgetEnv}
                     onChange={e => setEnvBudgets(prev => ({ ...prev, [env]: Math.max(0, Number(e.target.value)||0) }))}
-                    style={{ width:75, textAlign:'right', border:'none', borderBottom:`2px solid ${ENV_COLORS[env]}`,
+                    style={{ width:75, textAlign:'right', border:'none', borderBottom:'2px solid ${ENV_COLORS[env]}`,
                       background:'transparent', fontWeight:700, fontSize:'1rem', color:ENV_COLORS[env] }} />
                   <span style={{ color:ENV_COLORS[env], fontWeight:700 }}>€</span>
                 </div>
               </div>
               <div style={{ background:'#e8e8e8', borderRadius:8, height:8, marginBottom:6 }}>
-                <div style={{ background:ENV_COLORS[env], height:8, borderRadius:8, width:`${pct}%`, transition:'width 0.4s' }} />
+                <div style={{ background:ENV_COLORS[env], height:8, borderRadius:8, width:`${pct}%`, transition:`width 0.4s' }} />
               </div>
               <div style={{ display:'flex', justifyContent:'space-between', fontSize:'0.78rem', color:'#666' }}>
                 <span>Dépensé : <b style={{ color:ENV_COLORS[env] }}>{spentEnv.toFixed(2)} €</b></span>
@@ -767,7 +767,7 @@ function BudgetPage() {
 
       {/* ── Historique ── */}
       <div className="panel card-panel">
-        <SectionTitle title={`Historique (${expenses.length})`} linkLabel={expenses.length?'CSV':undefined} onLink={exportCsv} />
+        <SectionTitle title={`Historique (${expenses.length})`} linkLabel={expenses.length?`CSV':undefined} onLink={exportCsv} />
         <div className="simple-list">
           {expenses.length===0 && <p className="soft">Aucune dépense enregistrée.</p>}
           {expenses.map(item => {
@@ -878,7 +878,7 @@ const RESTAURANTS_DB = [
 
   // ════════ TOKYO ════════
   { id:'tk-pdj1', city:'Tokyo', zone:'Shibuya', meal:'🌅 PDJ', name:'Bread, Espresso &', type:'Café PDJ', dish:'Pain de mie fondu & cappuccino', price:'¥800', rating:4.7, budget:'💰', tag:'breadespresso', tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066456-d2345682-Reviews-Bread_Espresso-Tokyo.html', instagram:'https://www.instagram.com/explore/tags/breadespresso/' },
-  { id:'tk-pdj2', city:'Tokyo', zone:'Harajuku', meal:'🌅 PDJ`, name:"Flipper's", type:`Pancakes fluffy', dish:'Soufflé miracle pancake viral', price:'¥1200', rating:4.8, budget:'💰', tag:'flipperspancake', tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066454-d6789012-Reviews-Flippers-Tokyo.html', instagram:'https://www.instagram.com/explore/tags/flipperspancake/' },
+  { id:'tk-pdj2', city:'Tokyo', zone:'Harajuku', meal:'🌅 PDJ', name:"Flipper's", type:'Pancakes fluffy', dish:'Soufflé miracle pancake viral', price:'¥1200', rating:4.8, budget:'💰', tag:'flipperspancake', tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066454-d6789012-Reviews-Flippers-Tokyo.html', instagram:'https://www.instagram.com/explore/tags/flipperspancake/' },
   { id:'tk-pdj3', city:'Tokyo', zone:'Aoyama', meal:'🌅 PDJ', name:'A Happy Pancake', type:'Pancakes fluffy', dish:'Souffle pancake 3cm épaisseur', price:'¥1100', rating:4.7, budget:'💰', tag:'ahappypancake', tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066456-d7890123-Reviews-A_Happy_Pancake-Tokyo.html', instagram:'https://www.instagram.com/explore/tags/ahappypancake/' },
   { id:'tk-pdj4', city:'Tokyo', zone:'Shimokitazawa', meal:'🌅 PDJ', name:'Bear Pond Espresso', type:'Café PDJ', dish:'Espresso angel stain ultime', price:'¥700', rating:4.8, budget:'💰', tag:'bearpondespresso', tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066454-d2345683-Reviews-Bear_Pond-Tokyo.html', instagram:'https://www.instagram.com/explore/tags/bearpondespresso/' },
   { id:'tk-dej1', city:'Tokyo', zone:'Tsukiji', meal:'☀️ Déjeuner', name:'Sushi Dai Tsukiji', type:'Sushi', dish:'Omakase 10 pièces, file 2h', price:'¥4000', rating:4.9, budget:'💰💰', tag:'sushidai', tripadvisor:'https://www.tripadvisor.fr/Restaurant_Review-g1066454-d1234567-Reviews-Sushi_Dai-Tokyo.html', instagram:'https://www.instagram.com/explore/tags/sushidai/' },
@@ -906,7 +906,7 @@ const CITIES_FOOD = [...new Set(RESTAURANTS_DB.map(r => r.city))]
 const SPOTS_DB = [
   // ════ OSAKA ════
   { cat:'📸 Instagram', city:'Osaka', name:'Dotonbori Nuit', desc:'Néons, Glico Man, reflets sur la rivière Dotonbori', heure:'20h-23h', tag:'dotonbori', ig:'https://www.instagram.com/explore/tags/dotonbori/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234560-Reviews-Dotonbori-Osaka.html', prix:'Gratuit' },
-  { cat:'📸 Instagram', city:'Osaka', name:'Glico Running Man`, desc:"L'icône la plus photographiée du Japon, fond de néons", heure:`20h-23h', tag:'glicoman', ig:'https://www.instagram.com/explore/tags/glicoman/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234561-Reviews-Glico_Sign-Osaka.html', prix:'Gratuit' },
+  { cat:'📸 Instagram', city:'Osaka', name:'Glico Running Man', desc:"L'icône la plus photographiée du Japon, fond de néons", heure:'20h-23h', tag:'glicoman', ig:'https://www.instagram.com/explore/tags/glicoman/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234561-Reviews-Glico_Sign-Osaka.html', prix:'Gratuit' },
   { cat:'📸 Instagram', city:'Osaka', name:'Tsutenkaku Tower', desc:'Tour rétro des années 50, quartier Shinsekai coloré', heure:'10h-16h', tag:'tsutenkaku', ig:'https://www.instagram.com/tsutenkaku_official/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234562-Reviews-Tsutenkaku-Osaka.html', prix:'¥900' },
   { cat:'📸 Instagram', city:'Osaka', name:'Osaka Castle Golden Hour', desc:'Lumière dorée sur le château, fossé miroir', heure:'6h-9h', tag:'osakacastle', ig:'https://www.instagram.com/explore/tags/osakacastle/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234563-Reviews-Osaka_Castle-Osaka.html', prix:'¥600' },
   { cat:'🎪 Insolite', city:'Osaka', name:'Cat Café Calico Osaka', desc:'50+ chats en liberté, ambiance cosy et relaxante', heure:'11h-20h', tag:'catcafeosaka', ig:'https://www.instagram.com/explore/tags/catcafeosaka/', tri:'https://www.tripadvisor.fr/Attraction_Review-g298566-d1234580-Reviews-Calico_Cat_Cafe-Osaka.html', prix:'¥200/10min' },
@@ -945,11 +945,11 @@ const SPOTS_DB = [
   { cat:'📸 Instagram', city:'Séoul', name:'N Seoul Tower by Night', desc:'Vue 360° sur Seoul illuminée, cadenas amoureux', heure:'19h-22h', tag:'nseoultower', ig:'https://www.instagram.com/nseoultower/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d320895-Reviews-N_Seoul_Tower-Seoul.html', prix:'₩16000' },
   { cat:'📸 Instagram', city:'Séoul', name:'Seongsu Murals', desc:'Quartier hipster, cafés arty, murals streetart industriel', heure:'11h-18h', tag:'seongsuseoul', ig:'https://www.instagram.com/explore/tags/seongsuseoul/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456783-Reviews-Seongsu-Seoul.html', prix:'Gratuit' },
   { cat:'📸 Instagram', city:'Séoul', name:'Lotte Tower Sky Seoul', desc:'123e étage, vue panoramique, sky bridge vitré', heure:'9h-23h', tag:'lottetower', ig:'https://www.instagram.com/explore/tags/lottetower/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234615-Reviews-Lotte_Tower-Seoul.html', prix:'₩27000' },
-  { cat:'🎪 Insolite', city:'Séoul', name:'Lotte World Theme Park`, desc:"Parc d'attraction indoor + outdoor géant, Corée en miniature", heure:`9h-21h', tag:'lotteworld', ig:'https://www.instagram.com/explore/tags/lotteworld/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234586-Reviews-Lotte_World-Seoul.html', prix:'₩54000' },
-  { cat:'🎪 Insolite', city:'Séoul', name:'Trick Eye Museum`, desc:`Musée illusions optiques, photos trompe-l'oeil ultra virales`, heure:`10h-20h', tag:'trickeye', ig:'https://www.instagram.com/explore/tags/trickeye/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d5678901-Reviews-Trick_Eye-Seoul.html', prix:'₩15000' },
+  { cat:'🎪 Insolite', city:'Séoul', name:'Lotte World Theme Park', desc:"Parc d'attraction indoor + outdoor géant, Corée en miniature", heure:'9h-21h', tag:'lotteworld', ig:'https://www.instagram.com/explore/tags/lotteworld/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234586-Reviews-Lotte_World-Seoul.html', prix:'₩54000' },
+  { cat:'🎪 Insolite', city:'Séoul', name:'Trick Eye Museum', desc:`Musée illusions optiques, photos trompe-l`oeil ultra virales', heure:`10h-20h`, tag:'trickeye', ig:'https://www.instagram.com/explore/tags/trickeye/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d5678901-Reviews-Trick_Eye-Seoul.html', prix:'₩15000' },
   { cat:'🎪 Insolite', city:'Séoul', name:'Nanta Show Hongdae', desc:'Spectacle culinaire percussions sans paroles, interactif', heure:'17h & 20h', tag:'nantashow', ig:'https://www.instagram.com/explore/tags/nantashow/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234587-Reviews-Nanta_Show-Seoul.html', prix:'₩40000' },
   { cat:'🏛️ Atypique', city:'Séoul', name:'Ihwa Mural Village', desc:'Village mural sur colline Naksan, art de rue authentique', heure:'10h-18h', tag:'ihwamural', ig:'https://www.instagram.com/explore/tags/ihwamural/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234616-Reviews-Ihwa_Village-Seoul.html', prix:'Gratuit' },
-  { cat:'🏛️ Atypique', city:'Séoul', name:'Gwangjang Market 1905`, desc:"Plus vieux marché couvert de Corée, ambiance d'époque", heure:`8h-23h', tag:'gwangjangmarket', ig:'https://www.instagram.com/explore/tags/gwangjangmarket/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456781-Reviews-Gwangjang-Seoul.html', prix:'Gratuit' },
+  { cat:'🏛️ Atypique', city:'Séoul', name:'Gwangjang Market 1905', desc:"Plus vieux marché couvert de Corée, ambiance d'époque", heure:'8h-23h', tag:'gwangjangmarket', ig:'https://www.instagram.com/explore/tags/gwangjangmarket/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456781-Reviews-Gwangjang-Seoul.html', prix:'Gratuit' },
   { cat:'🎵 Musical', city:'Séoul', name:'Hongdae Club District', desc:'50+ clubs & live houses, K-indie & électro', heure:'22h-6h', tag:'hongdaeclub', ig:'https://www.instagram.com/explore/tags/hongdaeclub/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456784-Reviews-Hongdae-Seoul.html', prix:'₩10000-20000' },
   { cat:'🎵 Musical', city:'Séoul', name:'SM Town Coex', desc:'Pop coréenne, musée K-pop interactif, hologrammes', heure:'12h-21h', tag:'smtown', ig:'https://www.instagram.com/explore/tags/smtown/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d7654321-Reviews-SM_Town-Seoul.html', prix:'Gratuit (expo) ₩15000 show' },
   { cat:'🎵 Musical', city:'Séoul', name:'K-Star Road Gangnam', desc:'Statues des groupes K-pop, photozones officielles', heure:'Anytime', tag:'kstarroad', ig:'https://www.instagram.com/explore/tags/kstarroad/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d8765432-Reviews-K_Star_Road-Seoul.html', prix:'Gratuit' },
@@ -1185,7 +1185,7 @@ function ExplorerPage() {
               <div>
                 <div style={{ fontSize:'0.75rem', color:'#888', marginBottom:8 }}>{filtered.length} lieu{filtered.length>1?'x':''}</div>
                 {filtered.map(spot => (
-                  <div key={spot.name+spot.city} style={{ background:'#fff', border:`1px solid ${CAT_COLORS[spot.cat]||'#eee'}`, borderRadius:14, padding:'0.85rem 1rem', marginBottom:8 }}>
+                  <div key={spot.name+spot.city} style={{ background:'#fff', border:'1px solid ${CAT_COLORS[spot.cat]||'#eee'}', borderRadius:14, padding:'0.85rem 1rem', marginBottom:8 }}>
                     <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
                       <div style={{ flex:1 }}>
                         <div style={{ display:'flex', gap:6, alignItems:'center', marginBottom:3 }}>
@@ -1265,7 +1265,7 @@ function CarnetPage() {
       {/* ── Contenu pleine page ── */}
       <div style={{ flex:1, padding:'1.2rem 1rem 2rem', maxWidth:680, margin:'0 auto', width:'100%', boxSizing:'border-box' }}>
         <h2 style={{ fontSize:'1.2rem', fontWeight:800, color:'#0b1f3a', marginBottom:4, lineHeight:1.3 }}>{section?.title}</h2>
-        <div style={{ height:3, width:60, background:'#e1306c`, borderRadius:4, marginBottom:16 }} />
+        <div style={{ height:3, width:60, background:'#e1306c', borderRadius:4, marginBottom:16 }} />
         <div>
           {section?.paragraphs?.map((p, i) => {
             if (!p.trim()) return null
@@ -1273,7 +1273,7 @@ function CarnetPage() {
             const isEmoji = /^[📍🍜🚌🎌🌸🏮⛩️🎋🌊🏖️🏔️💴💶🕐]/.test(p)
             return (
               <p key={i} style={{
-                fontSize: isH ? `1rem' : '0.9rem',
+                fontSize: isH ? `1rem` : '0.9rem',
                 fontWeight: isH ? 700 : 400,
                 color: isH ? '#0b1f3a' : '#444',
                 lineHeight: 1.7,
@@ -1405,9 +1405,9 @@ function ConverterPage() {
             {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.label} ({c.symbol})</option>)}
           </select>
           <div style={{ flex:1, padding:'10px', borderRadius:10, background: result ? '#e8f5e9' : '#f5f5f5',
-            border:`2px solid ${result ? '#27ae60' : '#ddd'}`, fontSize:'1.3rem', fontWeight:800,
+            border:`2px solid ${result ? `#27ae60' : '#ddd'}', fontSize:'1.3rem', fontWeight:800,
             textAlign:'right', color:'#27ae60', display:'flex', alignItems:'center', justifyContent:'flex-end' }}>
-            {result ? `${toCur?.symbol}${Number(result).toLocaleString('fr-FR')}` : '—'}
+            {result ? `${toCur?.symbol}${Number(result).toLocaleString(`fr-FR')}' : '—'}
           </div>
         </div>
 
@@ -1441,7 +1441,7 @@ function ConverterPage() {
       {/* Tableau toutes devises */}
       <div style={{ background:'#fff', borderRadius:16, padding:'1rem', border:'1px solid #e0e0e0' }}>
         <div style={{ fontSize:'0.85rem', fontWeight:700, color:'#0b1f3a', marginBottom:8 }}>
-          {amount ? `${fromCur?.symbol}${Number(amount).toLocaleString()} =` : 'Équivalences (pour 1 unité)'}
+          {amount ? `${fromCur?.symbol}${Number(amount).toLocaleString()} =` : `Équivalences (pour 1 unité)'}
         </div>
         {CURRENCIES.filter(c => c.code !== from).map(c => (
           <div key={c.code} style={{ display:'flex', justifyContent:'space-between', padding:'7px 0', borderBottom:'1px solid #f0f0f0' }}>
@@ -1494,32 +1494,32 @@ const PHRASES_DB = [
   },
   {
     cat: '🚇 Transport', phrases: [
-      { fr: 'Où est la station de métro ?', jp: '地下鉄の駅はどこですか？', jpRom: 'Chikatetsu no eki wa doko desu ka?', kr: '지하철역이 어디예요?', krRom: 'Jihacheolyeogi eodieyo?` },
-      { fr: `Un billet pour... s'il vous plaît`, jp: `...まで一枚ください', jpRom: '...made ichimai kudasai', kr: '...까지 한 장 주세요', krRom: '...kkaji han jang juseyo` },
-      { fr: `Où est l'arrêt de bus ?`, jp: `バス停はどこですか？', jpRom: 'Basu tei wa doko desu ka?', kr: '버스 정류장이 어디예요?', krRom: 'Beoseu jeongnyujang eodieyo?' },
-      { fr: 'À quelle heure part le train ?', jp: '電車は何時に出ますか？', jpRom: 'Densha wa nanji ni demasu ka?', kr: '기차가 몇 시에 출발해요?', krRom: 'Gichaga myeot sie chulbalhaeyo?` },
-      { fr: `C'est loin à pied ?`, jp: `歩いて遠いですか？', jpRom: 'Aruite tooi desu ka?', kr: '걸어서 멀어요?', krRom: 'Georeo seo meoreoyo?' },
+      { fr: 'Où est la station de métro ?', jp: '地下鉄の駅はどこですか？', jpRom: 'Chikatetsu no eki wa doko desu ka?', kr: '지하철역이 어디예요?', krRom: 'Jihacheolyeogi eodieyo?' },
+      { fr: `Un billet pour... s`il vous plaît', jp: `...まで一枚ください`, jpRom: '...made ichimai kudasai', kr: '...까지 한 장 주세요', krRom: '...kkaji han jang juseyo' },
+      { fr: `Où est l`arrêt de bus ?', jp: `バス停はどこですか？`, jpRom: 'Basu tei wa doko desu ka?', kr: '버스 정류장이 어디예요?', krRom: 'Beoseu jeongnyujang eodieyo?' },
+      { fr: 'À quelle heure part le train ?', jp: '電車は何時に出ますか？', jpRom: 'Densha wa nanji ni demasu ka?', kr: '기차가 몇 시에 출발해요?', krRom: 'Gichaga myeot sie chulbalhaeyo?' },
+      { fr: `C`est loin à pied ?', jp: `歩いて遠いですか？`, jpRom: 'Aruite tooi desu ka?', kr: '걸어서 멀어요?', krRom: 'Georeo seo meoreoyo?' },
       { fr: 'Appelez-moi un taxi', jp: 'タクシーを呼んでください', jpRom: 'Takushi wo yonde kudasai', kr: '택시 불러 주세요', krRom: 'Taeksi bulleo juseyo' },
       { fr: 'Je veux aller à...', jp: '...に行きたいです', jpRom: '...ni ikitai desu', kr: '...에 가고 싶어요', krRom: '...e gago sipeoyo' },
     ]
   },
   {
     cat: '🍜 Restaurant', phrases: [
-      { fr: 'Une table pour 4 personnes', jp: '4人用のテーブルをお願いします', jpRom: 'Yonin you no teburu wo onegaishimasu', kr: '4인 테이블 부탁드려요', krRom: 'Sa-in teibeul butakdeuryeoyo` },
-      { fr: `Le menu s'il vous plaît`, jp: `メニューをください', jpRom: 'Menyu wo kudasai', kr: '메뉴판 주세요', krRom: 'Menyupan juseyo` },
-      { fr: `C'est délicieux !`, jp: `おいしい！', jpRom: 'Oishii!', kr: '맛있어요!', krRom: 'Massisseoyo!` },
-      { fr: `L'addition s'il vous plaît`, jp: `お会計をお願いします', jpRom: 'Okaikei wo onegaishimasu', kr: '계산서 주세요', krRom: 'Gyesanseo juseyo' },
-      { fr: 'Je suis allergique à...', jp: '...アレルギーがあります', jpRom: '...arerugii ga arimasu', kr: '...알레르기가 있어요', krRom: '...allereugi ga isseoyo` },
-      { fr: `Sans gluten s'il vous plaît`, jp: `グルテンなしでお願いします', jpRom: 'Guruten nashi de onegaishimasu', kr: '글루텐 없이 해주세요', krRom: 'Geulluten eopsi haejuseyo' },
-      { fr: 'Je ne mange pas de porc', jp: '豚肉は食べません', jpRom: 'Butaniku wa tabemasen', kr: '돼지고기를 안 먹어요', krRom: 'Dwaejigogireul an meogoyo` },
-      { fr: `C'est trop piquant`, jp: `辛すぎます', jpRom: 'Kara sugimasu', kr: '너무 매워요', krRom: 'Neomu maewoyo` },
-      { fr: `De l'eau s'il vous plaît`, jp: `お水をください', jpRom: 'Omizu wo kudasai', kr: '물 주세요', krRom: 'Mul juseyo' },
+      { fr: 'Une table pour 4 personnes', jp: '4人用のテーブルをお願いします', jpRom: 'Yonin you no teburu wo onegaishimasu', kr: '4인 테이블 부탁드려요', krRom: 'Sa-in teibeul butakdeuryeoyo' },
+      { fr: `Le menu s`il vous plaît', jp: `メニューをください`, jpRom: 'Menyu wo kudasai', kr: '메뉴판 주세요', krRom: 'Menyupan juseyo' },
+      { fr: `C`est délicieux !', jp: `おいしい！`, jpRom: 'Oishii!', kr: '맛있어요!', krRom: 'Massisseoyo!' },
+      { fr: `L`addition s'il vous plaît', jp: `お会計をお願いします`, jpRom: 'Okaikei wo onegaishimasu', kr: '계산서 주세요', krRom: 'Gyesanseo juseyo' },
+      { fr: 'Je suis allergique à...', jp: '...アレルギーがあります', jpRom: '...arerugii ga arimasu', kr: '...알레르기가 있어요', krRom: '...allereugi ga isseoyo' },
+      { fr: `Sans gluten s`il vous plaît', jp: `グルテンなしでお願いします`, jpRom: 'Guruten nashi de onegaishimasu', kr: '글루텐 없이 해주세요', krRom: 'Geulluten eopsi haejuseyo' },
+      { fr: 'Je ne mange pas de porc', jp: '豚肉は食べません', jpRom: 'Butaniku wa tabemasen', kr: '돼지고기를 안 먹어요', krRom: 'Dwaejigogireul an meogoyo' },
+      { fr: `C`est trop piquant', jp: `辛すぎます`, jpRom: 'Kara sugimasu', kr: '너무 매워요', krRom: 'Neomu maewoyo' },
+      { fr: `De l`eau s'il vous plaît', jp: `お水をください`, jpRom: 'Omizu wo kudasai', kr: '물 주세요', krRom: 'Mul juseyo' },
     ]
   },
   {
     cat: '🛍️ Shopping', phrases: [
-      { fr: 'Combien ça coûte ?', jp: 'いくらですか？', jpRom: 'Ikura desu ka?', kr: '얼마예요?', krRom: 'Eolmayeyo?` },
-      { fr: `C'est trop cher`, jp: `高すぎます', jpRom: 'Taka sugimasu', kr: '너무 비싸요', krRom: 'Neomu bissayo' },
+      { fr: 'Combien ça coûte ?', jp: 'いくらですか？', jpRom: 'Ikura desu ka?', kr: '얼마예요?', krRom: 'Eolmayeyo?' },
+      { fr: `C`est trop cher', jp: `高すぎます`, jpRom: 'Taka sugimasu', kr: '너무 비싸요', krRom: 'Neomu bissayo' },
       { fr: 'Avez-vous une taille plus grande ?', jp: 'もっと大きいサイズはありますか？', jpRom: 'Motto ookii saizu wa arimasu ka?', kr: '더 큰 사이즈 있어요?', krRom: 'Deo keun saiseu isseoyo?' },
       { fr: 'Je peux essayer ?', jp: '試着できますか？', jpRom: 'Shichaku dekimasu ka?', kr: '입어봐도 돼요?', krRom: 'Ibeoboado dwaeyo?' },
       { fr: 'Je prends celui-ci', jp: 'これをください', jpRom: 'Kore wo kudasai', kr: '이걸로 할게요', krRom: 'Igeolro halgeyo' },
@@ -1528,12 +1528,12 @@ const PHRASES_DB = [
     ]
   },
   {
-    cat: '🏨 Hôtel`, phrases: [
-      { fr: `J'ai une réservation`, jp: `予約があります', jpRom: 'Yoyaku ga arimasu', kr: '예약했어요', krRom: 'Yeyak haesseoyo' },
+    cat: '🏨 Hôtel', phrases: [
+      { fr: `J`ai une réservation', jp: `予約があります`, jpRom: 'Yoyaku ga arimasu', kr: '예약했어요', krRom: 'Yeyak haesseoyo' },
       { fr: 'Check-in / Check-out', jp: 'チェックイン / チェックアウト', jpRom: 'Chekkuin / Chekku auto', kr: '체크인 / 체크아웃', krRom: 'Chekeu-in / Chekeu-aut' },
       { fr: 'Où est ma chambre ?', jp: '私の部屋はどこですか？', jpRom: 'Watashi no heya wa doko desu ka?', kr: '제 방이 어디예요?', krRom: 'Je bangi eodieyo?' },
-      { fr: 'Le wifi ne fonctionne pas', jp: 'ワイファイが使えません', jpRom: 'Waifai ga tsukaemasen', kr: '와이파이가 안 돼요', krRom: 'Waipai ga an dwaeyo` },
-      { fr: `Pouvez-vous m'appeler un taxi ?`, jp: `タクシーを呼んでもらえますか？', jpRom: 'Takushi wo yonde moraemasu ka?', kr: '택시 불러주실 수 있어요?', krRom: 'Taeksi bulleojusil su isseoyo?' },
+      { fr: 'Le wifi ne fonctionne pas', jp: 'ワイファイが使えません', jpRom: 'Waifai ga tsukaemasen', kr: '와이파이가 안 돼요', krRom: 'Waipai ga an dwaeyo' },
+      { fr: `Pouvez-vous m`appeler un taxi ?', jp: `タクシーを呼んでもらえますか？`, jpRom: 'Takushi wo yonde moraemasu ka?', kr: '택시 불러주실 수 있어요?', krRom: 'Taeksi bulleojusil su isseoyo?' },
       { fr: 'Avez-vous un coffre-fort ?', jp: 'セーフを使えますか？', jpRom: 'Sefu wo tsukaemasu ka?', kr: '금고 있어요?', krRom: 'Geumgo isseoyo?' },
     ]
   },
@@ -1541,12 +1541,12 @@ const PHRASES_DB = [
     cat: '🆘 Urgence', phrases: [
       { fr: 'Au secours !', jp: '助けて！', jpRom: 'Tasukete!', kr: '도와주세요!', krRom: 'Dowajuseyo!' },
       { fr: 'Appelez la police !', jp: '警察を呼んでください！', jpRom: 'Keisatsu wo yonde kudasai!', kr: '경찰을 불러주세요!', krRom: 'Gyeongchal eul bulleojuseyo!' },
-      { fr: 'Appelez une ambulance !', jp: '救急車を呼んでください！', jpRom: 'Kyukyusha wo yonde kudasai!', kr: '구급차를 불러주세요!', krRom: 'Gugeupcha reul bulleojuseyo!` },
-      { fr: `J'ai besoin d'un médecin`, jp: `医者が必要です', jpRom: 'Isha ga hitsuyou desu', kr: '의사가 필요해요', krRom: 'Uisaga piryohaeyo' },
-      { fr: 'Je me suis perdu(e)', jp: '迷子になりました', jpRom: 'Maigo ni narimashita', kr: '길을 잃었어요', krRom: 'Gireul ireoosseoyo` },
-      { fr: `On m'a volé mon sac`, jp: `バッグを盗まれました', jpRom: 'Baggu wo nusumaremashita', kr: '가방을 도둑맞았어요', krRom: 'Gabangeul dodungmajasseoyo` },
-      { fr: `Où est l'hôpital le plus proche ?`, jp: `一番近い病院はどこですか？', jpRom: 'Ichiban chikai byouin wa doko desu ka?', kr: '가장 가까운 병원이 어디예요?', krRom: 'Gajang gakkaun byeongwoni eodieyo?` },
-      { fr: `J'ai mal ici`, jp: `ここが痛いです', jpRom: 'Koko ga itai desu', kr: '여기가 아파요', krRom: 'Yeogiga apayo' },
+      { fr: 'Appelez une ambulance !', jp: '救急車を呼んでください！', jpRom: 'Kyukyusha wo yonde kudasai!', kr: '구급차를 불러주세요!', krRom: 'Gugeupcha reul bulleojuseyo!' },
+      { fr: `J`ai besoin d'un médecin', jp: `医者が必要です`, jpRom: 'Isha ga hitsuyou desu', kr: '의사가 필요해요', krRom: 'Uisaga piryohaeyo' },
+      { fr: 'Je me suis perdu(e)', jp: '迷子になりました', jpRom: 'Maigo ni narimashita', kr: '길을 잃었어요', krRom: 'Gireul ireoosseoyo' },
+      { fr: `On m`a volé mon sac', jp: `バッグを盗まれました`, jpRom: 'Baggu wo nusumaremashita', kr: '가방을 도둑맞았어요', krRom: 'Gabangeul dodungmajasseoyo' },
+      { fr: `Où est l`hôpital le plus proche ?', jp: `一番近い病院はどこですか？`, jpRom: 'Ichiban chikai byouin wa doko desu ka?', kr: '가장 가까운 병원이 어디예요?', krRom: 'Gajang gakkaun byeongwoni eodieyo?' },
+      { fr: `J`ai mal ici', jp: `ここが痛いです`, jpRom: 'Koko ga itai desu', kr: '여기가 아파요', krRom: 'Yeogiga apayo' },
       { fr: 'Urgences Japon : 110 (police) 119 (ambulance)', jp: '110番 (警察) / 119番 (救急)', jpRom: 'Hyakujuuban / Hyakujuukyuuban', kr: '한국 : 112 (경찰) / 119 (구급)', krRom: 'Ilil-i (Gyeongchal) / Ilil-gu (Gugeup)' },
     ]
   },
@@ -1554,16 +1554,16 @@ const PHRASES_DB = [
     cat: '📍 Orientation', phrases: [
       { fr: 'Où est... ?', jp: '...はどこですか？', jpRom: '...wa doko desu ka?', kr: '...이/가 어디예요?', krRom: '...i/ga eodieyo?' },
       { fr: 'Tout droit', jp: 'まっすぐ', jpRom: 'Massugu', kr: '직진', krRom: 'Jikjin' },
-      { fr: 'À gauche / À droite', jp: '左 / 右', jpRom: 'Hidari / Migi', kr: '왼쪽 / 오른쪽', krRom: 'Oenjjok / Oreunjjok` },
-      { fr: `Près d'ici / Loin`, jp: `近く / 遠い', jpRom: 'Chikaku / Tooi', kr: '가까워요 / 멀어요', krRom: 'Gakkawoyo / Meoreoyo' },
+      { fr: 'À gauche / À droite', jp: '左 / 右', jpRom: 'Hidari / Migi', kr: '왼쪽 / 오른쪽', krRom: 'Oenjjok / Oreunjjok' },
+      { fr: `Près d`ici / Loin', jp: `近く / 遠い`, jpRom: 'Chikaku / Tooi', kr: '가까워요 / 멀어요', krRom: 'Gakkawoyo / Meoreoyo' },
       { fr: 'Pouvez-vous me montrer sur la carte ?', jp: '地図で見せてもらえますか？', jpRom: 'Chizu de misete moraemasu ka?', kr: '지도에서 보여주실 수 있어요?', krRom: 'Jidoeseo boyeojusil su isseoyo?' },
     ]
   },
   {
     cat: '💬 Enfants', phrases: [
       { fr: 'Mon enfant est perdu', jp: '子供がいなくなりました', jpRom: 'Kodomo ga inakunarimashita', kr: '아이를 잃어버렸어요', krRom: 'Aireul ireobeoryeosseoyo' },
-      { fr: 'Y a-t-il un espace enfants ?', jp: 'キッズスペースはありますか？', jpRom: 'Kizzu supeesu wa arimasu ka?', kr: '어린이 공간이 있어요?', krRom: 'Eorini gonggani isseoyo?` },
-      { fr: `Tarif enfant s'il vous plaît`, jp: `子供料金をお願いします', jpRom: 'Kodomo ryoukin wo onegaishimasu', kr: '어린이 요금으로 해주세요', krRom: 'Eorini yogeumeuro haejuseyo' },
+      { fr: 'Y a-t-il un espace enfants ?', jp: 'キッズスペースはありますか？', jpRom: 'Kizzu supeesu wa arimasu ka?', kr: '어린이 공간이 있어요?', krRom: 'Eorini gonggani isseoyo?' },
+      { fr: `Tarif enfant s`il vous plaît', jp: `子供料金をお願いします`, jpRom: 'Kodomo ryoukin wo onegaishimasu', kr: '어린이 요금으로 해주세요', krRom: 'Eorini yogeumeuro haejuseyo' },
       { fr: 'Avez-vous une chaise haute ?', jp: 'ベビーチェアはありますか？', jpRom: 'Bebi chea wa arimasu ka?', kr: '유아 의자 있어요?', krRom: 'Yua uija isseoyo?' },
     ]
   },
@@ -1659,8 +1659,8 @@ function PhrasesPage() {
                       🔊
                     </button>
                     <button onClick={() => copy(p.jp, `jp${i}`)}
-                      style={{ background: copied===`jp${i}`?'#27ae60':'#f0f0f0', color: copied===`jp${i}`?'#fff':'#555', border:'none', borderRadius:8, padding:'5px 8px', cursor:'pointer', fontSize:'0.75rem' }}>
-                      {copied===`jp${i}`?'✓':'📋'}
+                      style={{ background: copied===`jp${i}`?`#27ae60':'#f0f0f0', color: copied==='jp${i}`?`#fff':'#555', border:'none', borderRadius:8, padding:'5px 8px', cursor:'pointer', fontSize:'0.75rem' }}>
+                      {copied===`jp${i}`?`✓':'📋'}
                     </button>
                   </div>
                 </div>
@@ -1681,8 +1681,8 @@ function PhrasesPage() {
                       🔊
                     </button>
                     <button onClick={() => copy(p.kr, `kr${i}`)}
-                      style={{ background: copied===`kr${i}`?'#27ae60':'#f0f0f0', color: copied===`kr${i}`?'#fff':'#555', border:'none', borderRadius:8, padding:'5px 8px', cursor:'pointer', fontSize:'0.75rem' }}>
-                      {copied===`kr${i}`?'✓':'📋'}
+                      style={{ background: copied===`kr${i}`?`#27ae60':'#f0f0f0', color: copied==='kr${i}`?`#fff':'#555', border:'none', borderRadius:8, padding:'5px 8px', cursor:'pointer', fontSize:'0.75rem' }}>
+                      {copied===`kr${i}`?`✓':'📋'}
                     </button>
                   </div>
                 </div>
@@ -1734,7 +1734,7 @@ function CountdownCard() {
 const TRANSPORT_INFO = [
   {
     title: '🚅 JR Pass — Shinkansen',
-    color: '#e8523a`,
+    color: '#e8523a',
     items: [
       "Achetez le JR Pass AVANT de partir en France — moins cher et obligatoire à l'avance",
       "Pass 14 jours recommandé pour votre itinéraire (Osaka → Tokyo via Kyoto)",
@@ -1745,8 +1745,8 @@ const TRANSPORT_INFO = [
     ]
   },
   {
-    title: `💳 IC Card — Suica / Pasmo',
-    color: '#3a7bd5`,
+    title: `💳 IC Card — Suica / Pasmo`,
+    color: '#3a7bd5',
     items: [
       "Carte rechargeable pour métro, bus, et paiements (combinis, vending machines)",
       "Suica : achetez à l'aéroport Haneda ou Narita (dépôt ¥500 remboursable)",
@@ -1757,8 +1757,8 @@ const TRANSPORT_INFO = [
     ]
   },
   {
-    title: `🚇 Métro Osaka / Tokyo / Séoul',
-    color: '#27ae60`,
+    title: `🚇 Métro Osaka / Tokyo / Séoul`,
+    color: '#27ae60',
     items: [
       "Osaka : ligne Midosuji (rouge) = axe principal Namba ↔ Umeda",
       "Osaka Pass 24h/48h recommandé pour les journées touristiques intensives",
@@ -1770,8 +1770,8 @@ const TRANSPORT_INFO = [
     ]
   },
   {
-    title: `✈️ Vols intérieurs & Ferries',
-    color: '#8e44ad`,
+    title: `✈️ Vols intérieurs & Ferries`,
+    color: '#8e44ad',
     items: [
       "Kyoto → Séoul : aucun vol direct — prendre le Shinkansen jusqu'à Osaka/Kansai Airport",
       "Vol Osaka (KIX) → Séoul (ICN) : ~1h30 — Air Korea, Peach, Jeju Air",
@@ -1781,8 +1781,8 @@ const TRANSPORT_INFO = [
     ]
   },
   {
-    title: `🚌 Bus & Navettes aéroport',
-    color: '#f39c12`,
+    title: `🚌 Bus & Navettes aéroport`,
+    color: '#f39c12',
     items: [
       "Osaka Kansai (KIX) → Namba : Haruka Express JR (50min, couvert JR Pass)",
       "Tokyo Haneda → centre : Monorail ou Keikyu (30min, ¥300-500)",
@@ -1792,8 +1792,8 @@ const TRANSPORT_INFO = [
     ]
   },
   {
-    title: `💡 Conseils pratiques',
-    color: '#0b1f3a`,
+    title: `💡 Conseils pratiques`,
+    color: '#0b1f3a',
     items: [
       "Google Maps fonctionne parfaitement pour les transports au Japon et en Corée",
       "Téléchargez les cartes hors-ligne Google Maps avant le départ",
@@ -1809,12 +1809,12 @@ function TransportPage() {
   const [open, setOpen] = React.useState(null)
   return (
     <motion.div key="transport" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
-      <div style={{ background:`linear-gradient(135deg,#0b1f3a,#1a3a6b)', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
+      <div style={{ background:`linear-gradient(135deg,#0b1f3a,#1a3a6b)`, borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
         <div style={{ fontWeight:800, fontSize:'1.1rem' }}>🚆 Guide Transports</div>
         <div style={{ fontSize:'0.8rem', opacity:0.75, marginTop:2 }}>JR Pass · IC Card · Métro · Aéroport</div>
       </div>
       {TRANSPORT_INFO.map((section, i) => (
-        <div key={section.title} style={{ background:'#fff', borderRadius:14, border:`2px solid ${section.color}`, overflow:'hidden' }}>
+        <div key={section.title} style={{ background:'#fff', borderRadius:14, border:'2px solid ${section.color}`, overflow:`hidden' }}>
           <button onClick={() => setOpen(open===i ? null : i)}
             style={{ width:'100%', display:'flex', justifyContent:'space-between', alignItems:'center',
               padding:'0.9rem 1.1rem', background:'none', border:'none', cursor:'pointer', textAlign:'left' }}>
@@ -1839,16 +1839,16 @@ function TransportPage() {
 
 // ════ CHECKLIST PRÉ-DÉPART ════
 const CHECKLIST_DEF = [
-  { cat:'📄 Documents', items:['Passeports valides 6+ mois','Assurance voyage souscrite','Billets avion imprimés ou téléchargés','JR Pass commandé','Réservations hôtels confirmées','Carnet de vaccination','Photocopies documents (cloud + papier)`,"Photos d'identité (x4 par personne)"] },
-  { cat:`💳 Argent & Paiements', items:['Yens japonais (¥) — prévoir ~¥50 000/pers/semaine','Wons coréens (₩) — prévoir ~₩200 000/pers','CB Visa/Mastercard sans frais étrangers','Prévenir sa banque du voyage','Télécharger app banque','Code PIN à 4 chiffres connu'] },
+  { cat:'📄 Documents', items:['Passeports valides 6+ mois','Assurance voyage souscrite','Billets avion imprimés ou téléchargés','JR Pass commandé','Réservations hôtels confirmées','Carnet de vaccination','Photocopies documents (cloud + papier)',"Photos d'identité (x4 par personne)"] },
+  { cat:`💳 Argent & Paiements`, items:['Yens japonais (¥) — prévoir ~¥50 000/pers/semaine','Wons coréens (₩) — prévoir ~₩200 000/pers','CB Visa/Mastercard sans frais étrangers','Prévenir sa banque du voyage','Télécharger app banque','Code PIN à 4 chiffres connu'] },
   { cat:'📱 Tech & Connectivité', items:['SIM internationale ou Pocket WiFi réservé','Maps Japon + Corée téléchargées hors-ligne','App Suica / T-money','Adaptateur prise japonaise (Type A)','Batterie externe chargée (max 100Wh en cabine)','Chargeurs tous appareils','Écouteurs (film dans avion)'] },
   { cat:'👕 Bagages', items:['Valise ≤ 23kg + bagage cabine ≤ 10kg','Chaussures confortables (BEAUCOUP de marche)','Imperméable / coupe-vent','Vêtements été + 1 pull (clim forte Japon)','Chaussettes propres (déchausser souvent)','Maillots de bain (onsen, plage Busan)','Crème solaire SPF50+'] },
-  { cat:'💊 Santé', items:['Médicaments habituels + ordonnances','Paracétamol / ibuprofène','Pansements + désinfectant','Anti-diarrhéique (changement alimentation)','Crème anti-moustiques','Masques chirurgicaux (courant en Asie)`,"Carte européenne d'assurance maladie"] },
-  { cat:`✈️ Jour J', items:['Arriver CDG 3h avant (vol Rome 09 juil.)`,"Peluche / jeu enfant pour l'avion",`Collations avion`,"Valider JR Pass à l'arrivée",`Retirer espèces au distributeur aéroport','Suica / T-money à acheter`,"Note des numéros d'hôtel premiers jours"] },
+  { cat:'💊 Santé', items:['Médicaments habituels + ordonnances','Paracétamol / ibuprofène','Pansements + désinfectant','Anti-diarrhéique (changement alimentation)','Crème anti-moustiques','Masques chirurgicaux (courant en Asie)',"Carte européenne d'assurance maladie"] },
+  { cat:`✈️ Jour J`, items:['Arriver CDG 3h avant (vol Rome 09 juil.)',"Peluche / jeu enfant pour l'avion",'Collations avion`,"Valider JR Pass à l`arrivée",'Retirer espèces au distributeur aéroport','Suica / T-money à acheter',"Note des numéros d'hôtel premiers jours"] },
 ]
 
 function ChecklistPage() {
-  const [checks, setChecks] = useLocalStorage(`checklist_items', {})
+  const [checks, setChecks] = useLocalStorage(`checklist_items`, {})
   const [openCat, setOpenCat] = React.useState(CHECKLIST_DEF[0].cat)
 
   const toggle = (cat, item) => {
@@ -1864,7 +1864,7 @@ function ChecklistPage() {
       <div style={{ background:'linear-gradient(135deg,#27ae60,#2ecc71)', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
         <div style={{ fontWeight:800, fontSize:'1.1rem' }}>✅ Checklist pré-départ</div>
         <div style={{ marginTop:8, background:'rgba(255,255,255,0.25)', borderRadius:8, height:10 }}>
-          <div style={{ background:'#fff', height:10, borderRadius:8, width:`${(done/total)*100}%`, transition:'width 0.4s' }} />
+          <div style={{ background:'#fff', height:10, borderRadius:8, width:'${(done/total)*100}%`, transition:`width 0.4s' }} />
         </div>
         <div style={{ fontSize:'0.82rem', marginTop:4 }}>{done} / {total} éléments cochés</div>
       </div>
@@ -1893,7 +1893,7 @@ function ChecklistPage() {
                       style={{ width:'100%', display:'flex', alignItems:'center', gap:10, padding:'8px 4px',
                         borderBottom:'1px solid #f5f5f5', background:'none', border:'none', cursor:'pointer', textAlign:'left' }}>
                       <div style={{ width:22, height:22, borderRadius:6, flexShrink:0,
-                        background: checked?'#27ae60':'#fff', border:`2px solid ${checked?'#27ae60':'#ccc'}`,
+                        background: checked?'#27ae60':'#fff', border:'2px solid ${checked?'#27ae60':'#ccc'}',
                         display:'flex', alignItems:'center', justifyContent:'center' }}>
                         {checked && <span style={{ color:'#fff', fontSize:'0.8rem', fontWeight:700 }}>✓</span>}
                       </div>
@@ -1996,9 +1996,9 @@ function FavorisPage() {
 
       {favoris.length === 0 && (
         <div style={{ background:'#fff', borderRadius:14, padding:'2rem', textAlign:'center', color:'#888' }}>
-          <div style={{ fontSize:'2rem`, marginBottom:8 }}>🤍</div>
+          <div style={{ fontSize:'2rem', marginBottom:8 }}>🤍</div>
           <div style={{ fontWeight:700 }}>Aucun favori pour l'instant</div>
-          <div style={{ fontSize:`0.82rem', marginTop:4 }}>Appuie sur 🤍 dans la section Explorer pour sauvegarder des adresses</div>
+          <div style={{ fontSize:`0.82rem`, marginTop:4 }}>Appuie sur 🤍 dans la section Explorer pour sauvegarder des adresses</div>
         </div>
       )}
 
@@ -2057,11 +2057,11 @@ const SHOPPING_DB = [
     { name:'Confiseries coréennes', desc:'Choco Pie, Pepero, Yakgwa — snacks emblématiques', ou:'Myeongdong, supermarchés KR', prix:'₩2000-5000' },
   ]},
   { cat:'💄 Beauté & Cosmétiques', emoji:'💄', items:[
-    { name:'Masques visage coréens`, desc:"Tony Moly, Innisfree, Mediheal — 10x moins chers qu'en France", ou:`Myeongdong, Olive Young', prix:'₩500-2000/masque' },
+    { name:'Masques visage coréens', desc:"Tony Moly, Innisfree, Mediheal — 10x moins chers qu'en France", ou:'Myeongdong, Olive Young', prix:'₩500-2000/masque' },
     { name:'Crème BB & cushion', desc:'Formules coréennes très couvrantes et légères', ou:'Olive Young (toutes villes)', prix:'₩15000-35000' },
     { name:'Sérum Snail Repair', desc:'Crème escargot réparatrice — best-seller mondial', ou:'Innisfree, Nature Republic', prix:'₩20000-40000' },
     { name:'Produits Shiseido / Kose', desc:'Cosmétiques japonais premium à prix japonais', ou:'Drugstores JP (Matsumoto Kiyoshi)', prix:'¥1500-5000' },
-    { name:'Parfum Issey Miyake`, desc:"Prix duty-free bien plus bas qu'en France", ou:"Aéroports JP/KR", prix:`¥8000-15000' },
+    { name:'Parfum Issey Miyake', desc:"Prix duty-free bien plus bas qu'en France", ou:"Aéroports JP/KR", prix:'¥8000-15000' },
   ]},
   { cat:'🎌 Souvenirs Japon', emoji:'🎌', items:[
     { name:'Netsuke & figurines Maneki-neko', desc:'Chats porte-bonheur en céramique', ou:'Asakusa, Nishiki Market', prix:'¥500-3000' },
@@ -2080,7 +2080,7 @@ const SHOPPING_DB = [
   ]},
   { cat:'💡 Pratique & Tech', emoji:'💡', items:[
     { name:'Adaptateur prise Japon (Type A)', desc:"Prises plates en J — si pas encore acheté", ou:'Aéroport CDG ou Amazon', prix:'€5-15' },
-    { name:'Batterie externe Anker`, desc:"Moins chère en Asie qu'en France", ou:`Akihabara, Yodobashi Camera', prix:'¥3000-6000' },
+    { name:'Batterie externe Anker', desc:"Moins chère en Asie qu'en France", ou:'Akihabara, Yodobashi Camera', prix:'¥3000-6000' },
     { name:'Parapluie pliable Japonais', desc:'Qualité supérieure, très légers et compacts', ou:'Combinis JP (¥500 basique!)', prix:'¥500-2000' },
     { name:'Ventilateur de poche', desc:'Indispensable en juillet — chaleur intense', ou:'Combinis, Dollar stores JP/KR', prix:'¥300-1500' },
   ]},
@@ -2116,7 +2116,7 @@ function ShoppingPage() {
                     <div style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
                       <button onClick={() => toggle(key)}
                         style={{ width:22, height:22, borderRadius:6, flexShrink:0, marginTop:2,
-                          background: done?'#f39c12':'#fff', border:`2px solid ${done?'#f39c12':'#ccc'}`,
+                          background: done?'#f39c12':'#fff', border:'2px solid ${done?'#f39c12':'#ccc'}',
                           cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
                         {done && <span style={{ color:'#fff', fontSize:'0.75rem', fontWeight:700 }}>✓</span>}
                       </button>
@@ -2142,10 +2142,10 @@ function ShoppingPage() {
 
 // ════ SANTÉ & URGENCE ════
 function SantePage() {
-  const open = (url) => window.open(url, '_blank', 'noopener,noreferrer`)
+  const open = (url) => window.open(url, '_blank', 'noopener,noreferrer')
   const SECTIONS = [
     {
-      title: `🚨 Numéros d'urgence`, color:`#e53935',
+      title: `🚨 Numéros d`urgence', color:`#e53935`,
       items:[
         { label:'🇯🇵 Police Japon', val:'110', action:'tel:110' },
         { label:'🇯🇵 Ambulance/Pompiers Japon', val:'119', action:'tel:119' },
@@ -2156,9 +2156,9 @@ function SantePage() {
       ]
     },
     {
-      title: '🏥 Hôpitaux avec English/French', color:'#e53935`,
+      title: '🏥 Hôpitaux avec English/French', color:'#e53935',
       items:[
-        { label:`Tokyo — St. Luke's International`, val:`Chuo-ku', action:'https://www.luke.ac.jp/eng/' },
+        { label:`Tokyo — St. Luke`s International', val:`Chuo-ku`, action:'https://www.luke.ac.jp/eng/' },
         { label:'Tokyo — International Clinic', val:'Roppongi', action:'https://www.intlclinic.com/' },
         { label:'Osaka — Otemae Hospital', val:'Chuo-ku Osaka', action:'https://www.otemae.osakafu-hosp.jp/' },
         { label:'Séoul — Severance Hospital', val:'Sinchon, Séoul', action:'https://www.severance.or.kr/eng/' },
@@ -2195,7 +2195,7 @@ function SantePage() {
         <div style={{ fontSize:'0.8rem', opacity:0.75, marginTop:2 }}>Numéros · Hôpitaux · Pharmacies · Conseils</div>
       </div>
       {SECTIONS.map(section => (
-        <div key={section.title} style={{ background:'#fff', borderRadius:14, padding:'1rem', border:`2px solid ${section.color}20` }}>
+        <div key={section.title} style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'2px solid ${section.color}20` }}>
           <div style={{ fontWeight:800, color:section.color, marginBottom:10, fontSize:'0.95rem' }}>{section.title}</div>
           {section.items.map((item, i) => (
             <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'6px 0', borderBottom:'1px solid #f5f5f5' }}>
@@ -2224,9 +2224,9 @@ function SimPage() {
       title: '📶 SIM Internationale (recommandé)',
       color:'#27ae60',
       pros:['Pas de configuration compliquée','Fonctionne en Japon ET Corée','Données illimitées souvent incluses','Prix fixe prévisible'],
-      cons:['Perdez votre numéro FR temporairement','Appels FR souvent non inclus`],
-      recomm:`Airalo (eSIM) ou Ubigi — achetez l'eSIM avant le départ sur leur app`,
-      prix:`~15€ pour 10Go / 30 jours Japon+Corée',
+      cons:['Perdez votre numéro FR temporairement','Appels FR souvent non inclus'],
+      recomm:`Airalo (eSIM) ou Ubigi — achetez l`eSIM avant le départ sur leur app',
+      prix:`~15€ pour 10Go / 30 jours Japon+Corée`,
       lien:'https://www.airalo.com/',
     },
     {
@@ -2235,13 +2235,13 @@ function SimPage() {
       pros:['Plusieurs appareils connectés simultanément','Gardez votre numéro FR actif','Excellente couverture Japon'],
       cons:['Batterie à recharger chaque soir','Objet à ne pas perdre (caution)','Récupération/retour à l'aéroport'],
       recomm:'Global WiFi ou IIJmio — réservez en ligne avant le départ',
-      prix:`~500¥/jour — livré à l'aéroport à l'arrivée`,
+      prix:`~500¥/jour — livré à l`aéroport à l'arrivée',
       lien:'https://www.globalwifi.com.au/',
     },
     {
       title: '📱 SIM Locale Japon (au KIX)',
       color:'#8e44ad',
-      pros:[`Achat simple à l'aéroport`,'Bon débit 4G/5G','Pas de caution'],
+      pros:[`Achat simple à l`aéroport','Bon débit 4G/5G','Pas de caution'],
       cons:['Valable Japon uniquement','Racheter une SIM pour la Corée'],
       recomm:'IIJmio ou Mobal — distributeurs aéroport Kansai (KIX) arrivée',
       prix:'~¥3000 pour 15Go / 30 jours',
@@ -2267,7 +2267,7 @@ function SimPage() {
         💡 <b>Notre conseil :</b> L'eSIM Airalo est la solution la plus simple pour toute la famille — Japon + Corée en une seule souscription depuis votre téléphone.
       </div>
       {OPTIONS.map(opt => (
-        <div key={opt.title} style={{ background:'#fff', borderRadius:14, padding:'1rem', border:`2px solid ${opt.color}` }}>
+        <div key={opt.title} style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'2px solid ${opt.color}` }}>
           <div style={{ fontWeight:800, color:opt.color, fontSize:'0.95rem', marginBottom:8 }}>{opt.title}</div>
           <div style={{ fontSize:'0.82rem', fontWeight:700, color:'#27ae60', marginBottom:6 }}>{opt.prix}</div>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:8 }}>
@@ -2282,7 +2282,7 @@ function SimPage() {
           </div>
           <div style={{ fontSize:'0.78rem', color:'#555', fontStyle:'italic', marginBottom:8 }}>📌 {opt.recomm}</div>
           <button onClick={() => window.open(opt.lien,'_blank')}
-            style={{ background:opt.color, color:'#fff', border:'none', borderRadius:10, padding:'0.5rem 1rem', cursor:'pointer', fontWeight:700, fontSize:'0.82rem', width:'100%` }}>
+            style={{ background:opt.color, color:'#fff', border:'none', borderRadius:10, padding:'0.5rem 1rem', cursor:'pointer', fontWeight:700, fontSize:'0.82rem', width:'100%' }}>
             🌐 Voir l'offre
           </button>
         </div>
@@ -2295,7 +2295,7 @@ function SimPage() {
 // ════ PLANS MÉTRO ════
 const METRO_DATA = {
   Osaka: {
-    flag: `🇯🇵',
+    flag: `🇯🇵`,
     color: '#e8523a',
     mapUrl: 'https://www.osakametro.co.jp/en/guide/map/img/rosenzu_en.png',
     pdfUrl: 'https://www.osakametro.co.jp/en/guide/map/',
@@ -2392,10 +2392,10 @@ const METRO_DATA = {
     mapUrl: 'https://www.humetro.busan.kr/eng/file/linemap_en.jpg',
     pdfUrl: 'http://www.humetro.busan.kr/eng/main/index.do',
     googleMaps: 'https://maps.app.goo.gl/busan-metro',
-    appStore: 'https://www.kakaocorp.com/page/service/service/KakaoMap`,
-    tip: `Busan a 4 lignes. La Ligne 1 (orange) relie Haeundae au centre. Achetez la T-money à l'aéroport — fonctionne partout. Taxi peu cher pour les courtes distances.`,
+    appStore: 'https://www.kakaocorp.com/page/service/service/KakaoMap',
+    tip: `Busan a 4 lignes. La Ligne 1 (orange) relie Haeundae au centre. Achetez la T-money à l`aéroport — fonctionne partout. Taxi peu cher pour les courtes distances.',
     lines: [
-      { name: `Ligne 1', color: '#E05B2C', num: '1', stations: ['Nopo','Seomyeon','Busan Station','Nampo','Jagalchi','Toseong'] },
+      { name: `Ligne 1`, color: '#E05B2C', num: '1', stations: ['Nopo','Seomyeon','Busan Station','Nampo','Jagalchi','Toseong'] },
       { name: 'Ligne 2', color: '#30A9DE', num: '2', stations: ['Jangsan','Haeundae','Centum City','Seomyeon','Sasang','Yangsan'] },
       { name: 'Ligne 3', color: '#9B6B29', num: '3', stations: ['Daejeo','Deokcheon','Yeonsan','Suyeong','Baekyangsan'] },
       { name: 'Ligne 4 (Gireum)', color: '#2DBF2D', num: '4', stations: ['Minam','Banyeo','Anpyeong','Danggam'] },
@@ -2439,7 +2439,7 @@ function MetroPage() {
       <div style={{ padding:'0.8rem', display:'flex', flexDirection:'column', gap:10 }}>
 
         {/* Conseil + liens officiels */}
-        <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:`2px solid ${metro.color}` }}>
+        <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'2px solid ${metro.color}` }}>
           <div style={{ fontWeight:800, color:metro.color, fontSize:'0.95rem', marginBottom:6 }}>
             {metro.flag} Métro {city}
           </div>
@@ -2483,7 +2483,7 @@ function MetroPage() {
                 {line.stations.map((st, i) => (
                   <React.Fragment key={st}>
                     <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0 }}>
-                      <div style={{ width:10, height:10, borderRadius:'50%', background:line.color, border:'2px solid #fff', boxShadow:`0 0 0 2px ${line.color}` }} />
+                      <div style={{ width:10, height:10, borderRadius:'50%', background:line.color, border:'2px solid #fff', boxShadow:'0 0 0 2px ${line.color}` }} />
                       <div style={{ fontSize:'0.6rem', color:'#555', marginTop:3, whiteSpace:'nowrap', maxWidth:60, textAlign:'center', lineHeight:1.2 }}>{st}</div>
                     </div>
                     {i < line.stations.length-1 && (
@@ -2513,7 +2513,7 @@ function MetroPage() {
                 </div>
                 <div style={{ fontSize:'0.76rem', color:'#555', marginTop:2 }}>{st.note}</div>
               </div>
-              <button onClick={() => open(`https://www.google.com/maps/search/${encodeURIComponent(st.name+' station '+city)}`)}
+              <button onClick={() => open(`https://www.google.com/maps/search/${encodeURIComponent(st.name+` station '+city)}')}
                 style={{ background:'#0b1f3a', color:'#fff', border:'none', borderRadius:8, padding:'5px 10px', cursor:'pointer', fontSize:'0.72rem', flexShrink:0, marginLeft:8 }}>
                 📍
               </button>
@@ -2535,7 +2535,7 @@ function loadNotifData(setNotifPos, setNotifData) {
     try {
       const [weatherRes, geoRes] = await Promise.all([
         fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&timezone=auto`),
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, { headers: { 'Accept-Language': 'fr' } })
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, { headers: { `Accept-Language': 'fr' } })
       ])
       const weatherData = await weatherRes.json()
       const geoData     = await geoRes.json()
@@ -2668,7 +2668,7 @@ function AppShell() {
         {quickLinks.map((item) => {
           const Icon = item.icon
           return (
-            <button key={item.key} className={`bottom-item ${tab === item.key ? 'active' : ''}`} onClick={() => setTab(item.key)}>
+            <button key={item.key} className={`bottom-item ${tab === item.key ? `active' : ''}'} onClick={() => setTab(item.key)}>
               <Icon size={21} />
               <span>{item.label === 'IA Assistant' ? 'IA' : item.label}</span>
             </button>
