@@ -6,7 +6,8 @@ import {
   Menu, Bell, SunMedium, ChevronRight, MapPin, Clock3, Footprints,
   Camera, WalletCards, Globe, Smartphone, Hotel, Plane, Train, Phone,
   Languages, Mic, Volume2, Search, Send, PlusCircle, Trash2, Download,
-  Flame, Route, Navigation, HeartPulse, FileText, Calculator, CheckSquare, Clock
+  Flame, Route, Navigation, HeartPulse, FileText, Calculator, CheckSquare, Clock,
+  Heart, Wifi, ShoppingBag, Moon, Sun, AlertTriangle, Star
 } from 'lucide-react'
 
 const assets = {
@@ -195,6 +196,10 @@ const secondaryLinks = [
   { key: 'transport', label: 'Transports',     icon: Train,      color: 'blue'   },
   { key: 'checklist', label: 'Checklist',      icon: CheckSquare,color: 'green'  },
   { key: 'notes',     label: 'Mes notes',      icon: FileText,   color: 'amber'  },
+  { key: 'favoris',   label: 'Mes favoris',    icon: Heart,      color: 'pink'   },
+  { key: 'shopping',  label: 'Shopping',       icon: ShoppingBag,color: 'orange' },
+  { key: 'sante',     label: 'Santé & Urgence',icon: HeartPulse, color: 'red'    },
+  { key: 'sim',       label: 'SIM & Wifi',     icon: Wifi,       color: 'teal'   },
 ]
 
 const usefulInfo = [
@@ -495,6 +500,11 @@ function FoodPage() {
 
 function ChatGPTPage() {
   const [copied, setCopied] = useState(null)
+  const [favoris, setFavoris] = useLocalStorage('mes_favoris', [])
+  const toggleFav = (id, nom, type) => {
+    setFavoris(prev => prev.find(f=>f.id===id) ? prev.filter(f=>f.id!==id) : [...prev, {id, nom, type}])
+  }
+  const isFav = (id) => favoris.some(f=>f.id===id)
   const openChatGPT = () => window.open('https://chatgpt.com', '_blank', 'noopener,noreferrer')
 
   const copyPrompt = (text, id) => {
@@ -1125,9 +1135,14 @@ function ExplorerPage() {
                 </div>
               </div>
               <div style={{ display:'flex', gap:6, marginTop:8 }}>
-                <button onClick={() => open(r.instagram)} style={{ ...igBtnStyle, flex:1 }}>📷 Instagram</button>
-                <button onClick={() => open(r.tripadvisor)} style={{ ...triBtnStyle, flex:1 }}>🟢 TripAdvisor</button>
-                <button onClick={() => openMaps(r.name + ' ' + r.city)} style={{ ...mapBtnStyle, flex:1 }}>📍 Maps</button>
+                <button onClick={() => open(r.instagram)} style={{ ...igBtnStyle, flex:1 }}>📷 IG</button>
+                <button onClick={() => open(r.tripadvisor)} style={{ ...triBtnStyle, flex:1 }}>🟢 TA</button>
+                <button onClick={() => openMaps(r.name + ' ' + r.city)} style={{ ...mapBtnStyle, flex:1 }}>📍</button>
+                <button onClick={() => toggleFav(r.id, r.name, 'resto')}
+                  style={{ padding:'5px 10px', borderRadius:10, fontSize:'0.85rem', border:'none', cursor:'pointer',
+                    background: isFav(r.id)?'#e1306c':'#f0f0f0', color: isFav(r.id)?'#fff':'#555' }}>
+                  {isFav(r.id)?'❤️':'🤍'}
+                </button>
               </div>
             </div>
           ))}
@@ -1963,6 +1978,319 @@ function NotesPage() {
 }
 
 
+// ════ FAVORIS ════
+function FavorisPage() {
+  const [favoris, setFavoris] = useLocalStorage('mes_favoris', [])
+  const removeFav = (id) => setFavoris(prev => prev.filter(f => f.id !== id))
+
+  const restos = favoris.filter(f => f.type === 'resto')
+  const spots  = favoris.filter(f => f.type === 'spot')
+
+  return (
+    <motion.div key="favoris" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
+      <div style={{ background:'linear-gradient(135deg,#e1306c,#c0392b)', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
+        <div style={{ fontWeight:800, fontSize:'1.1rem' }}>❤️ Mes Favoris</div>
+        <div style={{ fontSize:'0.8rem', opacity:0.75, marginTop:2 }}>Tes restaurants et lieux sauvegardés</div>
+      </div>
+
+      {favoris.length === 0 && (
+        <div style={{ background:'#fff', borderRadius:14, padding:'2rem', textAlign:'center', color:'#888' }}>
+          <div style={{ fontSize:'2rem', marginBottom:8 }}>🤍</div>
+          <div style={{ fontWeight:700 }}>Aucun favori pour l'instant</div>
+          <div style={{ fontSize:'0.82rem', marginTop:4 }}>Appuie sur 🤍 dans la section Explorer pour sauvegarder des adresses</div>
+        </div>
+      )}
+
+      {restos.length > 0 && (
+        <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'1px solid #eee' }}>
+          <div style={{ fontWeight:700, color:'#e8523a', marginBottom:10 }}>🍜 Restaurants ({restos.length})</div>
+          {restos.map(f => {
+            const r = RESTAURANTS_DB.find(x => x.id === f.id)
+            if (!r) return null
+            return (
+              <div key={f.id} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 0', borderBottom:'1px solid #f5f5f5' }}>
+                <div>
+                  <div style={{ fontWeight:700, fontSize:'0.9rem' }}>{r.name}</div>
+                  <div style={{ fontSize:'0.75rem', color:'#888' }}>{r.city} · {r.type} · {r.price} {r.budget}</div>
+                  <div style={{ fontSize:'0.72rem', color:'#aaa', fontStyle:'italic' }}>{r.meal}</div>
+                </div>
+                <div style={{ display:'flex', gap:5 }}>
+                  <button onClick={() => window.open(r.tripadvisor,'_blank')} style={{ ...triBtnStyle, fontSize:'0.7rem', padding:'4px 8px' }}>TA</button>
+                  <button onClick={() => removeFav(f.id)} style={{ background:'#fee', border:'none', borderRadius:8, padding:'4px 8px', cursor:'pointer', fontSize:'0.85rem' }}>🗑</button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {spots.length > 0 && (
+        <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'1px solid #eee' }}>
+          <div style={{ fontWeight:700, color:'#833ab4', marginBottom:10 }}>📸 Lieux ({spots.length})</div>
+          {spots.map(f => {
+            const s = SPOTS_DB.find(x => x.name+x.city === f.id)
+            if (!s) return null
+            return (
+              <div key={f.id} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 0', borderBottom:'1px solid #f5f5f5' }}>
+                <div>
+                  <div style={{ fontWeight:700, fontSize:'0.9rem' }}>{s.name}</div>
+                  <div style={{ fontSize:'0.75rem', color:'#888' }}>{s.city} · {s.cat} · {s.heure}</div>
+                </div>
+                <button onClick={() => removeFav(f.id)} style={{ background:'#fee', border:'none', borderRadius:8, padding:'4px 8px', cursor:'pointer', fontSize:'0.85rem' }}>🗑</button>
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </motion.div>
+  )
+}
+
+// ════ SHOPPING ════
+const SHOPPING_DB = [
+  { cat:'🍫 Douceurs à ramener', emoji:'🍫', items:[
+    { name:'Kit Kat saveurs Japon', desc:'Matcha, wasabi, sakura, patate douce — introuvables en France', ou:'Combinis, aéroport KIX', prix:'¥600/boîte' },
+    { name:'Pocky & Pretz éditions limitées', desc:'Saveurs saisonnières et régionales exclusives', ou:'7-Eleven, Lawson', prix:'¥150-300' },
+    { name:'Daifuku & Wagashi frais', desc:'Mochi à la crème, dorayaki — à consommer sur place', ou:'Patisseries locales, marchés', prix:'¥200-500' },
+    { name:'Thé Matcha Ito En', desc:'Meilleur rapport qualité/prix, grandes boîtes', ou:'Supermarchés, aéroport', prix:'¥800-2000' },
+    { name:'Confiseries coréennes', desc:'Choco Pie, Pepero, Yakgwa — snacks emblématiques', ou:'Myeongdong, supermarchés KR', prix:'₩2000-5000' },
+  ]},
+  { cat:'💄 Beauté & Cosmétiques', emoji:'💄', items:[
+    { name:'Masques visage coréens', desc:'Tony Moly, Innisfree, Mediheal — 10x moins chers qu'en France', ou:'Myeongdong, Olive Young', prix:'₩500-2000/masque' },
+    { name:'Crème BB & cushion', desc:'Formules coréennes très couvrantes et légères', ou:'Olive Young (toutes villes)', prix:'₩15000-35000' },
+    { name:'Sérum Snail Repair', desc:'Crème escargot réparatrice — best-seller mondial', ou:'Innisfree, Nature Republic', prix:'₩20000-40000' },
+    { name:'Produits Shiseido / Kose', desc:'Cosmétiques japonais premium à prix japonais', ou:'Drugstores JP (Matsumoto Kiyoshi)', prix:'¥1500-5000' },
+    { name:'Parfum Issey Miyake', desc:'Prix duty-free bien plus bas qu'en France', ou:'Aéroports JP/KR', prix:'¥8000-15000' },
+  ]},
+  { cat:'🎌 Souvenirs Japon', emoji:'🎌', items:[
+    { name:'Netsuke & figurines Maneki-neko', desc:'Chats porte-bonheur en céramique', ou:'Asakusa, Nishiki Market', prix:'¥500-3000' },
+    { name:'Tenugui (tissus imprimés)', desc:'Foulards japonais traditionnels peints à la main', ou:'Kyoto, Tokyo artisans', prix:'¥800-2000' },
+    { name:'Baguettes laquées', desc:'En bois de cerisier ou bambou, boîtes cadeau', ou:'Nishiki Kyoto, Asakusa', prix:'¥500-3000' },
+    { name:'Papier Washi', desc:'Papier traditionnel pour origami ou déco', ou:'Papeteries Kyoto', prix:'¥300-1500' },
+    { name:'Sake régional', desc:'Bouteilles de sake locale de Kyoto ou Nara', ou:'Fushimi Kyoto, supermarchés', prix:'¥1000-3000' },
+    { name:'Capsule toys Gachapon', desc:'Figurines aléatoires dans des capsules — collectors!', ou:'Akihabara, partout JP', prix:'¥100-500' },
+  ]},
+  { cat:'🇰🇷 Souvenirs Corée', emoji:'🇰🇷', items:[
+    { name:'Poupées Hahoetal (masques)', desc:'Masques traditionnels coréens, très colorés', ou:'Insadong, marchés', prix:'₩5000-20000' },
+    { name:'Céramique Celadon', desc:'Poterie vert jade emblématique de la Corée', ou:'Insadong, Gyeongbokgung', prix:'₩15000-50000' },
+    { name:'Épices ramyeon bag', desc:'Assortiment de ramyeon introuvable en France', ou:'Gwangjang Market, combinis', prix:'₩5000-15000' },
+    { name:'Cartes K-pop officielles', desc:'Photocards des groupes BTS, Blackpink, etc.', ou:'SM Town, Myeongdong', prix:'₩3000-20000' },
+    { name:'Chaussettes coréennes', desc:'Design unique, imprimés drôles — cadeau parfait', ou:'Partout (marchés, boutiques)', prix:'₩1000-3000' },
+  ]},
+  { cat:'💡 Pratique & Tech', emoji:'💡', items:[
+    { name:'Adaptateur prise Japon (Type A)', desc:'Prises plates en J — si pas encore acheté', ou:'Aéroport CDG ou Amazon', prix:'€5-15' },
+    { name:'Batterie externe Anker', desc:'Moins chère en Asie qu'en France', ou:'Akihabara, Yodobashi Camera', prix:'¥3000-6000' },
+    { name:'Parapluie pliable Japonais', desc:'Qualité supérieure, très légers et compacts', ou:'Combinis JP (¥500 basique!)', prix:'¥500-2000' },
+    { name:'Ventilateur de poche', desc:'Indispensable en juillet — chaleur intense', ou:'Combinis, Dollar stores JP/KR', prix:'¥300-1500' },
+  ]},
+]
+
+function ShoppingPage() {
+  const [openCat, setOpenCat] = useState(null)
+  const [checkedItems, setCheckedItems] = useLocalStorage('shopping_checked', {})
+  const toggle = (key) => setCheckedItems(prev => ({ ...prev, [key]: !prev[key] }))
+
+  return (
+    <motion.div key="shopping" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
+      <div style={{ background:'linear-gradient(135deg,#f39c12,#e67e22)', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
+        <div style={{ fontWeight:800, fontSize:'1.1rem' }}>🛍️ Que ramener ?</div>
+        <div style={{ fontSize:'0.8rem', opacity:0.75, marginTop:2 }}>Douceurs · Beauté · Souvenirs · Tech</div>
+      </div>
+
+      {SHOPPING_DB.map((cat, ci) => (
+        <div key={cat.cat} style={{ background:'#fff', borderRadius:14, overflow:'hidden', border:'1px solid #eee' }}>
+          <button onClick={() => setOpenCat(openCat===ci ? null : ci)}
+            style={{ width:'100%', display:'flex', justifyContent:'space-between', alignItems:'center',
+              padding:'0.9rem 1.1rem', background:'none', border:'none', cursor:'pointer' }}>
+            <span style={{ fontWeight:800, fontSize:'0.95rem', color:'#0b1f3a' }}>{cat.cat}</span>
+            <span>{openCat===ci?'▲':'▼'}</span>
+          </button>
+          {openCat===ci && (
+            <div style={{ padding:'0 0.8rem 0.8rem' }}>
+              {cat.items.map((item, ii) => {
+                const key = ci+'-'+ii
+                const done = !!checkedItems[key]
+                return (
+                  <div key={ii} style={{ padding:'8px 4px', borderBottom:'1px solid #f5f5f5' }}>
+                    <div style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
+                      <button onClick={() => toggle(key)}
+                        style={{ width:22, height:22, borderRadius:6, flexShrink:0, marginTop:2,
+                          background: done?'#f39c12':'#fff', border:`2px solid ${done?'#f39c12':'#ccc'}`,
+                          cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                        {done && <span style={{ color:'#fff', fontSize:'0.75rem', fontWeight:700 }}>✓</span>}
+                      </button>
+                      <div style={{ flex:1 }}>
+                        <div style={{ fontWeight:700, fontSize:'0.88rem', color: done?'#bbb':'#0b1f3a', textDecoration:done?'line-through':'none' }}>{item.name}</div>
+                        <div style={{ fontSize:'0.78rem', color:'#666', marginTop:2 }}>{item.desc}</div>
+                        <div style={{ display:'flex', gap:12, marginTop:4, fontSize:'0.72rem' }}>
+                          <span style={{ color:'#888' }}>📍 {item.ou}</span>
+                          <span style={{ color:'#27ae60', fontWeight:700 }}>{item.prix}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      ))}
+    </motion.div>
+  )
+}
+
+// ════ SANTÉ & URGENCE ════
+function SantePage() {
+  const open = (url) => window.open(url, '_blank', 'noopener,noreferrer')
+  const SECTIONS = [
+    {
+      title: '🚨 Numéros d'urgence', color:'#e53935',
+      items:[
+        { label:'🇯🇵 Police Japon', val:'110', action:'tel:110' },
+        { label:'🇯🇵 Ambulance/Pompiers Japon', val:'119', action:'tel:119' },
+        { label:'🇰🇷 Police Corée', val:'112', action:'tel:112' },
+        { label:'🇰🇷 Ambulance Corée', val:'119', action:'tel:119' },
+        { label:'🇫🇷 Ambassade France Tokyo', val:'+81 3-5798-6000', action:'tel:+81357986000' },
+        { label:'🇫🇷 Ambassade France Séoul', val:'+82 2-3149-4300', action:'tel:+82231494300' },
+      ]
+    },
+    {
+      title: '🏥 Hôpitaux avec English/French', color:'#e53935',
+      items:[
+        { label:'Tokyo — St. Luke's International', val:'Chuo-ku', action:'https://www.luke.ac.jp/eng/' },
+        { label:'Tokyo — International Clinic', val:'Roppongi', action:'https://www.intlclinic.com/' },
+        { label:'Osaka — Otemae Hospital', val:'Chuo-ku Osaka', action:'https://www.otemae.osakafu-hosp.jp/' },
+        { label:'Séoul — Severance Hospital', val:'Sinchon, Séoul', action:'https://www.severance.or.kr/eng/' },
+        { label:'Séoul — Samsung Medical Center', val:'Gangnam, Séoul', action:'https://www.samsunghospital.com/gb/main/index.do' },
+      ]
+    },
+    {
+      title: '💊 Pharmacies & Médicaments', color:'#2196f3',
+      items:[
+        { label:'Matsumoto Kiyoshi (JP)', val:'Chaîne pharmacie partout', action:'https://www.matsukiyo.co.jp/' },
+        { label:'Welcia / Sundrug (JP)', val:'24h dans grandes villes', action:'https://www.welcia.co.jp/' },
+        { label:'Olive Young (KR)', val:'Pharmacie + cosmétiques', action:'https://www.oliveyoung.co.kr/' },
+        { label:'Dolgestin (JP) = paracétamol', val:'En vente libre', action:null },
+        { label:'Loperamide (JP/KR)', val:'Anti-diarrhéique', action:null },
+        { label:'Bufferin (JP) = ibuprofène', val:'En vente libre', action:null },
+      ]
+    },
+    {
+      title: '🌡️ Conseils santé été', color:'#ff9800',
+      items:[
+        { label:'Chaleur extrême juillet', val:'35°C+ avec humidité — hydratez-vous !', action:null },
+        { label:'Coup de chaleur', val:'Cherchez la clim immédiatement, sel+eau', action:null },
+        { label:'Vending machines', val:'Boissons froides partout — profitez-en !', action:null },
+        { label:'Masques', val:'Portez un masque dans les transports bondés', action:null },
+        { label:'Crème solaire', val:'Réappliquez toutes les 2h — soleil très fort', action:null },
+        { label:'Belly band', val:'Protège du froid excessif de la clim (surtout enfants)', action:null },
+      ]
+    },
+  ]
+  return (
+    <motion.div key="sante" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
+      <div style={{ background:'linear-gradient(135deg,#e53935,#b71c1c)', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
+        <div style={{ fontWeight:800, fontSize:'1.1rem' }}>🏥 Santé & Urgences</div>
+        <div style={{ fontSize:'0.8rem', opacity:0.75, marginTop:2 }}>Numéros · Hôpitaux · Pharmacies · Conseils</div>
+      </div>
+      {SECTIONS.map(section => (
+        <div key={section.title} style={{ background:'#fff', borderRadius:14, padding:'1rem', border:`2px solid ${section.color}20` }}>
+          <div style={{ fontWeight:800, color:section.color, marginBottom:10, fontSize:'0.95rem' }}>{section.title}</div>
+          {section.items.map((item, i) => (
+            <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'6px 0', borderBottom:'1px solid #f5f5f5' }}>
+              <div>
+                <div style={{ fontWeight:600, fontSize:'0.85rem' }}>{item.label}</div>
+                <div style={{ fontSize:'0.75rem', color:'#888' }}>{item.val}</div>
+              </div>
+              {item.action && (
+                <button onClick={() => item.action.startsWith('tel:') ? window.location.href=item.action : open(item.action)}
+                  style={{ background:section.color, color:'#fff', border:'none', borderRadius:8, padding:'5px 12px', cursor:'pointer', fontSize:'0.78rem', fontWeight:700 }}>
+                  {item.action.startsWith('tel:') ? '📞 Appeler' : '🌐 Ouvrir'}
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      ))}
+    </motion.div>
+  )
+}
+
+// ════ SIM & WIFI ════
+function SimPage() {
+  const OPTIONS = [
+    {
+      title: '📶 SIM Internationale (recommandé)',
+      color:'#27ae60',
+      pros:['Pas de configuration compliquée','Fonctionne en Japon ET Corée','Données illimitées souvent incluses','Prix fixe prévisible'],
+      cons:['Perdez votre numéro FR temporairement','Appels FR souvent non inclus'],
+      recomm:'Airalo (eSIM) ou Ubigi — achetez l'eSIM avant le départ sur leur app',
+      prix:'~15€ pour 10Go / 30 jours Japon+Corée',
+      lien:'https://www.airalo.com/',
+    },
+    {
+      title: '📡 Pocket WiFi (très populaire)',
+      color:'#3a7bd5',
+      pros:['Plusieurs appareils connectés simultanément','Gardez votre numéro FR actif','Excellente couverture Japon'],
+      cons:['Batterie à recharger chaque soir','Objet à ne pas perdre (caution)','Récupération/retour à l'aéroport'],
+      recomm:'Global WiFi ou IIJmio — réservez en ligne avant le départ',
+      prix:'~500¥/jour — livré à l'aéroport à l'arrivée',
+      lien:'https://www.globalwifi.com.au/',
+    },
+    {
+      title: '📱 SIM Locale Japon (au KIX)',
+      color:'#8e44ad',
+      pros:['Achat simple à l'aéroport','Bon débit 4G/5G','Pas de caution'],
+      cons:['Valable Japon uniquement','Racheter une SIM pour la Corée'],
+      recomm:'IIJmio ou Mobal — distributeurs aéroport Kansai (KIX) arrivée',
+      prix:'~¥3000 pour 15Go / 30 jours',
+      lien:'https://www.iijmio.jp/service/tourist/',
+    },
+    {
+      title: '🇰🇷 SIM Locale Corée (à Incheon)',
+      color:'#e8523a',
+      pros:['Très bon marché','5G ultrarapide Séoul','Données illimitées souvent'],
+      cons:['Corée uniquement'],
+      recomm:'KT Olleh ou SK Telecom — boutiques aéroport Incheon arrivées',
+      prix:'~₩15000 pour illimité / 10 jours',
+      lien:'https://roaming.kt.com/en/index.html',
+    },
+  ]
+  return (
+    <motion.div key="sim" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
+      <div style={{ background:'linear-gradient(135deg,#00b4db,#0083b0)', borderRadius:16, padding:'1.2rem 1.4rem', color:'#fff' }}>
+        <div style={{ fontWeight:800, fontSize:'1.1rem' }}>📶 SIM & Connexion Internet</div>
+        <div style={{ fontSize:'0.8rem', opacity:0.75, marginTop:2 }}>Comparez les options — restez connectés partout</div>
+      </div>
+      <div style={{ background:'#fffbea', border:'1px solid #f0d060', borderRadius:12, padding:'0.9rem 1.1rem', fontSize:'0.82rem', color:'#7a6010' }}>
+        💡 <b>Notre conseil :</b> L'eSIM Airalo est la solution la plus simple pour toute la famille — Japon + Corée en une seule souscription depuis votre téléphone.
+      </div>
+      {OPTIONS.map(opt => (
+        <div key={opt.title} style={{ background:'#fff', borderRadius:14, padding:'1rem', border:`2px solid ${opt.color}` }}>
+          <div style={{ fontWeight:800, color:opt.color, fontSize:'0.95rem', marginBottom:8 }}>{opt.title}</div>
+          <div style={{ fontSize:'0.82rem', fontWeight:700, color:'#27ae60', marginBottom:6 }}>{opt.prix}</div>
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:8 }}>
+            <div style={{ background:'#e8f5e9', borderRadius:8, padding:'0.5rem' }}>
+              <div style={{ fontSize:'0.72rem', fontWeight:700, color:'#27ae60', marginBottom:3 }}>✅ Avantages</div>
+              {opt.pros.map((p,i) => <div key={i} style={{ fontSize:'0.75rem', color:'#333' }}>• {p}</div>)}
+            </div>
+            <div style={{ background:'#fce4ec', borderRadius:8, padding:'0.5rem' }}>
+              <div style={{ fontSize:'0.72rem', fontWeight:700, color:'#e53935', marginBottom:3 }}>⚠️ Inconvénients</div>
+              {opt.cons.map((c,i) => <div key={i} style={{ fontSize:'0.75rem', color:'#333' }}>• {c}</div>)}
+            </div>
+          </div>
+          <div style={{ fontSize:'0.78rem', color:'#555', fontStyle:'italic', marginBottom:8 }}>📌 {opt.recomm}</div>
+          <button onClick={() => window.open(opt.lien,'_blank')}
+            style={{ background:opt.color, color:'#fff', border:'none', borderRadius:10, padding:'0.5rem 1rem', cursor:'pointer', fontWeight:700, fontSize:'0.82rem', width:'100%' }}>
+            🌐 Voir l'offre
+          </button>
+        </div>
+      ))}
+    </motion.div>
+  )
+}
+
+
 function loadNotifData(setNotifPos, setNotifData) {
   if (!navigator.geolocation) { setNotifPos('denied'); return }
   setNotifPos('loading')
@@ -1990,6 +2318,7 @@ function loadNotifData(setNotifPos, setNotifData) {
 function AppShell() {
   const [tab, setTab] = useState('days')
   const [showMenu, setShowMenu] = useState(false)
+  const [darkMode, setDarkMode] = useLocalStorage('dark_mode', false)
   const [showNotifs, setShowNotifs] = useState(false)
   const [notifPos, setNotifPos] = useState(null)
   const [notifData, setNotifData] = useState(null)
@@ -2013,6 +2342,10 @@ function AppShell() {
     transport: <TransportPage />,
     checklist: <ChecklistPage />,
     notes:     <NotesPage />,
+    favoris:   <FavorisPage />,
+    shopping:  <ShoppingPage />,
+    sante:     <SantePage />,
+    sim:       <SimPage />,
   }[tab]
 
   return (
@@ -2023,7 +2356,7 @@ function AppShell() {
           <button className="round-btn" onClick={() => setShowMenu(true)}><Menu size={20} /></button>
           <div className="hero-actions">
             <button className="round-btn" onClick={() => { setShowNotifs(true); loadNotifData(setNotifPos, setNotifData) }}><Bell size={20} /></button>
-            <button className="round-btn"><SunMedium size={20} /></button>
+            <button className="round-btn" onClick={() => setDarkMode(v=>!v)}>{darkMode ? <Sun size={20}/> : <Moon size={20}/>}</button>
           </div>
         </div>
 
