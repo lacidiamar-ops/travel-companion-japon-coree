@@ -555,7 +555,7 @@ function ChatGPTPage() {
 
       {/* 3 boutons */}
       {buttons.map(btn => (
-        <div key={btn.id} style={{ background:'#fff', border:`2px solid ${btn.color}`, borderRadius:16, padding:`1rem 1.2rem' }}>
+        <div key={btn.id} style={{ background:'#fff', border:`2px solid ${btn.color}`, borderRadius:16, padding:'1rem 1.2rem' }}>
           <div style={{ display:'flex', alignItems:'flex-start', gap:12, marginBottom:12 }}>
             <span style={{ fontSize:'1.8rem', lineHeight:1 }}>{btn.icon}</span>
             <div>
@@ -613,7 +613,7 @@ function BudgetPage() {
   // ── UI states ──
   const [showRates, setShowRates] = useState(false)
   const [form, setForm] = useState({
-    date: new Date().toISOString().slice(0,10), pays:'Japon', categorie:'Restaurant', label:'', amount:'`
+    date: new Date().toISOString().slice(0,10), pays:'Japon', categorie:'Restaurant', label:'', amount:''
   })
 
   // ── Calculs dérivés — toujours à jour ──
@@ -698,7 +698,7 @@ function BudgetPage() {
                 <div style={{ display:'flex', alignItems:'center', gap:4 }}>
                   <input type="number" value={budgetEnv}
                     onChange={e => setEnvBudgets(prev => ({ ...prev, [env]: Math.max(0, Number(e.target.value)||0) }))}
-                    style={{ width:75, textAlign:'right', border:'none', borderBottom:'2px solid ${ENV_COLORS[env]}`,
+                    style={{ width:75, textAlign:'right', border:'none', borderBottom:`2px solid ${ENV_COLORS[env]}`,
                       background:'transparent', fontWeight:700, fontSize:'1rem', color:ENV_COLORS[env] }} />
                   <span style={{ color:ENV_COLORS[env], fontWeight:700 }}>€</span>
                 </div>
@@ -766,7 +766,7 @@ function BudgetPage() {
 
       {/* ── Historique ── */}
       <div className="panel card-panel">
-        <SectionTitle title={`Historique (${expenses.length})`} linkLabel={expenses.length?`CSV':undefined} onLink={exportCsv} />
+        <SectionTitle title={`Historique (${expenses.length})`} linkLabel={expenses.length?'CSV':undefined} onLink={exportCsv} />
         <div className="simple-list">
           {expenses.length===0 && <p className="soft">Aucune dépense enregistrée.</p>}
           {expenses.map(item => {
@@ -945,7 +945,7 @@ const SPOTS_DB = [
   { cat:'📸 Instagram', city:'Séoul', name:'Seongsu Murals', desc:'Quartier hipster, cafés arty, murals streetart industriel', heure:'11h-18h', tag:'seongsuseoul', ig:'https://www.instagram.com/explore/tags/seongsuseoul/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456783-Reviews-Seongsu-Seoul.html', prix:'Gratuit' },
   { cat:'📸 Instagram', city:'Séoul', name:'Lotte Tower Sky Seoul', desc:'123e étage, vue panoramique, sky bridge vitré', heure:'9h-23h', tag:'lottetower', ig:'https://www.instagram.com/explore/tags/lottetower/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234615-Reviews-Lotte_Tower-Seoul.html', prix:'₩27000' },
   { cat:'🎪 Insolite', city:'Séoul', name:'Lotte World Theme Park', desc:"Parc d'attraction indoor + outdoor géant, Corée en miniature", heure:'9h-21h', tag:'lotteworld', ig:'https://www.instagram.com/explore/tags/lotteworld/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234586-Reviews-Lotte_World-Seoul.html', prix:'₩54000' },
-  { cat:'🎪 Insolite', city:'Séoul', name:'Trick Eye Museum', desc:'Musée illusions optiques, photos trompe-l'oeil ultra virales', heure:'10h-20h', tag:'trickeye', ig:'https://www.instagram.com/explore/tags/trickeye/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d5678901-Reviews-Trick_Eye-Seoul.html', prix:'₩15000' },
+  { cat:'🎪 Insolite', city:'Séoul', name:'Trick Eye Museum', desc:"Musée illusions optiques, photos trompe-l'oeil ultra virales", heure:'10h-20h', tag:'trickeye', ig:'https://www.instagram.com/explore/tags/trickeye/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d5678901-Reviews-Trick_Eye-Seoul.html', prix:'₩15000' },
   { cat:'🎪 Insolite', city:'Séoul', name:'Nanta Show Hongdae', desc:'Spectacle culinaire percussions sans paroles, interactif', heure:'17h & 20h', tag:'nantashow', ig:'https://www.instagram.com/explore/tags/nantashow/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234587-Reviews-Nanta_Show-Seoul.html', prix:'₩40000' },
   { cat:'🏛️ Atypique', city:'Séoul', name:'Ihwa Mural Village', desc:'Village mural sur colline Naksan, art de rue authentique', heure:'10h-18h', tag:'ihwamural', ig:'https://www.instagram.com/explore/tags/ihwamural/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d1234616-Reviews-Ihwa_Village-Seoul.html', prix:'Gratuit' },
   { cat:'🏛️ Atypique', city:'Séoul', name:'Gwangjang Market 1905', desc:"Plus vieux marché couvert de Corée, ambiance d'époque", heure:'8h-23h', tag:'gwangjangmarket', ig:'https://www.instagram.com/explore/tags/gwangjangmarket/', tri:'https://www.tripadvisor.fr/Attraction_Review-g294197-d3456781-Reviews-Gwangjang-Seoul.html', prix:'Gratuit' },
@@ -1184,7 +1184,7 @@ function ExplorerPage() {
               <div>
                 <div style={{ fontSize:'0.75rem', color:'#888', marginBottom:8 }}>{filtered.length} lieu{filtered.length>1?'x':''}</div>
                 {filtered.map(spot => (
-                  <div key={spot.name+spot.city} style={{ background:'#fff', border:'1px solid ${CAT_COLORS[spot.cat]||'#eee'}', borderRadius:14, padding:'0.85rem 1rem', marginBottom:8 }}>
+                  <div key={spot.name+spot.city} style={{ background:'#fff', border:`1px solid ${CAT_COLORS[spot.cat]||'#eee'}`, borderRadius:14, padding:'0.85rem 1rem', marginBottom:8 }}>
                     <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
                       <div style={{ flex:1 }}>
                         <div style={{ display:'flex', gap:6, alignItems:'center', marginBottom:3 }}>
@@ -1404,7 +1404,7 @@ function ConverterPage() {
             {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.label} ({c.symbol})</option>)}
           </select>
           <div style={{ flex:1, padding:'10px', borderRadius:10, background: result ? '#e8f5e9' : '#f5f5f5',
-            border:`2px solid ${result ? `#27ae60' : '#ddd'}`, fontSize:'1.3rem', fontWeight:800,
+            border:`2px solid ${result ? '#27ae60' : '#ddd'}`, fontSize:'1.3rem', fontWeight:800,
             textAlign:'right', color:'#27ae60', display:'flex', alignItems:'center', justifyContent:'flex-end' }}>
             {result ? `${toCur?.symbol}${Number(result).toLocaleString('fr-FR')}` : '—'}
           </div>
@@ -1440,7 +1440,7 @@ function ConverterPage() {
       {/* Tableau toutes devises */}
       <div style={{ background:'#fff', borderRadius:16, padding:'1rem', border:'1px solid #e0e0e0' }}>
         <div style={{ fontSize:'0.85rem', fontWeight:700, color:'#0b1f3a', marginBottom:8 }}>
-          {amount ? `${fromCur?.symbol}${Number(amount).toLocaleString()} =` : `Équivalences (pour 1 unité)'}
+          {amount ? `${fromCur?.symbol}${Number(amount).toLocaleString()} =` : 'Équivalences (pour 1 unité)'}
         </div>
         {CURRENCIES.filter(c => c.code !== from).map(c => (
           <div key={c.code} style={{ display:'flex', justifyContent:'space-between', padding:'7px 0', borderBottom:'1px solid #f0f0f0' }}>
@@ -1507,12 +1507,12 @@ const PHRASES_DB = [
       { fr: 'Une table pour 4 personnes', jp: '4人用のテーブルをお願いします', jpRom: 'Yonin you no teburu wo onegaishimasu', kr: '4인 테이블 부탁드려요', krRom: 'Sa-in teibeul butakdeuryeoyo' },
       { fr: "Le menu s'il vous plaît", jp: 'メニューをください', jpRom: 'Menyu wo kudasai', kr: '메뉴판 주세요', krRom: 'Menyupan juseyo' },
       { fr: "C'est délicieux !", jp: 'おいしい！', jpRom: 'Oishii!', kr: '맛있어요!', krRom: 'Massisseoyo!' },
-      { fr: 'L'addition s'il vous plaît', jp: 'お会計をお願いします', jpRom: 'Okaikei wo onegaishimasu', kr: '계산서 주세요', krRom: 'Gyesanseo juseyo' },
+      { fr: "L'addition s'il vous plaît", jp: 'お会計をお願いします', jpRom: 'Okaikei wo onegaishimasu', kr: '계산서 주세요', krRom: 'Gyesanseo juseyo' },
       { fr: 'Je suis allergique à...', jp: '...アレルギーがあります', jpRom: '...arerugii ga arimasu', kr: '...알레르기가 있어요', krRom: '...allereugi ga isseoyo' },
       { fr: "Sans gluten s'il vous plaît", jp: 'グルテンなしでお願いします', jpRom: 'Guruten nashi de onegaishimasu', kr: '글루텐 없이 해주세요', krRom: 'Geulluten eopsi haejuseyo' },
       { fr: 'Je ne mange pas de porc', jp: '豚肉は食べません', jpRom: 'Butaniku wa tabemasen', kr: '돼지고기를 안 먹어요', krRom: 'Dwaejigogireul an meogoyo' },
       { fr: "C'est trop piquant", jp: '辛すぎます', jpRom: 'Kara sugimasu', kr: '너무 매워요', krRom: 'Neomu maewoyo' },
-      { fr: 'De l'eau s'il vous plaît', jp: 'お水をください', jpRom: 'Omizu wo kudasai', kr: '물 주세요', krRom: 'Mul juseyo' },
+      { fr: "De l'eau s'il vous plaît", jp: 'お水をください', jpRom: 'Omizu wo kudasai', kr: '물 주세요', krRom: 'Mul juseyo' },
     ]
   },
   {
@@ -1528,11 +1528,11 @@ const PHRASES_DB = [
   },
   {
     cat: '🏨 Hôtel', phrases: [
-      { fr: 'J'ai une réservation', jp: '予約があります', jpRom: 'Yoyaku ga arimasu', kr: '예약했어요', krRom: 'Yeyak haesseoyo' },
+      { fr: "J'ai une réservation", jp: '予約があります', jpRom: 'Yoyaku ga arimasu', kr: '예약했어요', krRom: 'Yeyak haesseoyo' },
       { fr: 'Check-in / Check-out', jp: 'チェックイン / チェックアウト', jpRom: 'Chekkuin / Chekku auto', kr: '체크인 / 체크아웃', krRom: 'Chekeu-in / Chekeu-aut' },
       { fr: 'Où est ma chambre ?', jp: '私の部屋はどこですか？', jpRom: 'Watashi no heya wa doko desu ka?', kr: '제 방이 어디예요?', krRom: 'Je bangi eodieyo?' },
       { fr: 'Le wifi ne fonctionne pas', jp: 'ワイファイが使えません', jpRom: 'Waifai ga tsukaemasen', kr: '와이파이가 안 돼요', krRom: 'Waipai ga an dwaeyo' },
-      { fr: 'Pouvez-vous m'appeler un taxi ?', jp: 'タクシーを呼んでもらえますか？', jpRom: 'Takushi wo yonde moraemasu ka?', kr: '택시 불러주실 수 있어요?', krRom: 'Taeksi bulleojusil su isseoyo?' },
+      { fr: "Pouvez-vous m'appeler un taxi ?", jp: 'タクシーを呼んでもらえますか？', jpRom: 'Takushi wo yonde moraemasu ka?', kr: '택시 불러주실 수 있어요?', krRom: 'Taeksi bulleojusil su isseoyo?' },
       { fr: 'Avez-vous un coffre-fort ?', jp: 'セーフを使えますか？', jpRom: 'Sefu wo tsukaemasu ka?', kr: '금고 있어요?', krRom: 'Geumgo isseoyo?' },
     ]
   },
@@ -1541,11 +1541,11 @@ const PHRASES_DB = [
       { fr: 'Au secours !', jp: '助けて！', jpRom: 'Tasukete!', kr: '도와주세요!', krRom: 'Dowajuseyo!' },
       { fr: 'Appelez la police !', jp: '警察を呼んでください！', jpRom: 'Keisatsu wo yonde kudasai!', kr: '경찰을 불러주세요!', krRom: 'Gyeongchal eul bulleojuseyo!' },
       { fr: 'Appelez une ambulance !', jp: '救急車を呼んでください！', jpRom: 'Kyukyusha wo yonde kudasai!', kr: '구급차를 불러주세요!', krRom: 'Gugeupcha reul bulleojuseyo!' },
-      { fr: 'J'ai besoin d'un médecin', jp: '医者が必要です', jpRom: 'Isha ga hitsuyou desu', kr: '의사가 필요해요', krRom: 'Uisaga piryohaeyo' },
+      { fr: "J'ai besoin d'un médecin", jp: '医者が必要です', jpRom: 'Isha ga hitsuyou desu', kr: '의사가 필요해요', krRom: 'Uisaga piryohaeyo' },
       { fr: 'Je me suis perdu(e)', jp: '迷子になりました', jpRom: 'Maigo ni narimashita', kr: '길을 잃었어요', krRom: 'Gireul ireoosseoyo' },
-      { fr: 'On m'a volé mon sac', jp: 'バッグを盗まれました', jpRom: 'Baggu wo nusumaremashita', kr: '가방을 도둑맞았어요', krRom: 'Gabangeul dodungmajasseoyo' },
-      { fr: 'Où est l'hôpital le plus proche ?', jp: '一番近い病院はどこですか？', jpRom: 'Ichiban chikai byouin wa doko desu ka?', kr: '가장 가까운 병원이 어디예요?', krRom: 'Gajang gakkaun byeongwoni eodieyo?' },
-      { fr: 'J'ai mal ici', jp: 'ここが痛いです', jpRom: 'Koko ga itai desu', kr: '여기가 아파요', krRom: 'Yeogiga apayo' },
+      { fr: "On m'a volé mon sac", jp: 'バッグを盗まれました', jpRom: 'Baggu wo nusumaremashita', kr: '가방을 도둑맞았어요', krRom: 'Gabangeul dodungmajasseoyo' },
+      { fr: "Où est l'hôpital le plus proche ?", jp: '一番近い病院はどこですか？', jpRom: 'Ichiban chikai byouin wa doko desu ka?', kr: '가장 가까운 병원이 어디예요?', krRom: 'Gajang gakkaun byeongwoni eodieyo?' },
+      { fr: "J'ai mal ici", jp: 'ここが痛いです', jpRom: 'Koko ga itai desu', kr: '여기가 아파요', krRom: 'Yeogiga apayo' },
       { fr: 'Urgences Japon : 110 (police) 119 (ambulance)', jp: '110番 (警察) / 119番 (救急)', jpRom: 'Hyakujuuban / Hyakujuukyuuban', kr: '한국 : 112 (경찰) / 119 (구급)', krRom: 'Ilil-i (Gyeongchal) / Ilil-gu (Gugeup)' },
     ]
   },
@@ -1554,7 +1554,7 @@ const PHRASES_DB = [
       { fr: 'Où est... ?', jp: '...はどこですか？', jpRom: '...wa doko desu ka?', kr: '...이/가 어디예요?', krRom: '...i/ga eodieyo?' },
       { fr: 'Tout droit', jp: 'まっすぐ', jpRom: 'Massugu', kr: '직진', krRom: 'Jikjin' },
       { fr: 'À gauche / À droite', jp: '左 / 右', jpRom: 'Hidari / Migi', kr: '왼쪽 / 오른쪽', krRom: 'Oenjjok / Oreunjjok' },
-      { fr: 'Près d'ici / Loin', jp: '近く / 遠い', jpRom: 'Chikaku / Tooi', kr: '가까워요 / 멀어요', krRom: 'Gakkawoyo / Meoreoyo' },
+      { fr: "Près d'ici / Loin", jp: '近く / 遠い', jpRom: 'Chikaku / Tooi', kr: '가까워요 / 멀어요', krRom: 'Gakkawoyo / Meoreoyo' },
       { fr: 'Pouvez-vous me montrer sur la carte ?', jp: '地図で見せてもらえますか？', jpRom: 'Chizu de misete moraemasu ka?', kr: '지도에서 보여주실 수 있어요?', krRom: 'Jidoeseo boyeojusil su isseoyo?' },
     ]
   },
@@ -1562,7 +1562,7 @@ const PHRASES_DB = [
     cat: '💬 Enfants', phrases: [
       { fr: 'Mon enfant est perdu', jp: '子供がいなくなりました', jpRom: 'Kodomo ga inakunarimashita', kr: '아이를 잃어버렸어요', krRom: 'Aireul ireobeoryeosseoyo' },
       { fr: 'Y a-t-il un espace enfants ?', jp: 'キッズスペースはありますか？', jpRom: 'Kizzu supeesu wa arimasu ka?', kr: '어린이 공간이 있어요?', krRom: 'Eorini gonggani isseoyo?' },
-      { fr: 'Tarif enfant s'il vous plaît', jp: '子供料金をお願いします', jpRom: 'Kodomo ryoukin wo onegaishimasu', kr: '어린이 요금으로 해주세요', krRom: 'Eorini yogeumeuro haejuseyo' },
+      { fr: "Tarif enfant s'il vous plaît", jp: '子供料金をお願いします', jpRom: 'Kodomo ryoukin wo onegaishimasu', kr: '어린이 요금으로 해주세요', krRom: 'Eorini yogeumeuro haejuseyo' },
       { fr: 'Avez-vous une chaise haute ?', jp: 'ベビーチェアはありますか？', jpRom: 'Bebi chea wa arimasu ka?', kr: '유아 의자 있어요?', krRom: 'Yua uija isseoyo?' },
     ]
   },
@@ -1658,8 +1658,8 @@ function PhrasesPage() {
                       🔊
                     </button>
                     <button onClick={() => copy(p.jp, `jp${i}`)}
-                      style={{ background: copied===`jp${i}`?`#27ae60':'#f0f0f0', color: copied==='jp${i}`?`#fff':'#555', border:'none', borderRadius:8, padding:'5px 8px', cursor:'pointer', fontSize:'0.75rem' }}>
-                      {copied===`jp${i}`?`✓':'📋'}
+                      style={{ background: copied===`jp${i}`?'#27ae60':'#f0f0f0', color: copied===`jp${i}`?'#fff':'#555', border:'none', borderRadius:8, padding:'5px 8px', cursor:'pointer', fontSize:'0.75rem' }}>
+                      {copied===`jp${i}`?'✓':'📋'}
                     </button>
                   </div>
                 </div>
@@ -1680,8 +1680,8 @@ function PhrasesPage() {
                       🔊
                     </button>
                     <button onClick={() => copy(p.kr, `kr${i}`)}
-                      style={{ background: copied===`kr${i}`?`#27ae60':'#f0f0f0', color: copied==='kr${i}`?`#fff':'#555', border:'none', borderRadius:8, padding:'5px 8px', cursor:'pointer', fontSize:'0.75rem' }}>
-                      {copied===`kr${i}`?`✓':'📋'}
+                      style={{ background: copied===`kr${i}`?'#27ae60':'#f0f0f0', color: copied===`kr${i}`?'#fff':'#555', border:'none', borderRadius:8, padding:'5px 8px', cursor:'pointer', fontSize:'0.75rem' }}>
+                      {copied===`kr${i}`?'✓':'📋'}
                     </button>
                   </div>
                 </div>
@@ -1892,7 +1892,7 @@ function ChecklistPage() {
                       style={{ width:'100%', display:'flex', alignItems:'center', gap:10, padding:'8px 4px',
                         borderBottom:'1px solid #f5f5f5', background:'none', border:'none', cursor:'pointer', textAlign:'left' }}>
                       <div style={{ width:22, height:22, borderRadius:6, flexShrink:0,
-                        background: checked?'#27ae60':'#fff', border:'2px solid ${checked?'#27ae60':'#ccc'}',
+                        background: checked?'#27ae60':'#fff', border:`2px solid ${checked?'#27ae60':'#ccc'}`,
                         display:'flex', alignItems:'center', justifyContent:'center' }}>
                         {checked && <span style={{ color:'#fff', fontSize:'0.8rem', fontWeight:700 }}>✓</span>}
                       </div>
@@ -2115,7 +2115,7 @@ function ShoppingPage() {
                     <div style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
                       <button onClick={() => toggle(key)}
                         style={{ width:22, height:22, borderRadius:6, flexShrink:0, marginTop:2,
-                          background: done?'#f39c12':'#fff', border:'2px solid ${done?'#f39c12':'#ccc'}',
+                          background: done?'#f39c12':'#fff', border:`2px solid ${done?'#f39c12':'#ccc'}`,
                           cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
                         {done && <span style={{ color:'#fff', fontSize:'0.75rem', fontWeight:700 }}>✓</span>}
                       </button>
@@ -2144,7 +2144,7 @@ function SantePage() {
   const open = (url) => window.open(url, '_blank', 'noopener,noreferrer')
   const SECTIONS = [
     {
-      title: '🚨 Numéros d'urgence', color:'#e53935`,
+      title: "🚨 Numéros d'urgence", color:'#e53935',
       items:[
         { label:'🇯🇵 Police Japon', val:'110', action:'tel:110' },
         { label:'🇯🇵 Ambulance/Pompiers Japon', val:'119', action:'tel:119' },
@@ -2157,7 +2157,7 @@ function SantePage() {
     {
       title: '🏥 Hôpitaux avec English/French', color:'#e53935',
       items:[
-        { label:'Tokyo — St. Luke's International', val:'Chuo-ku', action:'https://www.luke.ac.jp/eng/' },
+        { label:"Tokyo — St. Luke's International", val:'Chuo-ku', action:'https://www.luke.ac.jp/eng/' },
         { label:'Tokyo — International Clinic', val:'Roppongi', action:'https://www.intlclinic.com/' },
         { label:'Osaka — Otemae Hospital', val:'Chuo-ku Osaka', action:'https://www.otemae.osakafu-hosp.jp/' },
         { label:'Séoul — Severance Hospital', val:'Sinchon, Séoul', action:'https://www.severance.or.kr/eng/' },
@@ -2224,7 +2224,7 @@ function SimPage() {
       color:'#27ae60',
       pros:['Pas de configuration compliquée','Fonctionne en Japon ET Corée','Données illimitées souvent incluses','Prix fixe prévisible'],
       cons:['Perdez votre numéro FR temporairement','Appels FR souvent non inclus'],
-      recomm:'Airalo (eSIM) ou Ubigi — achetez l'eSIM avant le départ sur leur app',
+      recomm:"Airalo (eSIM) ou Ubigi — achetez l'eSIM avant le départ sur leur app",
       prix:`~15€ pour 10Go / 30 jours Japon+Corée`,
       lien:'https://www.airalo.com/',
     },
@@ -2232,15 +2232,15 @@ function SimPage() {
       title: '📡 Pocket WiFi (très populaire)',
       color:'#3a7bd5',
       pros:['Plusieurs appareils connectés simultanément','Gardez votre numéro FR actif','Excellente couverture Japon'],
-      cons:['Batterie à recharger chaque soir','Objet à ne pas perdre (caution)','Récupération/retour à l'aéroport'],
+      cons:['Batterie à recharger chaque soir','Objet à ne pas perdre (caution)',"Récupération/retour à l'aéroport"],
       recomm:'Global WiFi ou IIJmio — réservez en ligne avant le départ',
-      prix:'~500¥/jour — livré à l'aéroport à l'arrivée',
+      prix:"~500¥/jour — livré à l'aéroport à l'arrivée",
       lien:'https://www.globalwifi.com.au/',
     },
     {
       title: '📱 SIM Locale Japon (au KIX)',
       color:'#8e44ad',
-      pros:['Achat simple à l'aéroport','Bon débit 4G/5G','Pas de caution'],
+      pros:["Achat simple à l'aéroport",'Bon débit 4G/5G','Pas de caution'],
       cons:['Valable Japon uniquement','Racheter une SIM pour la Corée'],
       recomm:'IIJmio ou Mobal — distributeurs aéroport Kansai (KIX) arrivée',
       prix:'~¥3000 pour 15Go / 30 jours',
@@ -2392,9 +2392,9 @@ const METRO_DATA = {
     pdfUrl: 'http://www.humetro.busan.kr/eng/main/index.do',
     googleMaps: 'https://maps.app.goo.gl/busan-metro',
     appStore: 'https://www.kakaocorp.com/page/service/service/KakaoMap',
-    tip: `Busan a 4 lignes. La Ligne 1 (orange) relie Haeundae au centre. Achetez la T-money à l'aéroport — fonctionne partout. Taxi peu cher pour les courtes distances.',
+    tip: `Busan a 4 lignes. La Ligne 1 (orange) relie Haeundae au centre. Achetez la T-money à l'aéroport — fonctionne partout. Taxi peu cher pour les courtes distances.`,
     lines: [
-      { name: `Ligne 1', color: '#E05B2C', num: '1', stations: ['Nopo','Seomyeon','Busan Station','Nampo','Jagalchi','Toseong'] },
+      { name: 'Ligne 1', color: '#E05B2C', num: '1', stations: ['Nopo','Seomyeon','Busan Station','Nampo','Jagalchi','Toseong'] },
       { name: 'Ligne 2', color: '#30A9DE', num: '2', stations: ['Jangsan','Haeundae','Centum City','Seomyeon','Sasang','Yangsan'] },
       { name: 'Ligne 3', color: '#9B6B29', num: '3', stations: ['Daejeo','Deokcheon','Yeonsan','Suyeong','Baekyangsan'] },
       { name: 'Ligne 4 (Gireum)', color: '#2DBF2D', num: '4', stations: ['Minam','Banyeo','Anpyeong','Danggam'] },
@@ -2482,7 +2482,7 @@ function MetroPage() {
                 {line.stations.map((st, i) => (
                   <React.Fragment key={st}>
                     <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0 }}>
-                      <div style={{ width:10, height:10, borderRadius:'50%', background:line.color, border:'2px solid #fff', boxShadow:'0 0 0 2px ${line.color}` }} />
+                      <div style={{ width:10, height:10, borderRadius:'50%', background:line.color, border:'2px solid #fff', boxShadow:`0 0 0 2px ${line.color}` }} />
                       <div style={{ fontSize:'0.6rem', color:'#555', marginTop:3, whiteSpace:'nowrap', maxWidth:60, textAlign:'center', lineHeight:1.2 }}>{st}</div>
                     </div>
                     {i < line.stations.length-1 && (
@@ -2512,7 +2512,7 @@ function MetroPage() {
                 </div>
                 <div style={{ fontSize:'0.76rem', color:'#555', marginTop:2 }}>{st.note}</div>
               </div>
-              <button onClick={() => open(`https://www.google.com/maps/search/${encodeURIComponent(st.name+` station '+city)}`)}
+              <button onClick={() => open(`https://www.google.com/maps/search/${encodeURIComponent(st.name+' station '+city)}`)}
                 style={{ background:'#0b1f3a', color:'#fff', border:'none', borderRadius:8, padding:'5px 10px', cursor:'pointer', fontSize:'0.72rem', flexShrink:0, marginLeft:8 }}>
                 📍
               </button>
