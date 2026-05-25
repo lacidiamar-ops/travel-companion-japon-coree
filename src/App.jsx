@@ -186,9 +186,10 @@ const quickLinks = [
 ]
 // Onglets secondaires accessibles via le menu hamburger uniquement
 const secondaryLinks = [
-  { key: 'map', label: 'Carte', icon: Map, color: 'blue' },
-  { key: 'ai',  label: 'ChatGPT', icon: Sparkles, color: 'green' },
-  { key: 'converter', label: 'Convertisseur', icon: Calculator, color: 'indigo' },
+  { key: 'map',      label: 'Carte',         icon: Map,        color: 'blue'   },
+  { key: 'ai',       label: 'ChatGPT',       icon: Sparkles,   color: 'green'  },
+  { key: 'converter',label: 'Convertisseur', icon: Calculator, color: 'indigo' },
+  { key: 'phrases',  label: 'Phrases utiles',icon: Languages,  color: 'rose'   },
 ]
 
 const usefulInfo = [
@@ -1454,6 +1455,225 @@ function ConverterPage() {
   )
 }
 
+// ════════════════════════════════════════════════════
+//  PHRASES UTILES
+// ════════════════════════════════════════════════════
+const PHRASES_DB = [
+  {
+    cat: '👋 Salutations', phrases: [
+      { fr: 'Bonjour / Bonsoir', jp: 'こんにちは / こんばんは', jpRom: 'Konnichiwa / Konbanwa', kr: '안녕하세요', krRom: 'Annyeonghaseyo' },
+      { fr: 'Merci beaucoup', jp: 'ありがとうございます', jpRom: 'Arigatou gozaimasu', kr: '감사합니다', krRom: 'Gamsahamnida' },
+      { fr: 'Excusez-moi / Pardon', jp: 'すみません', jpRom: 'Sumimasen', kr: '실례합니다', krRom: 'Sillyehamnida' },
+      { fr: 'Oui / Non', jp: 'はい / いいえ', jpRom: 'Hai / Iie', kr: '네 / 아니요', krRom: 'Ne / Aniyo' },
+      { fr: 'Je ne comprends pas', jp: 'わかりません', jpRom: 'Wakarimasen', kr: '모르겠어요', krRom: 'Moreugesseoyo' },
+      { fr: 'Parlez-vous français ?', jp: 'フランス語を話せますか？', jpRom: 'Furansugo wo hanasemasu ka?', kr: '프랑스어 할 수 있어요?', krRom: 'Peurangseueo hal su isseoyo?' },
+      { fr: 'Pouvez-vous répéter ?', jp: 'もう一度言ってください', jpRom: 'Mou ichido itte kudasai', kr: '다시 말씀해 주세요', krRom: 'Dasi malsseum hae juseyo' },
+    ]
+  },
+  {
+    cat: '🚇 Transport', phrases: [
+      { fr: 'Où est la station de métro ?', jp: '地下鉄の駅はどこですか？', jpRom: 'Chikatetsu no eki wa doko desu ka?', kr: '지하철역이 어디예요?', krRom: 'Jihacheolyeogi eodieyo?' },
+      { fr: 'Un billet pour... s'il vous plaît', jp: '...まで一枚ください', jpRom: '...made ichimai kudasai', kr: '...까지 한 장 주세요', krRom: '...kkaji han jang juseyo' },
+      { fr: 'Où est l'arrêt de bus ?', jp: 'バス停はどこですか？', jpRom: 'Basu tei wa doko desu ka?', kr: '버스 정류장이 어디예요?', krRom: 'Beoseu jeongnyujang eodieyo?' },
+      { fr: 'À quelle heure part le train ?', jp: '電車は何時に出ますか？', jpRom: 'Densha wa nanji ni demasu ka?', kr: '기차가 몇 시에 출발해요?', krRom: 'Gichaga myeot sie chulbalhaeyo?' },
+      { fr: 'C'est loin à pied ?', jp: '歩いて遠いですか？', jpRom: 'Aruite tooi desu ka?', kr: '걸어서 멀어요?', krRom: 'Georeo seo meoreoyo?' },
+      { fr: 'Appelez-moi un taxi', jp: 'タクシーを呼んでください', jpRom: 'Takushi wo yonde kudasai', kr: '택시 불러 주세요', krRom: 'Taeksi bulleo juseyo' },
+      { fr: 'Je veux aller à...', jp: '...に行きたいです', jpRom: '...ni ikitai desu', kr: '...에 가고 싶어요', krRom: '...e gago sipeoyo' },
+    ]
+  },
+  {
+    cat: '🍜 Restaurant', phrases: [
+      { fr: 'Une table pour 4 personnes', jp: '4人用のテーブルをお願いします', jpRom: 'Yonin you no teburu wo onegaishimasu', kr: '4인 테이블 부탁드려요', krRom: 'Sa-in teibeul butakdeuryeoyo' },
+      { fr: 'Le menu s'il vous plaît', jp: 'メニューをください', jpRom: 'Menyu wo kudasai', kr: '메뉴판 주세요', krRom: 'Menyupan juseyo' },
+      { fr: 'C'est délicieux !', jp: 'おいしい！', jpRom: 'Oishii!', kr: '맛있어요!', krRom: 'Massisseoyo!' },
+      { fr: 'L'addition s'il vous plaît', jp: 'お会計をお願いします', jpRom: 'Okaikei wo onegaishimasu', kr: '계산서 주세요', krRom: 'Gyesanseo juseyo' },
+      { fr: 'Je suis allergique à...', jp: '...アレルギーがあります', jpRom: '...arerugii ga arimasu', kr: '...알레르기가 있어요', krRom: '...allereugi ga isseoyo' },
+      { fr: 'Sans gluten s'il vous plaît', jp: 'グルテンなしでお願いします', jpRom: 'Guruten nashi de onegaishimasu', kr: '글루텐 없이 해주세요', krRom: 'Geulluten eopsi haejuseyo' },
+      { fr: 'Je ne mange pas de porc', jp: '豚肉は食べません', jpRom: 'Butaniku wa tabemasen', kr: '돼지고기를 안 먹어요', krRom: 'Dwaejigogireul an meogoyo' },
+      { fr: 'C'est trop piquant', jp: '辛すぎます', jpRom: 'Kara sugimasu', kr: '너무 매워요', krRom: 'Neomu maewoyo' },
+      { fr: 'De l'eau s'il vous plaît', jp: 'お水をください', jpRom: 'Omizu wo kudasai', kr: '물 주세요', krRom: 'Mul juseyo' },
+    ]
+  },
+  {
+    cat: '🛍️ Shopping', phrases: [
+      { fr: 'Combien ça coûte ?', jp: 'いくらですか？', jpRom: 'Ikura desu ka?', kr: '얼마예요?', krRom: 'Eolmayeyo?' },
+      { fr: 'C'est trop cher', jp: '高すぎます', jpRom: 'Taka sugimasu', kr: '너무 비싸요', krRom: 'Neomu bissayo' },
+      { fr: 'Avez-vous une taille plus grande ?', jp: 'もっと大きいサイズはありますか？', jpRom: 'Motto ookii saizu wa arimasu ka?', kr: '더 큰 사이즈 있어요?', krRom: 'Deo keun saiseu isseoyo?' },
+      { fr: 'Je peux essayer ?', jp: '試着できますか？', jpRom: 'Shichaku dekimasu ka?', kr: '입어봐도 돼요?', krRom: 'Ibeoboado dwaeyo?' },
+      { fr: 'Je prends celui-ci', jp: 'これをください', jpRom: 'Kore wo kudasai', kr: '이걸로 할게요', krRom: 'Igeolro halgeyo' },
+      { fr: 'Carte bancaire acceptée ?', jp: 'クレジットカードは使えますか？', jpRom: 'Kurejitto kado wa tsukaemasu ka?', kr: '신용카드 돼요?', krRom: 'Sinyongkadeu dwaeyo?' },
+      { fr: 'Avez-vous un sac ?', jp: '袋をもらえますか？', jpRom: 'Fukuro wo moraemasu ka?', kr: '봉투 있어요?', krRom: 'Bongtu isseoyo?' },
+    ]
+  },
+  {
+    cat: '🏨 Hôtel', phrases: [
+      { fr: 'J'ai une réservation', jp: '予約があります', jpRom: 'Yoyaku ga arimasu', kr: '예약했어요', krRom: 'Yeyak haesseoyo' },
+      { fr: 'Check-in / Check-out', jp: 'チェックイン / チェックアウト', jpRom: 'Chekkuin / Chekku auto', kr: '체크인 / 체크아웃', krRom: 'Chekeu-in / Chekeu-aut' },
+      { fr: 'Où est ma chambre ?', jp: '私の部屋はどこですか？', jpRom: 'Watashi no heya wa doko desu ka?', kr: '제 방이 어디예요?', krRom: 'Je bangi eodieyo?' },
+      { fr: 'Le wifi ne fonctionne pas', jp: 'ワイファイが使えません', jpRom: 'Waifai ga tsukaemasen', kr: '와이파이가 안 돼요', krRom: 'Waipai ga an dwaeyo' },
+      { fr: 'Pouvez-vous m'appeler un taxi ?', jp: 'タクシーを呼んでもらえますか？', jpRom: 'Takushi wo yonde moraemasu ka?', kr: '택시 불러주실 수 있어요?', krRom: 'Taeksi bulleojusil su isseoyo?' },
+      { fr: 'Avez-vous un coffre-fort ?', jp: 'セーフを使えますか？', jpRom: 'Sefu wo tsukaemasu ka?', kr: '금고 있어요?', krRom: 'Geumgo isseoyo?' },
+    ]
+  },
+  {
+    cat: '🆘 Urgence', phrases: [
+      { fr: 'Au secours !', jp: '助けて！', jpRom: 'Tasukete!', kr: '도와주세요!', krRom: 'Dowajuseyo!' },
+      { fr: 'Appelez la police !', jp: '警察を呼んでください！', jpRom: 'Keisatsu wo yonde kudasai!', kr: '경찰을 불러주세요!', krRom: 'Gyeongchal eul bulleojuseyo!' },
+      { fr: 'Appelez une ambulance !', jp: '救急車を呼んでください！', jpRom: 'Kyukyusha wo yonde kudasai!', kr: '구급차를 불러주세요!', krRom: 'Gugeupcha reul bulleojuseyo!' },
+      { fr: 'J'ai besoin d'un médecin', jp: '医者が必要です', jpRom: 'Isha ga hitsuyou desu', kr: '의사가 필요해요', krRom: 'Uisaga piryohaeyo' },
+      { fr: 'Je me suis perdu(e)', jp: '迷子になりました', jpRom: 'Maigo ni narimashita', kr: '길을 잃었어요', krRom: 'Gireul ireoosseoyo' },
+      { fr: 'On m'a volé mon sac', jp: 'バッグを盗まれました', jpRom: 'Baggu wo nusumaremashita', kr: '가방을 도둑맞았어요', krRom: 'Gabangeul dodungmajasseoyo' },
+      { fr: 'Où est l'hôpital le plus proche ?', jp: '一番近い病院はどこですか？', jpRom: 'Ichiban chikai byouin wa doko desu ka?', kr: '가장 가까운 병원이 어디예요?', krRom: 'Gajang gakkaun byeongwoni eodieyo?' },
+      { fr: 'J'ai mal ici', jp: 'ここが痛いです', jpRom: 'Koko ga itai desu', kr: '여기가 아파요', krRom: 'Yeogiga apayo' },
+      { fr: 'Urgences Japon : 110 (police) 119 (ambulance)', jp: '110番 (警察) / 119番 (救急)', jpRom: 'Hyakujuuban / Hyakujuukyuuban', kr: '한국 : 112 (경찰) / 119 (구급)', krRom: 'Ilil-i (Gyeongchal) / Ilil-gu (Gugeup)' },
+    ]
+  },
+  {
+    cat: '📍 Orientation', phrases: [
+      { fr: 'Où est... ?', jp: '...はどこですか？', jpRom: '...wa doko desu ka?', kr: '...이/가 어디예요?', krRom: '...i/ga eodieyo?' },
+      { fr: 'Tout droit', jp: 'まっすぐ', jpRom: 'Massugu', kr: '직진', krRom: 'Jikjin' },
+      { fr: 'À gauche / À droite', jp: '左 / 右', jpRom: 'Hidari / Migi', kr: '왼쪽 / 오른쪽', krRom: 'Oenjjok / Oreunjjok' },
+      { fr: 'Près d'ici / Loin', jp: '近く / 遠い', jpRom: 'Chikaku / Tooi', kr: '가까워요 / 멀어요', krRom: 'Gakkawoyo / Meoreoyo' },
+      { fr: 'Pouvez-vous me montrer sur la carte ?', jp: '地図で見せてもらえますか？', jpRom: 'Chizu de misete moraemasu ka?', kr: '지도에서 보여주실 수 있어요?', krRom: 'Jidoeseo boyeojusil su isseoyo?' },
+    ]
+  },
+  {
+    cat: '💬 Enfants', phrases: [
+      { fr: 'Mon enfant est perdu', jp: '子供がいなくなりました', jpRom: 'Kodomo ga inakunarimashita', kr: '아이를 잃어버렸어요', krRom: 'Aireul ireobeoryeosseoyo' },
+      { fr: 'Y a-t-il un espace enfants ?', jp: 'キッズスペースはありますか？', jpRom: 'Kizzu supeesu wa arimasu ka?', kr: '어린이 공간이 있어요?', krRom: 'Eorini gonggani isseoyo?' },
+      { fr: 'Tarif enfant s'il vous plaît', jp: '子供料金をお願いします', jpRom: 'Kodomo ryoukin wo onegaishimasu', kr: '어린이 요금으로 해주세요', krRom: 'Eorini yogeumeuro haejuseyo' },
+      { fr: 'Avez-vous une chaise haute ?', jp: 'ベビーチェアはありますか？', jpRom: 'Bebi chea wa arimasu ka?', kr: '유아 의자 있어요?', krRom: 'Yua uija isseoyo?' },
+    ]
+  },
+]
+
+function PhrasesPage() {
+  const [activeCat, setActiveCat] = useState(PHRASES_DB[0].cat)
+  const [lang, setLang] = useState('both')
+  const [search, setSearch] = useState('')
+  const [copied, setCopied] = useState(null)
+
+  const copy = (text, id) => {
+    navigator.clipboard.writeText(text)
+    setCopied(id); setTimeout(() => setCopied(null), 1500)
+  }
+
+  const speak = (text, isJP) => {
+    if (!window.speechSynthesis) return
+    window.speechSynthesis.cancel()
+    const utt = new SpeechSynthesisUtterance(text)
+    utt.lang = isJP ? 'ja-JP' : 'ko-KR'
+    utt.rate = 0.85
+    window.speechSynthesis.speak(utt)
+  }
+
+  const catData = PHRASES_DB.find(c => c.cat === activeCat) || PHRASES_DB[0]
+  const filtered = search.trim()
+    ? PHRASES_DB.flatMap(c => c.phrases.filter(p =>
+        p.fr.toLowerCase().includes(search.toLowerCase()) ||
+        p.jpRom.toLowerCase().includes(search.toLowerCase()) ||
+        p.krRom.toLowerCase().includes(search.toLowerCase())
+      ).map(p => ({ ...p, _cat: c.cat }))
+    )
+    : catData.phrases
+
+  return (
+    <motion.div key="phrases" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }}
+      style={{ display:'flex', flexDirection:'column', minHeight:'100vh', background:'#f9f7f2' }}>
+
+      {/* Header */}
+      <div style={{ background:'linear-gradient(135deg,#0b1f3a,#1a3a6b)', padding:'1rem 1.2rem', color:'#fff', position:'sticky', top:0, zIndex:10 }}>
+        <div style={{ fontWeight:800, fontSize:'1.05rem', marginBottom:8 }}>🗣️ Phrases utiles — 🇯🇵 🇰🇷</div>
+        <input value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="Rechercher une phrase..."
+          style={{ width:'100%', padding:'8px 12px', borderRadius:10, border:'none', fontSize:'0.85rem',
+            background:'rgba(255,255,255,0.15)', color:'#fff', outline:'none', boxSizing:'border-box' }} />
+      </div>
+
+      {/* Filtre langue */}
+      <div style={{ background:'#fff', borderBottom:'1px solid #eee', padding:'8px 12px', display:'flex', gap:6 }}>
+        {[['both','🇯🇵 + 🇰🇷'],['jp','🇯🇵 Japonais'],['kr','🇰🇷 Coréen']].map(([k,l]) => (
+          <button key={k} onClick={() => setLang(k)}
+            style={{ padding:'4px 12px', borderRadius:20, fontSize:'0.75rem', fontWeight:700, cursor:'pointer', border:'none',
+              background: lang===k ? '#0b1f3a' : '#f0f0f0', color: lang===k ? '#fff' : '#555' }}>
+            {l}
+          </button>
+        ))}
+      </div>
+
+      {/* Catégories */}
+      {!search.trim() && (
+        <div style={{ background:'#fff', borderBottom:'1px solid #eee', padding:'6px 12px', overflowX:'auto', display:'flex', gap:6, whiteSpace:'nowrap' }}>
+          {PHRASES_DB.map(c => (
+            <button key={c.cat} onClick={() => setActiveCat(c.cat)}
+              style={{ flexShrink:0, padding:'5px 12px', borderRadius:20, fontSize:'0.75rem', fontWeight:700, cursor:'pointer', border:'none',
+                background: activeCat===c.cat ? '#0b1f3a' : '#f0f0f0',
+                color: activeCat===c.cat ? '#fff' : '#444' }}>
+              {c.cat}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Phrases */}
+      <div style={{ padding:'0.8rem 1rem 2rem', flex:1 }}>
+        {search.trim() && <div style={{ fontSize:'0.75rem', color:'#888', marginBottom:8 }}>{filtered.length} résultat{filtered.length>1?'s':''}</div>}
+        {filtered.map((p, i) => (
+          <div key={i} style={{ background:'#fff', borderRadius:14, padding:'0.9rem 1rem', marginBottom:10, boxShadow:'0 1px 4px rgba(0,0,0,0.07)' }}>
+            {/* Français */}
+            <div style={{ fontWeight:800, fontSize:'0.95rem', color:'#0b1f3a', marginBottom:8 }}>🇫🇷 {p.fr}</div>
+
+            {/* Japonais */}
+            {(lang === 'both' || lang === 'jp') && (
+              <div style={{ background:'#fff8f0', borderRadius:10, padding:'0.6rem 0.8rem', marginBottom:6 }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                  <div>
+                    <div style={{ fontSize:'1rem', color:'#c0392b', fontWeight:700 }}>{p.jp}</div>
+                    <div style={{ fontSize:'0.78rem', color:'#888', fontStyle:'italic' }}>{p.jpRom}</div>
+                  </div>
+                  <div style={{ display:'flex', gap:5 }}>
+                    <button onClick={() => speak(p.jp, true)}
+                      style={{ background:'#c0392b', color:'#fff', border:'none', borderRadius:8, padding:'5px 8px', cursor:'pointer', fontSize:'0.75rem' }}>
+                      🔊
+                    </button>
+                    <button onClick={() => copy(p.jp, `jp${i}`)}
+                      style={{ background: copied===`jp${i}`?'#27ae60':'#f0f0f0', color: copied===`jp${i}`?'#fff':'#555', border:'none', borderRadius:8, padding:'5px 8px', cursor:'pointer', fontSize:'0.75rem' }}>
+                      {copied===`jp${i}`?'✓':'📋'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Coréen */}
+            {(lang === 'both' || lang === 'kr') && (
+              <div style={{ background:'#f0f4ff', borderRadius:10, padding:'0.6rem 0.8rem' }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                  <div>
+                    <div style={{ fontSize:'1rem', color:'#2471a3', fontWeight:700 }}>{p.kr}</div>
+                    <div style={{ fontSize:'0.78rem', color:'#888', fontStyle:'italic' }}>{p.krRom}</div>
+                  </div>
+                  <div style={{ display:'flex', gap:5 }}>
+                    <button onClick={() => speak(p.kr, false)}
+                      style={{ background:'#2471a3', color:'#fff', border:'none', borderRadius:8, padding:'5px 8px', cursor:'pointer', fontSize:'0.75rem' }}>
+                      🔊
+                    </button>
+                    <button onClick={() => copy(p.kr, `kr${i}`)}
+                      style={{ background: copied===`kr${i}`?'#27ae60':'#f0f0f0', color: copied===`kr${i}`?'#fff':'#555', border:'none', borderRadius:8, padding:'5px 8px', cursor:'pointer', fontSize:'0.75rem' }}>
+                      {copied===`kr${i}`?'✓':'📋'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  )
+}
+
+
 function loadNotifData(setNotifPos, setNotifData) {
   if (!navigator.geolocation) { setNotifPos('denied'); return }
   setNotifPos('loading')
@@ -1500,6 +1720,7 @@ function AppShell() {
     budget:    <BudgetPage />,
     tools:     <ToolsPage />,
     converter: <ConverterPage />,
+    phrases:   <PhrasesPage />,
   }[tab]
 
   return (
