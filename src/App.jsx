@@ -367,7 +367,7 @@ function WeatherLiveCard() {
       try {
         const [weatherRes, geoRes] = await Promise.all([
           fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto`),
-          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, { headers: { `Accept-Language': 'fr' } })
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, { headers: { 'Accept-Language': 'fr' } })
         ])
         const data = await weatherRes.json()
         const geo  = await geoRes.json()
@@ -2534,7 +2534,7 @@ function loadNotifData(setNotifPos, setNotifData) {
     try {
       const [weatherRes, geoRes] = await Promise.all([
         fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&timezone=auto`),
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, { headers: { `Accept-Language': 'fr' } })
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, { headers: { 'Accept-Language': 'fr' } })
       ])
       const weatherData = await weatherRes.json()
       const geoData     = await geoRes.json()
