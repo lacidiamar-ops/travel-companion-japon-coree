@@ -16,7 +16,9 @@ const assets = {
 }
 
 const days = [
-  { id: 1, date: '11 juil.', city: 'Osaka', title: 'Tokyo → Osaka → Dotonbori', image: 'https://images.unsplash.com/photo-1590253230532-a67f6bc61c9e?auto=format&fit=crop&w=1200&q=80', summary: 'Haneda, Shinkansen, check-in Candeo Hotel Osaka Namba, soirée Dotonbori.', timeRange: '11:00 – 22:00', steps: '13 850 pas', highlights: ['Haneda', 'Tokyo Station', 'Dotonbori', 'Street food'], restaurants: ['Kukuru Takoyaki', 'Creo-ru', 'Rikuro Ojisan'], spots: ['Glico Running Man', 'Tombori Riverwalk'] },
+  { id: 0, date: '09 juil.', city: 'Paris → Rome', title: 'Départ Paris — Nuit à Paris CDG', image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1200&q=80', summary: "Départ de chez vous, trajet jusqu'à Paris CDG. Nuit à l'hôtel de l'aéroport pour un départ serein le lendemain matin.", timeRange: '06:00 – 23:00', steps: '-', highlights: ['CDG Aéroport', 'Hôtel transit Paris', 'Préparatifs finaux'], restaurants: ['Restaurant hôtel CDG', 'Brasserie aéroport'], spots: ['Tour Eiffel (si temps)', 'CDG Terminal 2'] },
+  { id: -1, date: '10 juil.', city: 'Rome → Osaka', title: 'Paris ✈️ Rome ✈️ Osaka — Grand envol !', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80', summary: "Vol Paris CDG → Rome Fiumicino, correspondance, puis Rome → Osaka Kansai (KIX). Arrivée à Osaka en soirée locale. Premier contact avec le Japon !", timeRange: '06:00 – 23:59', steps: '~25h de voyage', highlights: ['CDG Terminal', 'Rome Fiumicino FCO', 'Osaka Kansai KIX', 'Première nuit Osaka'], restaurants: ['Repas à bord', 'Snack aéroport Rome'], spots: ['Vue aérienne Japon', 'Arrivée Kansai Airport'] },
+  { id: 1, date: '11 juil.', city: 'Osaka', title: 'Arrivée Osaka — Check-in & Dotonbori', image: 'https://images.unsplash.com/photo-1590253230532-a67f6bc61c9e?auto=format&fit=crop&w=1200&q=80', summary: "Arrivée KIX, navette Haruka jusqu'à Namba, check-in Candeo Hotel. Première soirée à Dotonbori : Glico Man, takoyaki, néons.", timeRange: '11:00 – 22:00', steps: '13 850 pas', highlights: ['Haneda', 'Tokyo Station', 'Dotonbori', 'Street food'], restaurants: ['Kukuru Takoyaki', 'Creo-ru', 'Rikuro Ojisan'], spots: ['Glico Running Man', 'Tombori Riverwalk'] },
   { id: 2, date: '12 juil.', city: 'Osaka', title: 'Namba Yasaka → Osaka Castle → Shinsekai', image: 'https://images.unsplash.com/photo-1601823984263-b87b59798b70?auto=format&fit=crop&w=1200&q=80', summary: 'Tête de lion, château d’Osaka, Tempozan, Tsutenkaku et kushikatsu.', timeRange: '08:30 – 21:00', steps: '15 100 pas', highlights: ['Namba Yasaka', 'Osaka Castle', 'Shinsekai'], restaurants: ['Daruma Kushikatsu', 'Tempozan Food Court'], spots: ['Tsutenkaku', 'Osaka Castle'] },
   { id: 3, date: '13 juil.', city: 'Osaka', title: 'Universal Studios Japan', image: 'https://images.unsplash.com/photo-1542640244-7e672d6cef4e?auto=format&fit=crop&w=1200&q=80', summary: 'Super Nintendo World, Harry Potter, Jurassic Park et Umeda en soirée.', timeRange: '06:30 – 22:00', steps: '20 500 pas', highlights: ['USJ', 'Nintendo', 'Harry Potter'], restaurants: ['USJ snacks', 'Ichiran Shinjuku'], spots: ['Super Nintendo World', 'Hogwarts'] },
   { id: 4, date: '14 juil.', city: 'Nara / Kyoto', title: 'Nara → arrivée Gion', image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80', summary: 'Daims de Nara puis installation à Kyoto et soirée Gion.', timeRange: '08:00 – 21:30', steps: '14 600 pas', highlights: ['Nara Park', 'Kasuga Taisha', 'Gion'], restaurants: ['Nakatanidou', 'Gyoza ChaoChao'], spots: ['Daims', 'Yasaka Shrine'] },
@@ -1680,7 +1682,7 @@ function PhrasesPage() {
 
 // ════ COMPTE À REBOURS ════
 function CountdownCard() {
-  const DEPART = new Date('2025-07-11T08:00:00')
+  const DEPART = new Date('2025-07-09T06:00:00')
   const [now, setNow] = React.useState(new Date())
   React.useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000)
@@ -1698,7 +1700,7 @@ function CountdownCard() {
   const s = Math.floor((diff % 60000) / 1000)
   return (
     <div style={{ background:'linear-gradient(135deg,#0b1f3a,#1a3a6b)', borderRadius:16, padding:'1rem 1.4rem', color:'#fff' }}>
-      <div style={{ fontSize:'0.8rem', opacity:0.7, marginBottom:6 }}>✈️ Départ pour le Japon & la Corée</div>
+      <div style={{ fontSize:'0.8rem', opacity:0.7, marginBottom:6 }}>✈️ Départ Paris CDG → Rome → Osaka</div>
       <div style={{ display:'flex', justifyContent:'center', gap:12, textAlign:'center' }}>
         {[[j,'jours'],[h,'heures'],[m,'min'],[s,'sec']].map(([v,l]) => (
           <div key={l}>
@@ -1707,7 +1709,7 @@ function CountdownCard() {
           </div>
         ))}
       </div>
-      <div style={{ textAlign:'center', fontSize:'0.72rem', opacity:0.6, marginTop:6 }}>11 juillet 2025 — Osaka</div>
+      <div style={{ textAlign:'center', fontSize:'0.72rem', opacity:0.6, marginTop:6 }}>09 juillet 2025 — Paris ✈️ Rome ✈️ Osaka</div>
     </div>
   )
 }
@@ -1826,7 +1828,7 @@ const CHECKLIST_DEF = [
   { cat:'📱 Tech & Connectivité', items:['SIM internationale ou Pocket WiFi réservé','Maps Japon + Corée téléchargées hors-ligne','App Suica / T-money','Adaptateur prise japonaise (Type A)','Batterie externe chargée (max 100Wh en cabine)','Chargeurs tous appareils','Écouteurs (film dans avion)'] },
   { cat:'👕 Bagages', items:['Valise ≤ 23kg + bagage cabine ≤ 10kg','Chaussures confortables (BEAUCOUP de marche)','Imperméable / coupe-vent','Vêtements été + 1 pull (clim forte Japon)','Chaussettes propres (déchausser souvent)','Maillots de bain (onsen, plage Busan)','Crème solaire SPF50+'] },
   { cat:'💊 Santé', items:['Médicaments habituels + ordonnances','Paracétamol / ibuprofène','Pansements + désinfectant','Anti-diarrhéique (changement alimentation)','Crème anti-moustiques','Masques chirurgicaux (courant en Asie)','Carte européenne d'assurance maladie'] },
-  { cat:'✈️ Jour J', items:['Arriver aéroport 3h avant','Peluche / jeu enfant pour l'avion','Collations avion','Valider JR Pass à l'arrivée','Retirer espèces au distributeur aéroport','Suica / T-money à acheter','Note des numéros d'hôtel premiers jours'] },
+  { cat:'✈️ Jour J', items:['Arriver CDG 3h avant (vol Rome 09 juil.)','Peluche / jeu enfant pour l'avion','Collations avion','Valider JR Pass à l'arrivée','Retirer espèces au distributeur aéroport','Suica / T-money à acheter','Note des numéros d'hôtel premiers jours'] },
 ]
 
 function ChecklistPage() {
