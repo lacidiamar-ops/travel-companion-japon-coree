@@ -345,12 +345,11 @@ function UsefulCard({ info }) {
 
 
 const weatherCodes = {
-  0: `Ciel dégagé`, 1: `Principalement clair', 2: 'Partiellement nuageux', 3: 'Couvert',
-  45: `Brouillard`, 48: `Brouillard givrant', 51: 'Bruine faible', 53: 'Bruine', 55: 'Bruine forte',
-  61: `Pluie faible`, 63: `Pluie', 65: 'Pluie forte', 71: 'Neige faible', 73: 'Neige', 75: 'Neige forte',
+  0: 'Ciel dégagé', 1: 'Principalement clair', 2: 'Partiellement nuageux', 3: 'Couvert',
+  45: 'Brouillard', 48: 'Brouillard givrant', 51: 'Bruine faible', 53: 'Bruine', 55: 'Bruine forte',
+  61: 'Pluie faible', 63: 'Pluie', 65: 'Pluie forte', 71: 'Neige faible', 73: 'Neige', 75: 'Neige forte',
   80: 'Averses faibles', 81: 'Averses', 82: 'Averses fortes', 95: 'Orage'
 }
-
 function WeatherLiveCard() {
   const [weather, setWeather] = useState(null)
   const [status, setStatus] = useState('Active la géolocalisation pour afficher la météo autour de toi.')
