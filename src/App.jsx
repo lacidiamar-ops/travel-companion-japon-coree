@@ -614,7 +614,7 @@ function BudgetPage() {
   // ── UI states ──
   const [showRates, setShowRates] = useState(false)
   const [form, setForm] = useState({
-    date: new Date().toISOString().slice(0,10), pays:'Japon', categorie:'Restaurant', label:'', amount:''
+    date: new Date().toISOString().slice(0,10), pays:'Japon', categorie:'Restaurant', label:`', amount:'`
   })
 
   // ── Calculs dérivés — toujours à jour ──
@@ -643,7 +643,7 @@ function BudgetPage() {
       categorie: form.categorie, label: form.label.trim(),
       amount: raw, devise: ZONE_CURRENCY[form.pays].code, eur: eurVal,
     }, ...prev])
-    setForm(f => ({ ...f, label:'', amount:'' }))
+    setForm(f => ({ ...f, label:`', amount:'` }))
   }
 
   const removeExpense = (id) => setExpenses(prev => prev.filter(x => x.id !== id))
@@ -2145,7 +2145,7 @@ function SantePage() {
   const open = (url) => window.open(url, '_blank', 'noopener,noreferrer')
   const SECTIONS = [
     {
-      title: '🚨 Numéros d'urgence', color:'#e53935',
+      title: `🚨 Numéros d'urgence`, color:'#e53935',
       items:[
         { label:'🇯🇵 Police Japon', val:'110', action:'tel:110' },
         { label:'🇯🇵 Ambulance/Pompiers Japon', val:'119', action:'tel:119' },
@@ -2158,7 +2158,7 @@ function SantePage() {
     {
       title: '🏥 Hôpitaux avec English/French', color:'#e53935',
       items:[
-        { label:'Tokyo — St. Luke's International', val:'Chuo-ku', action:'https://www.luke.ac.jp/eng/' },
+        { label:`Tokyo — St. Luke's International`, val:'Chuo-ku', action:'https://www.luke.ac.jp/eng/' },
         { label:'Tokyo — International Clinic', val:'Roppongi', action:'https://www.intlclinic.com/' },
         { label:'Osaka — Otemae Hospital', val:'Chuo-ku Osaka', action:'https://www.otemae.osakafu-hosp.jp/' },
         { label:'Séoul — Severance Hospital', val:'Sinchon, Séoul', action:'https://www.severance.or.kr/eng/' },
@@ -2225,7 +2225,7 @@ function SimPage() {
       color:'#27ae60',
       pros:['Pas de configuration compliquée','Fonctionne en Japon ET Corée','Données illimitées souvent incluses','Prix fixe prévisible'],
       cons:['Perdez votre numéro FR temporairement','Appels FR souvent non inclus'],
-      recomm:'Airalo (eSIM) ou Ubigi — achetez l'eSIM avant le départ sur leur app',
+      recomm:`Airalo (eSIM) ou Ubigi — achetez l'eSIM avant le départ sur leur app`,
       prix:'~15€ pour 10Go / 30 jours Japon+Corée',
       lien:'https://www.airalo.com/',
     },
