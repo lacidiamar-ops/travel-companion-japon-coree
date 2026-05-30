@@ -2638,6 +2638,24 @@ const METRO_DATA = {
       { name: 'Roppongi (六本木)', lines: ['H','O'], note: 'Musées art, vie nocturne' },
     ]
   },
+  Nara: {
+    flag: '🇯🇵',
+    color: '#8B6914',
+    mapUrl: 'https://www.kintetsu.co.jp/railway/Rosen/A50001.html',
+    pdfUrl: 'https://www.kintetsu.co.jp/railway/Rosen/A50001.html',
+    googleMaps: 'https://maps.app.goo.gl/nara',
+    appStore: 'https://onepass.city.kyoto.lg.jp/',
+    tip: 'Nara se visite principalement à pied depuis les gares Kintetsu Nara ou JR Nara. Les daims sont partout dans le Nara Park ! Trajet depuis Osaka : 30 min en Kintetsu (¥560).',
+    lines: [
+      { name: 'Kintetsu Nara Line', color: '#8B6914', num: 'KN', stations: ['Osaka Namba','Tsuruhashi','Yamato-Saidaiji','Kintetsu Nara'] },
+      { name: 'JR Yamatoji', color: '#0072BC', num: 'JR', stations: ['Osaka','Tennoji','Oji','JR Nara'] },
+    ],
+    keyStations: [
+      { name: 'Kintetsu Nara (近鉄奈良)', lines: ['KN'], note: 'La plus proche du Nara Park et des daims' },
+      { name: 'JR Nara (JR奈良)', lines: ['JR'], note: 'Gare JR, bus vers Todai-ji' },
+      { name: 'Yamato-Saidaiji (大和西大寺)', lines: ['KN'], note: 'Correspondance vers Kyoto et Osaka' },
+    ]
+  },
   Séoul: {
     flag: '🇰🇷',
     color: '#2471a3',
@@ -2690,118 +2708,346 @@ const METRO_DATA = {
 
 function MetroPage() {
   const [city, setCity] = useState('Osaka')
-  const [showMap, setShowMap] = useState(false)
+  const [view, setView] = useState('plan') // 'plan' | 'map'
+  const [userPos, setUserPos] = useState(null)
+  const [geoStatus, setGeoStatus] = useState('idle') // idle | loading | ok | denied
+  const [nearestLine, setNearestLine] = useState(null)
   const metro = METRO_DATA[city]
   const open = (url) => window.open(url, '_blank', 'noopener,noreferrer')
 
+  // City centers for the interactive map
+  const CITY_CENTERS = {
+    Osaka:  { lat: 34.6937, lng: 135.5023, zoom: 13 },
+    Kyoto:  { lat: 35.0116, lng: 135.7681, zoom: 13 },
+    Nara:   { lat: 34.6851, lng: 135.8048, zoom: 14 },
+    Tokyo:  { lat: 35.6762, lng: 139.6503, zoom: 12 },
+    Séoul:  { lat: 37.5665, lng: 126.9780, zoom: 12 },
+    Busan:  { lat: 35.1796, lng: 129.0756, zoom: 13 },
+  }
+
+  // Géolocalisation
+  const locateMe = () => {
+    if (!navigator.geolocation) { setGeoStatus('denied'); return }
+    setGeoStatus('loading')
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserPos({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+        setGeoStatus('ok')
+        // Trouver la ville la plus proche
+        let closest = 'Osaka', minD = Infinity
+        for (const [c, center] of Object.entries(CITY_CENTERS)) {
+          const d = Math.hypot(pos.coords.latitude - center.lat, pos.coords.longitude - center.lng)
+          if (d < minD) { minD = d; closest = c }
+        }
+        if (minD < 2) setCity(closest) // auto-switch si dans la ville
+      },
+      () => setGeoStatus('denied'),
+      { timeout: 8000 }
+    )
+  }
+
+  // Construire l'URL OpenStreetMap avec marqueur utilisateur
+  const buildMapUrl = () => {
+    const center = CITY_CENTERS[city]
+    if (!center) return ''
+    const zoom = center.zoom
+    const lat = userPos ? userPos.lat : center.lat
+    const lng = userPos ? userPos.lng : center.lng
+    // OpenStreetMap embed with public transport layer
+    if (userPos) {
+      return `https://www.openstreetmap.org/export/embed.html?bbox=${center.lng-0.08}%2C${center.lat-0.06}%2C${center.lng+0.08}%2C${center.lat+0.06}&layer=transportmap&marker=${userPos.lat}%2C${userPos.lng}`
+    }
+    return `https://www.openstreetmap.org/export/embed.html?bbox=${center.lng-0.08}%2C${center.lat-0.06}%2C${center.lng+0.08}%2C${center.lat+0.06}&layer=transportmap`
+  }
+
+  // Plan images officiels (haute résolution)
+  const PLAN_IMAGES = {
+    Osaka: 'https://www.osakametro.co.jp/en/guide/map/img/rosenzu_en.png',
+    Kyoto: 'https://www2.city.kyoto.lg.jp/kotsu/webguide/img_network/subway_map_e.jpg',
+    Nara:  'https://www.kintetsu.co.jp/railway/Rosen/A50001.html',
+    Tokyo: 'https://www.tokyometro.jp/en/subwaymap/img/metromap_en.png',
+    Séoul: 'https://www.seoulmetro.co.kr/en/file/linemap_en.gif',
+    Busan: 'https://www.humetro.busan.kr/eng/file/linemap_en.jpg',
+  }
+
+  // PDF / liens officiels plans
+  const PLAN_LINKS = {
+    Osaka: { pdf: 'https://www.osakametro.co.jp/en/guide/map/', label: 'Osaka Metro EN' },
+    Kyoto: { pdf: 'https://www2.city.kyoto.lg.jp/kotsu/webguide/img_network/subway_map_e.jpg', label: 'Kyoto Subway EN' },
+    Nara:  { pdf: 'https://www.kintetsu.co.jp/railway/Rosen/A50001.html', label: 'Kintetsu Nara' },
+    Tokyo: { pdf: 'https://www.tokyometro.jp/en/subwaymap/', label: 'Tokyo Metro EN' },
+    Séoul: { pdf: 'https://www.seoulmetro.co.kr/en/page.do?menuIdx=551', label: 'Seoul Metro EN' },
+    Busan: { pdf: 'http://www.humetro.busan.kr/eng/main/index.do', label: 'Humetro Busan EN' },
+  }
+
   return (
     <motion.div key="metro" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }}
-      style={{ background:'#f5f5f5', minHeight:'100vh' }}>
+      style={{ background:'#f5f5f5', minHeight:'100vh', display:'flex', flexDirection:'column' }}>
 
-      {/* Header */}
-      <div style={{ background:'#0b1f3a', padding:'1rem 1.2rem', color:'#fff', position:'sticky', top:0, zIndex:10 }}>
-        <div style={{ fontWeight:800, fontSize:'1.05rem', marginBottom:10 }}>🚇 Plans Métro</div>
-        <div style={{ display:'flex', gap:6, overflowX:'auto' }}>
+      {/* ── Header ── */}
+      <div style={{ background:'#0b1f3a', padding:'1rem 1.2rem', color:'#fff', position:'sticky', top:0, zIndex:20 }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:10 }}>
+          <div style={{ fontWeight:800, fontSize:'1.05rem' }}>🚇 Cartes & Transports</div>
+          <button onClick={locateMe}
+            style={{ padding:'5px 12px', borderRadius:20, fontSize:'0.75rem', fontWeight:700, border:'none', cursor:'pointer',
+              background: geoStatus==='ok' ? '#27ae60' : geoStatus==='loading' ? '#f39c12' : geoStatus==='denied' ? '#e74c3c' : 'rgba(255,255,255,0.2)',
+              color:'#fff' }}>
+            {geoStatus==='loading' ? '⏳ Localisation…' : geoStatus==='ok' ? '📍 Localisé' : geoStatus==='denied' ? '🚫 GPS refusé' : '📍 Me localiser'}
+          </button>
+        </div>
+
+        {/* Sélecteur villes */}
+        <div style={{ display:'flex', gap:6, overflowX:'auto', marginBottom:10 }}>
           {Object.keys(METRO_DATA).map(c => (
-            <button key={c} onClick={() => { setCity(c); setShowMap(false) }}
-              style={{ flexShrink:0, padding:'5px 14px', borderRadius:20, fontSize:'0.8rem', fontWeight:700, cursor:'pointer', border:'none', whiteSpace:'nowrap',
-                background: city===c ? METRO_DATA[c].color : 'rgba(255,255,255,0.15)',
-                color: '#fff' }}>
+            <button key={c} onClick={() => setCity(c)}
+              style={{ flexShrink:0, padding:'5px 14px', borderRadius:20, fontSize:'0.78rem', fontWeight:700, cursor:'pointer', border:'none',
+                background: city===c ? METRO_DATA[c].color : 'rgba(255,255,255,0.15)', color:'#fff' }}>
               {METRO_DATA[c].flag} {c}
             </button>
           ))}
         </div>
+
+        {/* Switch Plan / Carte */}
+        <div style={{ display:'flex', background:'rgba(255,255,255,0.1)', borderRadius:12, padding:3 }}>
+          {[
+            { v:'plan', label:'🗺️ Plan officiel' },
+            { v:'map',  label:'🌐 Carte interactive' },
+            { v:'lines',label:'🚉 Lignes & stations' },
+          ].map(({ v, label }) => (
+            <button key={v} onClick={() => setView(v)}
+              style={{ flex:1, padding:'6px 4px', borderRadius:10, fontSize:'0.75rem', fontWeight:700, border:'none', cursor:'pointer',
+                background: view===v ? '#fff' : 'transparent',
+                color: view===v ? '#0b1f3a' : '#fff' }}>
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div style={{ padding:'0.8rem', display:'flex', flexDirection:'column', gap:10 }}>
-
-        {/* Conseil + liens officiels */}
-        <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:`2px solid ${metro.color}` }}>
-          <div style={{ fontWeight:800, color:metro.color, fontSize:'0.95rem', marginBottom:6 }}>
-            {metro.flag} Métro {city}
-          </div>
-          <div style={{ fontSize:'0.83rem', color:'#444', lineHeight:1.6, marginBottom:12 }}>
-            💡 {metro.tip}
-          </div>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
-            <button onClick={() => open(metro.pdfUrl)}
-              style={{ background:metro.color, color:'#fff', border:'none', borderRadius:10, padding:'8px', cursor:'pointer', fontWeight:700, fontSize:'0.78rem' }}>
-              🗺️ Carte officielle
-            </button>
-            <button onClick={() => open(metro.googleMaps)}
-              style={{ background:'#4285f4', color:'#fff', border:'none', borderRadius:10, padding:'8px', cursor:'pointer', fontWeight:700, fontSize:'0.78rem' }}>
-              📍 Google Maps
-            </button>
-            <button onClick={() => open(metro.appStore)}
-              style={{ background:'#333', color:'#fff', border:'none', borderRadius:10, padding:'8px', cursor:'pointer', fontWeight:700, fontSize:'0.78rem' }}>
-              📱 App officielle
-            </button>
-            <button onClick={() => open(`https://maps.app.goo.gl/?q=${city}+metro+map`)}
-              style={{ background:'#ff6d00', color:'#fff', border:'none', borderRadius:10, padding:'8px', cursor:'pointer', fontWeight:700, fontSize:'0.78rem' }}>
-              🔍 Maps Transit
-            </button>
-          </div>
+      {/* Bandeau géoloc info */}
+      {geoStatus === 'ok' && userPos && (
+        <div style={{ background:'#27ae60', color:'#fff', padding:'6px 16px', fontSize:'0.78rem', fontWeight:700, textAlign:'center' }}>
+          📍 Position : {userPos.lat.toFixed(4)}°, {userPos.lng.toFixed(4)}° — visible sur la carte interactive
         </div>
+      )}
 
-        {/* Lignes principales */}
-        <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'1px solid #eee' }}>
-          <div style={{ fontWeight:800, color:'#0b1f3a', marginBottom:10 }}>🚉 Lignes principales</div>
-          {metro.lines.map(line => (
-            <div key={line.name} style={{ marginBottom:14 }}>
-              <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:6 }}>
-                <div style={{ background:line.color, color:'#fff', width:28, height:28, borderRadius:'50%',
-                  display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:'0.75rem', flexShrink:0 }}>
-                  {line.num}
-                </div>
-                <span style={{ fontWeight:700, fontSize:'0.88rem', color:'#0b1f3a' }}>{line.name}</span>
+      <div style={{ flex:1, display:'flex', flexDirection:'column' }}>
+
+        {/* ══ VUE PLAN IMAGE ══ */}
+        {view === 'plan' && (
+          <div style={{ padding:'0.8rem', display:'flex', flexDirection:'column', gap:10 }}>
+            {/* Tip */}
+            <div style={{ background:'#fff', borderRadius:12, padding:'0.9rem 1rem', border:`2px solid ${metro.color}` }}>
+              <div style={{ fontWeight:800, color:metro.color, marginBottom:6 }}>{metro.flag} {city} — Conseils transport</div>
+              <div style={{ fontSize:'0.83rem', color:'#444', lineHeight:1.6 }}>💡 {metro.tip}</div>
+            </div>
+
+            {/* Image plan */}
+            <div style={{ background:'#fff', borderRadius:14, overflow:'hidden', border:`2px solid ${metro.color}` }}>
+              <div style={{ background:metro.color, padding:'8px 12px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                <span style={{ color:'#fff', fontWeight:700, fontSize:'0.85rem' }}>Plan officiel {city}</span>
+                <button onClick={() => open(PLAN_LINKS[city].pdf)}
+                  style={{ background:'rgba(255,255,255,0.25)', border:'none', color:'#fff', borderRadius:8, padding:'4px 10px', fontSize:'0.72rem', fontWeight:700, cursor:'pointer' }}>
+                  ↗ Ouvrir
+                </button>
               </div>
-              {/* Ligne visuelle avec stations */}
-              <div style={{ display:'flex', alignItems:'center', overflowX:'auto', paddingBottom:4, gap:0 }}>
-                {line.stations.map((st, i) => (
-                  <React.Fragment key={st}>
-                    <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0 }}>
-                      <div style={{ width:10, height:10, borderRadius:'50%', background:line.color, border:'2px solid #fff', boxShadow:`0 0 0 2px ${line.color}` }} />
-                      <div style={{ fontSize:'0.6rem', color:'#555', marginTop:3, whiteSpace:'nowrap', maxWidth:60, textAlign:'center', lineHeight:1.2 }}>{st}</div>
-                    </div>
-                    {i < line.stations.length-1 && (
-                      <div style={{ height:3, width:20, background:line.color, flexShrink:0, marginBottom:14 }} />
-                    )}
-                  </React.Fragment>
-                ))}
+              <div style={{ overflow:'auto', maxHeight:'55vh', background:'#f9f9f9' }}>
+                <img
+                  src={PLAN_IMAGES[city]}
+                  alt={`Plan métro ${city}`}
+                  style={{ width:'100%', display:'block', minHeight:200 }}
+                  onError={(e) => {
+                    e.target.style.display = 'none'
+                    e.target.nextSibling.style.display = 'flex'
+                  }}
+                />
+                <div style={{ display:'none', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'3rem 1rem', gap:12 }}>
+                  <div style={{ fontSize:'2.5rem' }}>🗺️</div>
+                  <div style={{ fontWeight:700, color:'#666', textAlign:'center' }}>Plan non disponible en aperçu</div>
+                  <button onClick={() => open(PLAN_LINKS[city].pdf)}
+                    style={{ background:metro.color, color:'#fff', border:'none', borderRadius:10, padding:'10px 20px', fontWeight:700, cursor:'pointer', fontSize:'0.88rem' }}>
+                    Voir le plan officiel ↗
+                  </button>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
 
-        {/* Stations clés du voyage */}
-        <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'1px solid #eee' }}>
-          <div style={{ fontWeight:800, color:'#0b1f3a', marginBottom:10 }}>⭐ Stations clés pour votre voyage</div>
-          {metro.keyStations.map(st => (
-            <div key={st.name} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 0', borderBottom:'1px solid #f0f0f0' }}>
-              <div style={{ flex:1 }}>
-                <div style={{ fontWeight:700, fontSize:'0.88rem', color:'#0b1f3a' }}>{st.name}</div>
-                <div style={{ fontSize:'0.75rem', color:'#888', marginTop:1 }}>
-                  {st.lines.map(l => (
-                    <span key={l} style={{ background: metro.lines.find(ml=>ml.num===l)?.color||metro.color,
-                      color:'#fff', borderRadius:10, padding:'1px 7px', fontSize:'0.65rem', fontWeight:700, marginRight:4 }}>
-                      {l}
-                    </span>
-                  ))}
-                </div>
-                <div style={{ fontSize:'0.76rem', color:'#555', marginTop:2 }}>{st.note}</div>
-              </div>
-              <button onClick={() => open(`https://www.google.com/maps/search/${encodeURIComponent(st.name+' station '+city)}`)}
-                style={{ background:'#0b1f3a', color:'#fff', border:'none', borderRadius:8, padding:'5px 10px', cursor:'pointer', fontSize:'0.72rem', flexShrink:0, marginLeft:8 }}>
-                📍
+            {/* Boutons rapides */}
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
+              <button onClick={() => open(PLAN_LINKS[city].pdf)}
+                style={{ background:metro.color, color:'#fff', border:'none', borderRadius:10, padding:'10px', cursor:'pointer', fontWeight:700, fontSize:'0.8rem' }}>
+                🗺️ Plan officiel
+              </button>
+              <button onClick={() => open(`https://maps.app.goo.gl/?q=${encodeURIComponent(city+' metro')}`)}
+                style={{ background:'#4285f4', color:'#fff', border:'none', borderRadius:10, padding:'10px', cursor:'pointer', fontWeight:700, fontSize:'0.8rem' }}>
+                📍 Google Maps
+              </button>
+              <button onClick={() => open(metro.appStore)}
+                style={{ background:'#333', color:'#fff', border:'none', borderRadius:10, padding:'10px', cursor:'pointer', fontWeight:700, fontSize:'0.8rem' }}>
+                📱 App officielle
+              </button>
+              <button onClick={() => { setView('map'); if(geoStatus==='idle') locateMe() }}
+                style={{ background:'#27ae60', color:'#fff', border:'none', borderRadius:10, padding:'10px', cursor:'pointer', fontWeight:700, fontSize:'0.8rem' }}>
+                🌐 Carte interactive
               </button>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
 
+        {/* ══ VUE CARTE INTERACTIVE ══ */}
+        {view === 'map' && (
+          <div style={{ display:'flex', flexDirection:'column', flex:1 }}>
+            {/* Barre info */}
+            <div style={{ background:'#fff', padding:'8px 12px', display:'flex', justifyContent:'space-between', alignItems:'center', borderBottom:'1px solid #eee', gap:8, flexWrap:'wrap' }}>
+              <div style={{ fontSize:'0.78rem', color:'#555' }}>
+                Couche transport public OpenStreetMap
+                {geoStatus !== 'ok' && <span style={{ color:'#e67e22' }}> — Appuie sur 📍 pour te localiser</span>}
+              </div>
+              <button onClick={() => open(`https://www.openstreetmap.org/#map=14/${CITY_CENTERS[city].lat}/${CITY_CENTERS[city].lng}&layers=T`)}
+                style={{ background:'#0b1f3a', color:'#fff', border:'none', borderRadius:8, padding:'5px 10px', fontSize:'0.72rem', cursor:'pointer', fontWeight:700, whiteSpace:'nowrap' }}>
+                ↗ Ouvrir plein écran
+              </button>
+            </div>
+
+            {/* Iframe OSM */}
+            <div style={{ position:'relative', flex:1, minHeight:'55vh' }}>
+              <iframe
+                key={city + (userPos ? userPos.lat : 'no')}
+                src={buildMapUrl()}
+                style={{ width:'100%', height:'100%', minHeight:'55vh', border:'none', display:'block' }}
+                title={`Carte transport ${city}`}
+                loading="lazy"
+              />
+              {/* Overlay bouton recentrer */}
+              <div style={{ position:'absolute', bottom:16, right:12, display:'flex', flexDirection:'column', gap:8 }}>
+                <button onClick={locateMe}
+                  style={{ background:'#0b1f3a', color:'#fff', border:'none', borderRadius:50, width:44, height:44,
+                    display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.2rem', cursor:'pointer', boxShadow:'0 2px 8px rgba(0,0,0,0.3)' }}>
+                  📍
+                </button>
+                <button onClick={() => open(`https://www.google.com/maps/search/transport+station/@${CITY_CENTERS[city].lat},${CITY_CENTERS[city].lng},14z`)}
+                  style={{ background:metro.color, color:'#fff', border:'none', borderRadius:50, width:44, height:44,
+                    display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.2rem', cursor:'pointer', boxShadow:'0 2px 8px rgba(0,0,0,0.3)' }}>
+                  🚉
+                </button>
+              </div>
+            </div>
+
+            {/* Légende transport */}
+            <div style={{ background:'#fff', padding:'10px 12px', borderTop:'1px solid #eee', display:'flex', gap:12, overflowX:'auto', flexShrink:0 }}>
+              {[
+                { color:'#2979ff', label:'Métro' },
+                { color:'#e53935', label:'Bus' },
+                { color:'#43a047', label:'Tramway' },
+                { color:'#f57c00', label:'Train' },
+              ].map(({ color, label }) => (
+                <div key={label} style={{ display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
+                  <div style={{ width:14, height:5, background:color, borderRadius:3 }} />
+                  <span style={{ fontSize:'0.72rem', color:'#555' }}>{label}</span>
+                </div>
+              ))}
+              <div style={{ fontSize:'0.7rem', color:'#999', marginLeft:'auto', flexShrink:0 }}>© OpenStreetMap</div>
+            </div>
+
+            {/* Liens rapides Google Maps itinéraire */}
+            {geoStatus === 'ok' && userPos && (
+              <div style={{ background:'#f0f7ff', padding:'10px 12px', borderTop:'1px solid #dce8f5' }}>
+                <div style={{ fontWeight:700, fontSize:'0.8rem', color:'#0b1f3a', marginBottom:6 }}>🚀 Itinéraire depuis ma position</div>
+                <div style={{ display:'flex', gap:8, overflowX:'auto' }}>
+                  {metro.keyStations.slice(0,3).map(st => (
+                    <button key={st.name} onClick={() => open(`https://www.google.com/maps/dir/${userPos.lat},${userPos.lng}/${encodeURIComponent(st.name)}`)}
+                      style={{ flexShrink:0, background:metro.color, color:'#fff', border:'none', borderRadius:8, padding:'6px 10px', fontSize:'0.72rem', fontWeight:700, cursor:'pointer' }}>
+                      → {st.name.split(' (')[0]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ══ VUE LIGNES & STATIONS ══ */}
+        {view === 'lines' && (
+          <div style={{ padding:'0.8rem', display:'flex', flexDirection:'column', gap:10 }}>
+            {/* Lignes */}
+            <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'1px solid #eee' }}>
+              <div style={{ fontWeight:800, color:'#0b1f3a', marginBottom:12, fontSize:'0.95rem' }}>🚉 Lignes principales</div>
+              {metro.lines.map(line => (
+                <div key={line.name} style={{ marginBottom:16 }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:8 }}>
+                    <div style={{ background:line.color, color:'#fff', width:30, height:30, borderRadius:'50%',
+                      display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:'0.75rem', flexShrink:0 }}>
+                      {line.num}
+                    </div>
+                    <span style={{ fontWeight:700, fontSize:'0.88rem', color:'#0b1f3a' }}>{line.name}</span>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'center', overflowX:'auto', paddingBottom:6 }}>
+                    {line.stations.map((st, i) => (
+                      <React.Fragment key={st+i}>
+                        <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0 }}>
+                          <div style={{ width:11, height:11, borderRadius:'50%', background:line.color, border:'2px solid #fff', boxShadow:`0 0 0 2px ${line.color}` }} />
+                          <div style={{ fontSize:'0.58rem', color:'#555', marginTop:3, whiteSpace:'nowrap', maxWidth:55, textAlign:'center', lineHeight:1.2 }}>{st}</div>
+                        </div>
+                        {i < line.stations.length-1 && (
+                          <div style={{ height:3, width:22, background:line.color, flexShrink:0, marginBottom:14 }} />
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Stations clés */}
+            <div style={{ background:'#fff', borderRadius:14, padding:'1rem', border:'1px solid #eee' }}>
+              <div style={{ fontWeight:800, color:'#0b1f3a', marginBottom:10, fontSize:'0.95rem' }}>⭐ Stations clés pour votre voyage</div>
+              {metro.keyStations.map(st => (
+                <div key={st.name} style={{ display:'flex', gap:10, padding:'8px 0', borderBottom:'1px solid #f5f5f5', alignItems:'flex-start' }}>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontWeight:700, fontSize:'0.88rem', color:'#0b1f3a' }}>{st.name}</div>
+                    <div style={{ marginTop:3, display:'flex', flexWrap:'wrap', gap:4 }}>
+                      {st.lines.map(l => (
+                        <span key={l} style={{ background: metro.lines.find(ml=>ml.num===l)?.color||metro.color,
+                          color:'#fff', borderRadius:10, padding:'1px 8px', fontSize:'0.65rem', fontWeight:700 }}>
+                          {l}
+                        </span>
+                      ))}
+                    </div>
+                    <div style={{ fontSize:'0.76rem', color:'#666', marginTop:3 }}>{st.note}</div>
+                  </div>
+                  <div style={{ display:'flex', flexDirection:'column', gap:4, flexShrink:0 }}>
+                    <button onClick={() => open(`https://www.google.com/maps/search/${encodeURIComponent(st.name+' station')}`)}
+                      style={{ background:'#4285f4', color:'#fff', border:'none', borderRadius:7, padding:'5px 8px', cursor:'pointer', fontSize:'0.68rem', fontWeight:700 }}>
+                      Maps
+                    </button>
+                    {geoStatus==='ok' && userPos && (
+                      <button onClick={() => open(`https://www.google.com/maps/dir/${userPos.lat},${userPos.lng}/${encodeURIComponent(st.name)}`)}
+                        style={{ background:metro.color, color:'#fff', border:'none', borderRadius:7, padding:'5px 8px', cursor:'pointer', fontSize:'0.68rem', fontWeight:700 }}>
+                        ↗ Itinéraire
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Astuce paiement */}
+            <div style={{ background:`${metro.color}15`, borderRadius:14, padding:'1rem', border:`1px solid ${metro.color}40` }}>
+              <div style={{ fontWeight:700, color:metro.color, marginBottom:6, fontSize:'0.88rem' }}>💳 Paiement & cartes</div>
+              {city === 'Osaka' && <div style={{ fontSize:'0.82rem', color:'#444', lineHeight:1.6 }}>Suica ou ICOCA acceptés. Osaka 1-Day Pass ¥800. Distributeurs anglais dans toutes les stations.</div>}
+              {city === 'Kyoto' && <div style={{ fontSize:'0.82rem', color:'#444', lineHeight:1.6 }}>Bus 1-Day Pass ¥700. Suica accepté partout. Les bus sont souvent plus pratiques que le métro.</div>}
+              {city === 'Nara' && <div style={{ fontSize:'0.82rem', color:'#444', lineHeight:1.6 }}>Kintetsu depuis Osaka Namba (30 min, ¥560). JR depuis Kyoto (45 min, ¥720). La ville se visite à pied.</div>}
+              {city === 'Tokyo' && <div style={{ fontSize:'0.82rem', color:'#444', lineHeight:1.6 }}>Suica ou Pasmo (rechargeable). Yamanote Line JR à ¥140–210. Tokyo Metro 1-Day ¥600.</div>}
+              {city === 'Séoul' && <div style={{ fontSize:'0.82rem', color:'#444', lineHeight:1.6 }}>T-money Card ₩2500 + recharge. Tarif de base ₩1400 (1.25km). Correspondances gratuites dans les 30 min.</div>}
+              {city === 'Busan' && <div style={{ fontSize:'0.82rem', color:'#444', lineHeight:1.6 }}>T-money ou carte Busan acceptée. Tarif ₩1500 base. Taxi recommandé pour Gamcheon Culture Village.</div>}
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   )
 }
+
 
 
 function loadNotifData(setNotifPos, setNotifData) {
