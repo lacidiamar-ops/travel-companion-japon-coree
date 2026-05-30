@@ -1300,6 +1300,7 @@ function CarnetPage() {
   const [editMode, setEditMode] = useState(false)
   const [edits, setEdits] = useLocalStorage('carnetEdits', {})
   const [savedFlash, setSavedFlash] = useState(false)
+  const [draftText, setDraftText] = useState(null) // texte brut en cours d'édition
 
   // Fusionne les éditions locales avec les sections originales
   const mergedSections = wordSections.map(s => {
@@ -1323,53 +1324,75 @@ function CarnetPage() {
       )
     : mergedSections
 
-  // Helpers d'édition
-  const updateSection = (changes) => {
+  // Quand on bascule en mode édition, initialiser le draft avec le texte du bloc
+  const toggleEditMode = () => {
+    if (!editMode) {
+      // Passer en mode édition : joindre tous les paragraphes en un seul bloc
+      setDraftText((section?.paragraphs || []).join('\n'))
+    } else {
+      // Quitter le mode édition : sauvegarder le bloc complet
+      if (draftText !== null) {
+        const newParas = draftText.split('\n')
+        setEdits(prev => ({
+          ...prev,
+          [selected]: {
+            ...(prev[selected] || {}),
+            title: prev[selected]?.title !== undefined ? prev[selected].title : section.title,
+            paragraphs: newParas,
+          }
+        }))
+        setSavedFlash(true)
+        setTimeout(() => setSavedFlash(false), 1800)
+      }
+      setDraftText(null)
+    }
+    setEditMode(v => !v)
+  }
+
+  // Changer de section en mode édition : sauvegarder d'abord
+  const selectSection = (id) => {
+    if (editMode && draftText !== null) {
+      const newParas = draftText.split('\n')
+      setEdits(prev => ({
+        ...prev,
+        [selected]: {
+          ...(prev[selected] || {}),
+          title: prev[selected]?.title !== undefined ? prev[selected].title : section.title,
+          paragraphs: newParas,
+        }
+      }))
+    }
+    setSelected(id)
+    setSearch('')
+    // Mettre à jour le draft pour la nouvelle section
+    if (editMode) {
+      const newSect = mergedSections.find(s => s.id === id) || mergedSections[0]
+      setDraftText((newSect?.paragraphs || []).join('\n'))
+    }
+  }
+
+  const updateTitle = (val) => {
     setEdits(prev => ({
       ...prev,
       [selected]: {
         ...(prev[selected] || {}),
-        title: changes.title !== undefined ? changes.title : (prev[selected]?.title !== undefined ? prev[selected].title : section.title),
-        paragraphs: changes.paragraphs !== undefined ? changes.paragraphs : (prev[selected]?.paragraphs !== undefined ? prev[selected].paragraphs : section.paragraphs),
+        title: val,
+        paragraphs: prev[selected]?.paragraphs !== undefined ? prev[selected].paragraphs : section.paragraphs,
       }
     }))
-    setSavedFlash(true)
-    setTimeout(() => setSavedFlash(false), 1200)
-  }
-
-  const updateParagraph = (i, value) => {
-    const newParas = [...(section.paragraphs || [])]
-    newParas[i] = value
-    updateSection({ paragraphs: newParas })
-  }
-
-  const addParagraph = (afterIdx) => {
-    const newParas = [...(section.paragraphs || [])]
-    newParas.splice(afterIdx + 1, 0, '')
-    updateSection({ paragraphs: newParas })
-  }
-
-  const deleteParagraph = (i) => {
-    const newParas = [...(section.paragraphs || [])]
-    newParas.splice(i, 1)
-    updateSection({ paragraphs: newParas })
-  }
-
-  const moveParagraph = (i, dir) => {
-    const newParas = [...(section.paragraphs || [])]
-    const target = i + dir
-    if (target < 0 || target >= newParas.length) return
-    ;[newParas[i], newParas[target]] = [newParas[target], newParas[i]]
-    updateSection({ paragraphs: newParas })
   }
 
   const restoreOriginal = () => {
-    if (!confirm('Restaurer le contenu original de cette section ? Vos modifications seront perdues.')) return
+    if (!confirm('Restaurer le contenu original de cette journée ? Vos modifications seront perdues.')) return
     setEdits(prev => {
       const next = { ...prev }
       delete next[selected]
       return next
     })
+    if (editMode) {
+      const orig = wordSections.find(s => s.id === selected)
+      setDraftText((orig?.paragraphs || []).join('\n'))
+    }
   }
 
   return (
@@ -1380,16 +1403,23 @@ function CarnetPage() {
       <div style={{ background:'#0b1f3a', padding:'1rem 1.2rem', color:'#fff', position:'sticky', top:0, zIndex:10 }}>
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8, gap:8 }}>
           <div style={{ fontWeight:800, fontSize:'1.05rem' }}>📖 Carnet de voyage</div>
-          <button onClick={() => setEditMode(v => !v)}
+          <button onClick={toggleEditMode}
             style={{ padding:'5px 12px', borderRadius:20, fontSize:'0.78rem', fontWeight:700, cursor:'pointer', border:'none',
               background: editMode ? '#e1306c' : 'rgba(255,255,255,0.2)', color:'#fff' }}>
-            {editMode ? '✓ Terminer' : '✏️ Modifier'}
+            {editMode ? '💾 Enregistrer' : '✏️ Modifier'}
           </button>
         </div>
-        <input value={search} onChange={e => setSearch(e.target.value)}
-          placeholder="Rechercher un lieu, une activité…"
-          style={{ width:'100%', padding:'8px 12px', borderRadius:10, border:'none', fontSize:'0.85rem',
-            background:'rgba(255,255,255,0.15)', color:'#fff', outline:'none', boxSizing:'border-box' }} />
+        {!editMode && (
+          <input value={search} onChange={e => setSearch(e.target.value)}
+            placeholder="Rechercher un lieu, une activité…"
+            style={{ width:'100%', padding:'8px 12px', borderRadius:10, border:'none', fontSize:'0.85rem',
+              background:'rgba(255,255,255,0.15)', color:'#fff', outline:'none', boxSizing:'border-box' }} />
+        )}
+        {editMode && (
+          <div style={{ fontSize:'0.75rem', opacity:0.8, textAlign:'center', padding:'4px 0' }}>
+            ✍️ Éditez le bloc complet de la journée — une ligne par paragraphe
+          </div>
+        )}
       </div>
 
       {/* ── Sommaire scrollable ── */}
@@ -1397,7 +1427,7 @@ function CarnetPage() {
         {filtered.map(s => {
           const wasEdited = !!edits[s.id]
           return (
-            <button key={s.id} onClick={() => { setSelected(s.id); setSearch('') }}
+            <button key={s.id} onClick={() => selectSection(s.id)}
               style={{ flexShrink:0, padding:'5px 12px', borderRadius:20, fontSize:'0.75rem', fontWeight:700, cursor:'pointer', border:'none',
                 background: selected===s.id ? '#0b1f3a' : '#f0f0f0',
                 color: selected===s.id ? '#fff' : '#444' }}>
@@ -1409,17 +1439,18 @@ function CarnetPage() {
 
       {/* Bandeau enregistrement */}
       {savedFlash && (
-        <div style={{ background:'#27ae60', color:'#fff', textAlign:'center', padding:'6px', fontSize:'0.8rem', fontWeight:700 }}>
-          ✓ Enregistré sur cet appareil
+        <div style={{ background:'#27ae60', color:'#fff', textAlign:'center', padding:'8px', fontSize:'0.85rem', fontWeight:700 }}>
+          ✓ Journée enregistrée sur cet appareil
         </div>
       )}
 
       {/* ── Contenu pleine page ── */}
       <div style={{ flex:1, padding:'1.2rem 1rem 2rem', maxWidth:680, margin:'0 auto', width:'100%', boxSizing:'border-box' }}>
+
         {/* Titre — éditable en mode édition */}
         {editMode ? (
           <input value={section?.title || ''}
-            onChange={e => updateSection({ title: e.target.value })}
+            onChange={e => updateTitle(e.target.value)}
             style={{ fontSize:'1.2rem', fontWeight:800, color:'#0b1f3a', marginBottom:4, lineHeight:1.3, width:'100%', border:'2px solid #e1306c', borderRadius:8, padding:'6px 10px', background:'#fff9fb', boxSizing:'border-box' }} />
         ) : (
           <h2 style={{ fontSize:'1.2rem', fontWeight:800, color:'#0b1f3a', marginBottom:4, lineHeight:1.3 }}>{section?.title}</h2>
@@ -1427,9 +1458,9 @@ function CarnetPage() {
         <div style={{ height:3, width:60, background:'#e1306c', borderRadius:4, marginBottom:16 }} />
 
         {/* Indicateur édité + bouton restaurer */}
-        {isEdited && (
+        {isEdited && !editMode && (
           <div style={{ background:'#fff9fb', border:'1px dashed #e1306c', borderRadius:8, padding:'8px 12px', marginBottom:14, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:8 }}>
-            <span style={{ fontSize:'0.78rem', color:'#e1306c', fontWeight:700 }}>✏️ Section modifiée localement</span>
+            <span style={{ fontSize:'0.78rem', color:'#e1306c', fontWeight:700 }}>✏️ Journée modifiée</span>
             <button onClick={restoreOriginal}
               style={{ padding:'4px 10px', borderRadius:8, border:'1px solid #e1306c', background:'#fff', color:'#e1306c', fontSize:'0.75rem', fontWeight:700, cursor:'pointer' }}>
               ↩ Restaurer l'original
@@ -1437,63 +1468,60 @@ function CarnetPage() {
           </div>
         )}
 
-        {/* Paragraphes */}
-        <div>
-          {section?.paragraphs?.map((p, i) => {
-            const isH = /^(📅|✈️|🚄|🏯|🗾|Jour\s|JOUR|Programme|Le matin|L'après|La soirée|Hébergement|Budget|Transport|Activité|Repas)/.test(p)
-            const isEmoji = /^[📍🍜🚌🎌🌸🏮⛩️🎋🌊🏖️🏔️💴💶🕐]/.test(p)
-
-            if (editMode) {
+        {/* ── MODE ÉDITION : grand textarea par bloc ── */}
+        {editMode ? (
+          <div style={{ background:'#fff', border:'2px solid #e1306c', borderRadius:12, padding:'4px', boxShadow:'0 2px 12px rgba(225,48,108,0.10)' }}>
+            <textarea
+              value={draftText || ''}
+              onChange={e => setDraftText(e.target.value)}
+              style={{
+                width:'100%', minHeight:'55vh', border:'none', outline:'none',
+                resize:'vertical', fontSize:'0.92rem', lineHeight:1.8, color:'#222',
+                boxSizing:'border-box', background:'transparent', fontFamily:'inherit',
+                padding:'12px'
+              }}
+              placeholder="Rédigez ici le contenu de la journée…
+Chaque ligne deviendra un paragraphe dans la vue normale."
+            />
+            <div style={{ borderTop:'1px solid #f0e0e4', padding:'8px 12px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+              <span style={{ fontSize:'0.72rem', color:'#aaa' }}>
+                {(draftText || '').split('\n').filter(l => l.trim()).length} lignes
+              </span>
+              <button onClick={restoreOriginal}
+                style={{ padding:'4px 10px', borderRadius:8, border:'1px solid #ccc', background:'#fff', color:'#888', fontSize:'0.72rem', cursor:'pointer' }}>
+                ↩ Restaurer l'original
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* ── MODE LECTURE : affichage paragraphes ── */
+          <div>
+            {section?.paragraphs?.map((p, i) => {
+              const isH = /^(📅|✈️|🚄|🏯|🗾|Jour\s|JOUR|Programme|Le matin|L'après|La soirée|Hébergement|Budget|Transport|Activité|Repas)/.test(p)
+              const isEmoji = /^[📍🍜🚌🎌🌸🏮⛩️🎋🌊🏖️🏔️💴💶🕐]/.test(p)
+              if (!p.trim()) return null
               return (
-                <div key={i} style={{ marginBottom:10, background:'#fff', border:'1px solid #e0e0e0', borderRadius:8, padding:'8px' }}>
-                  <textarea value={p}
-                    onChange={e => updateParagraph(i, e.target.value)}
-                    rows={Math.max(2, Math.ceil((p || '').length / 60))}
-                    style={{ width:'100%', border:'none', outline:'none', resize:'vertical', fontSize:'0.9rem', lineHeight:1.5, color:'#333', boxSizing:'border-box', background:'transparent', fontFamily:'inherit' }} />
-                  <div style={{ display:'flex', gap:6, marginTop:6, justifyContent:'flex-end' }}>
-                    <button onClick={() => moveParagraph(i, -1)} disabled={i===0}
-                      style={{ padding:'4px 8px', borderRadius:6, border:'1px solid #ddd', background: i===0?'#f5f5f5':'#fff', color: i===0?'#bbb':'#666', fontSize:'0.75rem', cursor: i===0?'not-allowed':'pointer' }}>↑</button>
-                    <button onClick={() => moveParagraph(i, 1)} disabled={i===section.paragraphs.length-1}
-                      style={{ padding:'4px 8px', borderRadius:6, border:'1px solid #ddd', background: i===section.paragraphs.length-1?'#f5f5f5':'#fff', color: i===section.paragraphs.length-1?'#bbb':'#666', fontSize:'0.75rem', cursor: i===section.paragraphs.length-1?'not-allowed':'pointer' }}>↓</button>
-                    <button onClick={() => addParagraph(i)}
-                      style={{ padding:'4px 8px', borderRadius:6, border:'1px solid #27ae60', background:'#fff', color:'#27ae60', fontSize:'0.75rem', cursor:'pointer', fontWeight:700 }}>+ Ajouter</button>
-                    <button onClick={() => deleteParagraph(i)}
-                      style={{ padding:'4px 8px', borderRadius:6, border:'1px solid #e74c3c', background:'#fff', color:'#e74c3c', fontSize:'0.75rem', cursor:'pointer', fontWeight:700 }}>🗑</button>
-                  </div>
-                </div>
+                <p key={i} style={{
+                  fontSize: isH ? '1rem' : '0.9rem',
+                  fontWeight: isH ? 700 : 400,
+                  color: isH ? '#0b1f3a' : '#444',
+                  lineHeight: 1.7,
+                  marginBottom: isH ? 12 : 8,
+                  borderLeft: isH ? '3px solid #e1306c' : 'none',
+                  background: isH ? '#fff9fb' : 'transparent',
+                  borderRadius: isH ? 6 : 0,
+                  padding: isH ? '6px 10px' : (isEmoji ? '0 0 0 4px' : '0'),
+                  whiteSpace: 'pre-wrap',
+                }}>{p}</p>
               )
-            }
-
-            if (!p.trim()) return null
-            return (
-              <p key={i} style={{
-                fontSize: isH ? '1rem' : '0.9rem',
-                fontWeight: isH ? 700 : 400,
-                color: isH ? '#0b1f3a' : '#444',
-                lineHeight: 1.7,
-                marginBottom: isH ? 12 : 8,
-                borderLeft: isH ? '3px solid #e1306c' : 'none',
-                background: isH ? '#fff9fb' : 'transparent',
-                borderRadius: isH ? 6 : 0,
-                padding: isH ? '6px 10px' : (isEmoji ? '0 0 0 4px' : '0'),
-                whiteSpace: 'pre-wrap',
-              }}>{p}</p>
-            )
-          })}
-
-          {/* En mode édition : bouton ajouter à la fin */}
-          {editMode && (
-            <button onClick={() => addParagraph((section.paragraphs?.length || 1) - 1)}
-              style={{ width:'100%', padding:'12px', borderRadius:10, border:'2px dashed #0b1f3a', background:'transparent', color:'#0b1f3a', fontSize:'0.85rem', fontWeight:700, cursor:'pointer', marginTop:10 }}>
-              + Ajouter un paragraphe
-            </button>
-          )}
-        </div>
+            })}
+          </div>
+        )}
       </div>
 
       {/* ── Navigation bas ── */}
       <div style={{ position:'sticky', bottom:0, background:'#fff', borderTop:'1px solid #eee', padding:'10px 16px', display:'flex', justifyContent:'space-between', gap:10 }}>
-        <button onClick={() => { if(idx > 0) setSelected(mergedSections[idx-1].id) }}
+        <button onClick={() => { if(idx > 0) selectSection(mergedSections[idx-1].id) }}
           disabled={idx === 0}
           style={{ flex:1, padding:'10px', borderRadius:12, border:'1px solid #ddd', background: idx===0?'#f5f5f5':'#0b1f3a', color: idx===0?'#bbb':'#fff', fontWeight:700, fontSize:'0.85rem', cursor: idx===0?'not-allowed':'pointer' }}>
           ← Précédent
@@ -1501,7 +1529,7 @@ function CarnetPage() {
         <div style={{ display:'flex', alignItems:'center', fontSize:'0.75rem', color:'#888' }}>
           {idx+1} / {mergedSections.length}
         </div>
-        <button onClick={() => { if(idx < mergedSections.length-1) setSelected(mergedSections[idx+1].id) }}
+        <button onClick={() => { if(idx < mergedSections.length-1) selectSection(mergedSections[idx+1].id) }}
           disabled={idx === mergedSections.length-1}
           style={{ flex:1, padding:'10px', borderRadius:12, border:'1px solid #ddd', background: idx===mergedSections.length-1?'#f5f5f5':'#0b1f3a', color: idx===mergedSections.length-1?'#bbb':'#fff', fontWeight:700, fontSize:'0.85rem', cursor: idx===mergedSections.length-1?'not-allowed':'pointer' }}>
           Suivant →
