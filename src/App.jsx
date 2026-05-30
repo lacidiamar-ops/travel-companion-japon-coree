@@ -206,6 +206,7 @@ const quickLinks = [
   { key: 'budget',   label: 'Budget',   icon: Wallet,       color: 'pink'   },
   { key: 'carnet',   label: 'Carnet',   icon: BookOpen,     color: 'amber'  },
   { key: 'tools',    label: 'Outils',   icon: Briefcase,    color: 'teal'   },
+  { key: 'metro',    label: 'Métro',    icon: MapPin,       color: 'violet' },
 ]
 // Onglets secondaires accessibles via le menu hamburger uniquement
 const secondaryLinks = [
@@ -220,7 +221,6 @@ const secondaryLinks = [
   { key: 'shopping',  label: 'Shopping',       icon: ShoppingBag,color: 'orange' },
   { key: 'sante',     label: 'Santé & Urgence',icon: HeartPulse, color: 'red'    },
   { key: 'sim',       label: 'SIM & Wifi',     icon: Wifi,       color: 'teal'   },
-  { key: 'metro',     label: 'Plans Métro',    icon: MapPin,     color: 'violet'  },
 ]
 
 const usefulInfo = [
