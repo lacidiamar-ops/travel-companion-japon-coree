@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { wordSections } from './wordContent.js'
+import { loadEditsFromCloud, saveEditToCloud, deleteEditFromCloud } from './supabase.js'
 import {
   CalendarDays, Map, UtensilsCrossed, Sparkles, Wallet, Briefcase, BookOpen,
   Menu, Bell, SunMedium, ChevronRight, MapPin, Clock3, Footprints,
@@ -1301,6 +1302,31 @@ function CarnetPage() {
   const [edits, setEdits] = useLocalStorage('carnetEdits', {})
   const [savedFlash, setSavedFlash] = useState(false)
   const [draftText, setDraftText] = useState(null) // texte brut en cours d'édition
+  const [syncStatus, setSyncStatus] = useState('idle') // idle | loading | synced | error
+
+  // ── Chargement initial depuis Supabase ──
+  useEffect(() => {
+    setSyncStatus('loading')
+    loadEditsFromCloud().then(cloudEdits => {
+      if (cloudEdits) {
+        // Fusion : cloud gagne sur local si plus récent
+        setEdits(prev => {
+          const merged = { ...prev }
+          for (const [id, ce] of Object.entries(cloudEdits)) {
+            const localUpdated = prev[id]?.updated_at
+            const cloudUpdated = ce.updated_at
+            if (!localUpdated || cloudUpdated > localUpdated) {
+              merged[id] = ce
+            }
+          }
+          return merged
+        })
+        setSyncStatus('synced')
+      } else {
+        setSyncStatus('error')
+      }
+    })
+  }, [])
 
   // Fusionne les éditions locales avec les sections originales
   const mergedSections = wordSections.map(s => {
@@ -1333,14 +1359,20 @@ function CarnetPage() {
       // Quitter le mode édition : sauvegarder le bloc complet
       if (draftText !== null) {
         const newParas = draftText.split('\n')
+        const newTitle = edits[selected]?.title !== undefined ? edits[selected].title : section.title
         setEdits(prev => ({
           ...prev,
           [selected]: {
             ...(prev[selected] || {}),
-            title: prev[selected]?.title !== undefined ? prev[selected].title : section.title,
+            title: newTitle,
             paragraphs: newParas,
+            updated_at: new Date().toISOString(),
           }
         }))
+        setSyncStatus('loading')
+        saveEditToCloud(selected, newTitle, newParas).then(ok => {
+          setSyncStatus(ok ? 'synced' : 'error')
+        })
         setSavedFlash(true)
         setTimeout(() => setSavedFlash(false), 1800)
       }
@@ -1353,14 +1385,17 @@ function CarnetPage() {
   const selectSection = (id) => {
     if (editMode && draftText !== null) {
       const newParas = draftText.split('\n')
+      const newTitle = edits[selected]?.title !== undefined ? edits[selected].title : section.title
       setEdits(prev => ({
         ...prev,
         [selected]: {
           ...(prev[selected] || {}),
-          title: prev[selected]?.title !== undefined ? prev[selected].title : section.title,
+          title: newTitle,
           paragraphs: newParas,
+          updated_at: new Date().toISOString(),
         }
       }))
+      saveEditToCloud(selected, newTitle, newParas)
     }
     setSelected(id)
     setSearch('')
@@ -1389,6 +1424,7 @@ function CarnetPage() {
       delete next[selected]
       return next
     })
+    deleteEditFromCloud(selected)
     if (editMode) {
       const orig = wordSections.find(s => s.id === selected)
       setDraftText((orig?.paragraphs || []).join('\n'))
@@ -1437,10 +1473,20 @@ function CarnetPage() {
         })}
       </div>
 
-      {/* Bandeau enregistrement */}
+      {/* Bandeau enregistrement + statut sync */}
       {savedFlash && (
         <div style={{ background:'#27ae60', color:'#fff', textAlign:'center', padding:'8px', fontSize:'0.85rem', fontWeight:700 }}>
-          ✓ Journée enregistrée sur cet appareil
+          ✓ Journée enregistrée et synchronisée ☁️
+        </div>
+      )}
+      {!savedFlash && syncStatus === 'loading' && (
+        <div style={{ background:'#f39c12', color:'#fff', textAlign:'center', padding:'5px', fontSize:'0.75rem', fontWeight:700 }}>
+          ☁️ Synchronisation…
+        </div>
+      )}
+      {!savedFlash && syncStatus === 'error' && (
+        <div style={{ background:'#e74c3c', color:'#fff', textAlign:'center', padding:'5px', fontSize:'0.75rem', fontWeight:700 }}>
+          ⚠️ Hors-ligne — modifications sauvées localement
         </div>
       )}
 
