@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { wordSections } from './wordContent.js'
-import { loadEditsFromCloud, saveEditToCloud, deleteEditFromCloud } from './supabase.js'
+import { loadEditsFromCloud, saveEditToCloud, deleteEditFromCloud,
+  loadExpensesFromCloud, saveExpenseToCloud, deleteExpenseFromCloud,
+  loadHotelsFromCloud, saveHotelToCloud, deleteHotelFromCloud,
+  loadBudgetConfigFromCloud, saveBudgetConfigToCloud } from './supabase.js'
 import {
   CalendarDays, Map, UtensilsCrossed, Sparkles, Wallet, Briefcase, BookOpen,
   Menu, Bell, SunMedium, ChevronRight, MapPin, Clock3, Footprints,
@@ -625,74 +628,144 @@ function ChatGPTPage() {
       ))}
 
       {/* Astuce */}
-      <div style={{ background:'#fffbea', border:'1px solid #f0d060', borderRadius:12, padding:'0.9rem 1.1rem', fontSize:'0.82rem', color:'#7a6010' }}>
-        <b>💡 Astuce :</b> Copie le prompt → ouvre ChatGPT → colle-le. Pour la photo, appuie sur l'icône 📎 dans ChatGPT pour ajouter ton image.
-      </div>
-
-    </motion.div>
-  )
-}
-
-function BudgetPage() {
-  // ── Constantes stables (hors du render) ──
+      <div style={{ background:'#fffbea', border:'1px solid #f0d060', borderRadius:12, padding:'0.9rem 1.1rem', fontSize:'0.82rem', color:'#7a6010' function BudgetPage() {
   const ZONE_CURRENCY = { Japon:{code:'JPY',sym:'¥'}, Corée:{code:'KRW',sym:'₩'}, Europe:{code:'EUR',sym:'€'} }
   const CATEGORIES    = ['Restaurant','Transport','Visite','Shopping','Hôtel','Snack','Autre']
-  const ENV_LIST      = ['Restauration','Transport','Loisirs']
-  const CAT_TO_ENV    = { Restaurant:'Restauration', Snack:'Restauration', Transport:'Transport', Visite:'Loisirs', Shopping:'Loisirs', Hôtel:'Loisirs', Autre:'Loisirs' }
-  const ENV_COLORS    = { Restauration:'#e8523a', Transport:'#3a7bd5', Loisirs:'#27ae60' }
-  const ENV_EMOJI     = { Restauration:'🍜', Transport:'🚆', Loisirs:'🎌' }
+  const ENV_LIST      = ['Restauration','Transport','Loisirs','Hébergement']
+  const CAT_TO_ENV    = { Restaurant:'Restauration', Snack:'Restauration', Transport:'Transport', Visite:'Loisirs', Shopping:'Loisirs', Hôtel:'Hébergement', Autre:'Loisirs' }
+  const ENV_COLORS    = { Restauration:'#e8523a', Transport:'#3a7bd5', Loisirs:'#27ae60', Hébergement:'#8e44ad' }
+  const ENV_EMOJI     = { Restauration:'🍜', Transport:'🚆', Loisirs:'🎌', Hébergement:'🏨' }
+  const VILLES        = ['Osaka','Kyoto','Nara','Tokyo','Séoul','Busan']
 
-  // ── États localStorage ──
-  const [rates,     setRates]     = useLocalStorage('budget_rates',     { JPY:0.0061, KRW:0.00064, EUR:1 })
-  const [expenses,  setExpenses]  = useLocalStorage('budget_items',     [])
-  const [envBudgets,setEnvBudgets]= useLocalStorage('budget_envelopes', { Restauration:1200, Transport:800, Loisirs:600 })
-
-  // ── UI states ──
-  const [showRates, setShowRates] = useState(false)
+  // ── États locaux ──
+  const [rates,      setRates]      = useLocalStorage('budget_rates',     { JPY:0.0061, KRW:0.00064, EUR:1 })
+  const [envBudgets, setEnvBudgets] = useLocalStorage('budget_envelopes', { Restauration:1200, Transport:800, Loisirs:600, Hébergement:2000 })
+  const [expenses,   setExpenses]   = useState([])
+  const [hotels,     setHotels]     = useState([])
+  const [syncStatus, setSyncStatus] = useState('loading')
+  const [activeTab,  setActiveTab]  = useState('depenses') // 'depenses' | 'hebergement' | 'enveloppes'
+  const [showRates,  setShowRates]  = useState(false)
   const [form, setForm] = useState({
     date: new Date().toISOString().slice(0,10), pays:'Japon', categorie:'Restaurant', label:'', amount:''
   })
+  const [hotelForm, setHotelForm] = useState({
+    ville:'Tokyo', nom:'', dates:'', montant_eur:'', devise:'EUR', montant_local:'', paye:false, notes:''
+  })
+  const [showHotelForm, setShowHotelForm] = useState(false)
+  const [lastSync, setLastSync] = useState(null)
 
-  // ── Calculs dérivés — toujours à jour ──
+  // ── Chargement Supabase au démarrage ──
+  useEffect(() => {
+    const load = async () => {
+      setSyncStatus('loading')
+      const [cloudExp, cloudHotels] = await Promise.all([
+        loadExpensesFromCloud(),
+        loadHotelsFromCloud(),
+      ])
+      if (cloudExp !== null) setExpenses(cloudExp)
+      if (cloudHotels !== null) setHotels(cloudHotels)
+      setSyncStatus(cloudExp !== null ? 'synced' : 'error')
+      setLastSync(new Date())
+    }
+    load()
+    // Refresh toutes les 30s pour voir les ajouts des autres
+    const interval = setInterval(load, 30000)
+    return () => clearInterval(interval)
+  }, [])
+
+  // ── Calculs ──
   const toEUR = (amount, pays) => {
     const code = ZONE_CURRENCY[pays]?.code ?? 'EUR'
     return Math.round(parseFloat(amount) * (Number(rates[code]) || 1) * 100) / 100
   }
 
-  // Dépensé par enveloppe (robuste : gère les anciennes dépenses sans .eur)
-  const spentByEnv = (env) =>
-    expenses
+  const spentByEnv = (env) => {
+    let total = expenses
       .filter(x => (CAT_TO_ENV[x.categorie] || 'Loisirs') === env)
-      .reduce((s, x) => s + (Number(x.eur) || Number(x.amount) || 0), 0)
+      .reduce((s, x) => s + (Number(x.eur) || 0), 0)
+    if (env === 'Hébergement') {
+      total += hotels
+        .filter(h => h.paye)
+        .reduce((s, h) => s + (Number(h.montant_eur) || 0), 0)
+    }
+    return total
+  }
 
-  const totalBudget = ENV_LIST.reduce((s, e) => s + (Number(envBudgets[e]) || 0), 0)
-  const totalSpent  = ENV_LIST.reduce((s, e) => s + spentByEnv(e), 0)
-  const totalLeft   = totalBudget - totalSpent
+  const hotelTotal    = hotels.reduce((s, h) => s + (Number(h.montant_eur) || 0), 0)
+  const hotelPaid     = hotels.filter(h => h.paye).reduce((s, h) => s + (Number(h.montant_eur) || 0), 0)
+  const hotelPending  = hotelTotal - hotelPaid
 
-  // ── Ajouter une dépense ──
-  const addExpense = () => {
+  const totalBudget   = ENV_LIST.reduce((s, e) => s + (Number(envBudgets[e]) || 0), 0)
+  const totalSpent    = ENV_LIST.reduce((s, e) => s + spentByEnv(e), 0)
+  const totalLeft     = totalBudget - totalSpent
+
+  // ── Ajouter dépense ──
+  const addExpense = async () => {
     const raw = parseFloat(form.amount)
     if (!form.label.trim() || isNaN(raw) || raw <= 0) return
     const eurVal = toEUR(raw, form.pays)
-    setExpenses(prev => [{
-      id: Date.now(), date: form.date, pays: form.pays,
+    const newExp = {
+      id: `exp_${Date.now()}_${Math.random().toString(36).slice(2,7)}`,
+      date: form.date, pays: form.pays,
       categorie: form.categorie, label: form.label.trim(),
       amount: raw, devise: ZONE_CURRENCY[form.pays].code, eur: eurVal,
-    }, ...prev])
+      added_by: 'famille', created_at: new Date().toISOString(),
+    }
+    setExpenses(prev => [newExp, ...prev])
     setForm(f => ({ ...f, label:'', amount:'' }))
+    setSyncStatus('loading')
+    const ok = await saveExpenseToCloud(newExp)
+    setSyncStatus(ok ? 'synced' : 'error')
   }
 
-  const removeExpense = (id) => setExpenses(prev => prev.filter(x => x.id !== id))
+  const removeExpense = async (id) => {
+    setExpenses(prev => prev.filter(x => x.id !== id))
+    await deleteExpenseFromCloud(id)
+  }
+
+  // ── Ajouter hôtel ──
+  const addHotel = async () => {
+    if (!hotelForm.nom.trim() || !hotelForm.montant_eur) return
+    const newHotel = {
+      id: `hotel_${Date.now()}_${Math.random().toString(36).slice(2,7)}`,
+      ville: hotelForm.ville,
+      nom: hotelForm.nom.trim(),
+      dates: hotelForm.dates.trim(),
+      montant_eur: parseFloat(hotelForm.montant_eur) || 0,
+      devise: hotelForm.devise,
+      montant_local: parseFloat(hotelForm.montant_local) || 0,
+      paye: hotelForm.paye,
+      notes: hotelForm.notes.trim(),
+      created_at: new Date().toISOString(),
+    }
+    setHotels(prev => [...prev, newHotel])
+    setHotelForm({ ville:'Tokyo', nom:'', dates:'', montant_eur:'', devise:'EUR', montant_local:'', paye:false, notes:'' })
+    setShowHotelForm(false)
+    setSyncStatus('loading')
+    const ok = await saveHotelToCloud(newHotel)
+    setSyncStatus(ok ? 'synced' : 'error')
+  }
+
+  const toggleHotelPaid = async (hotel) => {
+    const updated = { ...hotel, paye: !hotel.paye }
+    setHotels(prev => prev.map(h => h.id === hotel.id ? updated : h))
+    await saveHotelToCloud(updated)
+  }
+
+  const removeHotel = async (id) => {
+    setHotels(prev => prev.filter(h => h.id !== id))
+    await deleteHotelFromCloud(id)
+  }
 
   const exportCsv = () => {
-    const header = 'date,pays,catégorie,libellé,montant_local,devise,equivalent_eur,enveloppe'
+    const header = 'date,pays,catégorie,libellé,montant_local,devise,equivalent_eur,enveloppe,ajouté_par'
     const rows = expenses.map(x =>
       [x.date, x.pays, x.categorie, `"${x.label}"`, x.amount, x.devise,
-       (Number(x.eur)||0).toFixed(2), CAT_TO_ENV[x.categorie]||'Loisirs'].join(',')
+       (Number(x.eur)||0).toFixed(2), CAT_TO_ENV[x.categorie]||'Loisirs', x.added_by||''].join(',')
     )
     const blob = new Blob([header+'\n'+rows.join('\n')], { type:'text/csv;charset=utf-8' })
-    const a = document.createElement('a')
-    a.href = URL.createObjectURL(blob); a.download = 'depenses-lacidi.csv'; a.click()
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob)
+    a.download = 'depenses-lacidi.csv'; a.click()
   }
 
   const zoneInfo = ZONE_CURRENCY[form.pays]
@@ -700,6 +773,19 @@ function BudgetPage() {
 
   return (
     <motion.div key="budget" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
+
+      {/* ── Bandeau sync ── */}
+      <div style={{ background: syncStatus==='loading'?'#f39c12': syncStatus==='error'?'#e74c3c':'#27ae60',
+        color:'#fff', textAlign:'center', padding:'5px 12px', fontSize:'0.72rem', fontWeight:700, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+        <span>
+          {syncStatus==='loading' && '☁️ Synchronisation…'}
+          {syncStatus==='synced'  && '✅ Synchronisé — 4 téléphones connectés'}
+          {syncStatus==='error'   && '⚠️ Hors-ligne — données locales'}
+        </span>
+        {lastSync && syncStatus==='synced' && (
+          <span style={{ opacity:0.8 }}>{lastSync.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span>
+        )}
+      </div>
 
       {/* ── Récap global ── */}
       <div className="panel card-panel" style={{ background:'#0b1f3a', color:'#fff', borderRadius:16 }}>
@@ -717,108 +803,304 @@ function BudgetPage() {
             {totalLeft<0?'⚠ Dépassé':'Restant'} : {Math.abs(totalLeft).toFixed(2)} €
           </span>
         </div>
+        {/* Mini récap hébergement */}
+        <div style={{ marginTop:10, borderTop:'1px solid rgba(255,255,255,0.15)', paddingTop:8, display:'flex', justifyContent:'space-between', fontSize:'0.78rem' }}>
+          <span>🏨 Hébergements : <b>{hotelTotal.toFixed(0)} €</b></span>
+          <span style={{ color: hotelPending>0?'#f39c12':'#7dffb0' }}>
+            {hotelPaid.toFixed(0)} € payé · {hotelPending.toFixed(0)} € à payer
+          </span>
+        </div>
       </div>
 
-      {/* ── Enveloppes ── */}
-      <div className="panel card-panel">
-        <SectionTitle title="Enveloppes par catégorie" />
-        <p className="soft" style={{ marginBottom:'0.8rem' }}>Modifie les montants. Les dépenses s'imputent automatiquement sur chaque enveloppe.</p>
-        {ENV_LIST.map(env => {
-          const budgetEnv = Number(envBudgets[env]) || 0
-          const spentEnv  = spentByEnv(env)
-          const leftEnv   = budgetEnv - spentEnv
-          const pct       = budgetEnv > 0 ? Math.min(100, (spentEnv/budgetEnv)*100) : 0
-          return (
-            <div key={env} style={{ border:`2px solid ${ENV_COLORS[env]}`, borderRadius:12, padding:`0.8rem 1rem`, marginBottom:10 }}>
-              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6 }}>
-                <span style={{ fontWeight:700, color:ENV_COLORS[env] }}>{ENV_EMOJI[env]} {env}</span>
-                <div style={{ display:'flex', alignItems:'center', gap:4 }}>
-                  <input type="number" value={budgetEnv}
-                    onChange={e => setEnvBudgets(prev => ({ ...prev, [env]: Math.max(0, Number(e.target.value)||0) }))}
-                    style={{ width:75, textAlign:'right', border:'none', borderBottom:`2px solid ${ENV_COLORS[env]}`,
-                      background:'transparent', fontWeight:700, fontSize:'1rem', color:ENV_COLORS[env] }} />
-                  <span style={{ color:ENV_COLORS[env], fontWeight:700 }}>€</span>
+      {/* ── Onglets internes ── */}
+      <div style={{ display:'flex', background:'#fff', borderRadius:14, padding:4, border:'1px solid #eee', gap:4 }}>
+        {[
+          { key:'depenses',     label:'💸 Dépenses' },
+          { key:'hebergement',  label:'🏨 Hébergement' },
+          { key:'enveloppes',   label:'📊 Enveloppes' },
+        ].map(t => (
+          <button key={t.key} onClick={() => setActiveTab(t.key)}
+            style={{ flex:1, padding:'8px 4px', borderRadius:10, border:'none', cursor:'pointer', fontSize:'0.75rem', fontWeight:700,
+              background: activeTab===t.key ? '#0b1f3a' : 'transparent',
+              color: activeTab===t.key ? '#fff' : '#666' }}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* ══════════════════════════════════ */}
+      {/* ── ONGLET DÉPENSES ── */}
+      {/* ══════════════════════════════════ */}
+      {activeTab === 'depenses' && (<>
+
+        {/* Formulaire ajout */}
+        <div className="panel card-panel">
+          <SectionTitle title="Ajouter une dépense" />
+          <div style={{ fontSize:'0.72rem', color:'#888', marginBottom:8 }}>
+            👥 Visible par les 4 membres de la famille en temps réel
+          </div>
+          <div className="input-grid two">
+            <label><span>Date</span>
+              <input className="text-input" type="date" value={form.date} onChange={e => setForm(f=>({...f,date:e.target.value}))} />
+            </label>
+            <label><span>Zone</span>
+              <select className="text-input" value={form.pays} onChange={e => setForm(f=>({...f,pays:e.target.value}))}>
+                {Object.keys(ZONE_CURRENCY).map(z => <option key={z}>{z}</option>)}
+              </select>
+            </label>
+            <label><span>Catégorie</span>
+              <select className="text-input" value={form.categorie} onChange={e => setForm(f=>({...f,categorie:e.target.value}))}>
+                {CATEGORIES.map(c => <option key={c}>{c} → {CAT_TO_ENV[c]||'Loisirs'}</option>)}
+              </select>
+            </label>
+            <label><span>Libellé</span>
+              <input className="text-input" placeholder="ex : Ramen Kyoto" value={form.label}
+                onChange={e => setForm(f=>({...f,label:e.target.value}))} />
+            </label>
+            <label style={{ gridColumn:'1 / -1' }}>
+              <span>Montant ({zoneInfo?.sym} {zoneInfo?.code}) — ≈ <strong style={{ color:'#0b1f3a' }}>{preview.toFixed(2)} €</strong>
+                &nbsp;<small style={{ color:'#888' }}>→ enveloppe <b>{CAT_TO_ENV[form.categorie]||'Loisirs'}</b></small>
+              </span>
+              <input className="text-input" type="number" placeholder="0" value={form.amount}
+                onChange={e => setForm(f=>({...f,amount:e.target.value}))} />
+            </label>
+          </div>
+          <button className="primary-action" onClick={addExpense}><PlusCircle size={17} /> Enregistrer la dépense</button>
+        </div>
+
+        {/* Historique */}
+        <div className="panel card-panel">
+          <SectionTitle title={`Historique (${expenses.length})`} linkLabel={expenses.length?'CSV':undefined} onLink={exportCsv} />
+          <div className="simple-list">
+            {expenses.length===0 && <p className="soft">Aucune dépense enregistrée.</p>}
+            {expenses.map(item => {
+              const env = CAT_TO_ENV[item.categorie]||'Loisirs'
+              return (
+                <div className="simple-row no-hover" key={item.id}>
+                  <span>
+                    <span style={{ display:'inline-block', width:8, height:8, borderRadius:'50%', background:ENV_COLORS[env], marginRight:6 }} />
+                    <strong>{item.label}</strong>
+                    <small style={{ marginLeft:6, color:'#888' }}>{item.date} · {item.categorie}</small><br/>
+                    <small>{(item.amount||0).toLocaleString('fr-FR')} {item.devise} → <b>{euro(Number(item.eur)||0)}</b>
+                      <span style={{ marginLeft:6, fontSize:'0.7rem', color:ENV_COLORS[env] }}>({env})</span>
+                      {item.added_by && item.added_by !== 'famille' && <span style={{ marginLeft:4, color:'#aaa' }}>· {item.added_by}</span>}
+                    </small>
+                  </span>
+                  <button className="icon-btn" onClick={() => removeExpense(item.id)}><Trash2 size={16} /></button>
                 </div>
-              </div>
-              <div style={{ background:'#e8e8e8', borderRadius:8, height:8, marginBottom:6 }}>
-                <div style={{ background:ENV_COLORS[env], height:8, borderRadius:8, width:`${pct}%`, transition:'width 0.4s' }} />
-              </div>
-              <div style={{ display:'flex', justifyContent:'space-between', fontSize:'0.78rem', color:'#666' }}>
-                <span>Dépensé : <b style={{ color:ENV_COLORS[env] }}>{spentEnv.toFixed(2)} €</b></span>
-                <span style={{ color: leftEnv<0?'#e53935':'#27ae60', fontWeight:700 }}>
-                  {leftEnv<0?'⚠ +':''}{Math.abs(leftEnv).toFixed(2)} € {leftEnv<0?'dépassé':'restant'}
-                </span>
-              </div>
-            </div>
-          )
-        })}
-      </div>
+              )
+            })}
+          </div>
+        </div>
+      </>)}
 
-      {/* ── Taux & réglages ── */}
-      <div className="panel card-panel">
-        <SectionTitle title="Réglages" linkLabel={showRates?'Masquer':'⚙ Taux de change'} onLink={() => setShowRates(v => !v)} />
-        {showRates && (
-          <div className="input-grid two" style={{ marginTop:'0.5rem' }}>
-            {Object.entries({ JPY:'Yen ¥', KRW:'Won ₩', EUR:'Euro €' }).map(([code,label]) => (
-              <label key={code}><span>1 {label} = … €</span>
-                <input className="text-input" type="number" step="0.0001" value={rates[code] ?? ''}
-                  onChange={e => setRates(prev => ({ ...prev, [code]: parseFloat(e.target.value)||0 }))} />
+      {/* ══════════════════════════════════ */}
+      {/* ── ONGLET HÉBERGEMENT ── */}
+      {/* ══════════════════════════════════ */}
+      {activeTab === 'hebergement' && (<>
+
+        {/* Récap hébergement */}
+        <div className="panel card-panel" style={{ background:'#f8f3ff', border:'2px solid #8e44ad' }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:10 }}>
+            <span style={{ fontWeight:800, color:'#8e44ad', fontSize:'1rem' }}>🏨 Enveloppe Hébergement</span>
+            <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+              <input type="number" value={Number(envBudgets['Hébergement'])||0}
+                onChange={e => setEnvBudgets(prev => ({ ...prev, 'Hébergement': Math.max(0, Number(e.target.value)||0) }))}
+                style={{ width:80, textAlign:'right', border:'none', borderBottom:'2px solid #8e44ad',
+                  background:'transparent', fontWeight:700, fontSize:'1rem', color:'#8e44ad' }} />
+              <span style={{ color:'#8e44ad', fontWeight:700 }}>€</span>
+            </div>
+          </div>
+          <div style={{ background:'#e8e0f0', borderRadius:8, height:10, marginBottom:8 }}>
+            <div style={{ background:'#8e44ad', height:10, borderRadius:8, transition:'width 0.4s',
+              width:`${Math.min(100, (Number(envBudgets['Hébergement'])||1) ? (hotelTotal/(Number(envBudgets['Hébergement'])||1))*100 : 0)}%` }} />
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:8, textAlign:'center' }}>
+            <div style={{ background:'#fff', borderRadius:10, padding:'8px 4px' }}>
+              <div style={{ fontSize:'1.1rem', fontWeight:800, color:'#8e44ad' }}>{hotelTotal.toFixed(0)} €</div>
+              <div style={{ fontSize:'0.7rem', color:'#888' }}>Total prévu</div>
+            </div>
+            <div style={{ background:'#fff', borderRadius:10, padding:'8px 4px' }}>
+              <div style={{ fontSize:'1.1rem', fontWeight:800, color:'#27ae60' }}>{hotelPaid.toFixed(0)} €</div>
+              <div style={{ fontSize:'0.7rem', color:'#888' }}>Payé ✅</div>
+            </div>
+            <div style={{ background:'#fff', borderRadius:10, padding:'8px 4px' }}>
+              <div style={{ fontSize:'1.1rem', fontWeight:800, color: hotelPending>0?'#e67e22':'#27ae60' }}>{hotelPending.toFixed(0)} €</div>
+              <div style={{ fontSize:'0.7rem', color:'#888' }}>À payer</div>
+            </div>
+          </div>
+          <div style={{ marginTop:8, fontSize:'0.75rem', color:'#666', textAlign:'center' }}>
+            Restant enveloppe : <b style={{ color: (Number(envBudgets['Hébergement'])||0)-hotelTotal < 0 ? '#e74c3c':'#27ae60' }}>
+              {((Number(envBudgets['Hébergement'])||0) - hotelTotal).toFixed(0)} €
+            </b>
+          </div>
+        </div>
+
+        {/* Bouton ajouter hôtel */}
+        <button onClick={() => setShowHotelForm(v => !v)}
+          style={{ background:'#8e44ad', color:'#fff', border:'none', borderRadius:12, padding:'12px', fontWeight:700,
+            fontSize:'0.9rem', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
+          <PlusCircle size={18} /> {showHotelForm ? 'Annuler' : 'Ajouter un hébergement'}
+        </button>
+
+        {/* Formulaire hôtel */}
+        {showHotelForm && (
+          <div className="panel card-panel" style={{ border:'2px solid #8e44ad' }}>
+            <SectionTitle title="Nouvel hébergement" />
+            <div className="input-grid two">
+              <label><span>Ville</span>
+                <select className="text-input" value={hotelForm.ville} onChange={e => setHotelForm(f=>({...f,ville:e.target.value}))}>
+                  {VILLES.map(v => <option key={v}>{v}</option>)}
+                </select>
               </label>
-            ))}
+              <label><span>Nom de l'hôtel</span>
+                <input className="text-input" placeholder="ex : Dormy Inn Osaka" value={hotelForm.nom}
+                  onChange={e => setHotelForm(f=>({...f,nom:e.target.value}))} />
+              </label>
+              <label style={{ gridColumn:'1 / -1' }}><span>Dates (ex : 11-13 juillet)</span>
+                <input className="text-input" placeholder="ex : 11-13 juillet" value={hotelForm.dates}
+                  onChange={e => setHotelForm(f=>({...f,dates:e.target.value}))} />
+              </label>
+              <label><span>Montant en €</span>
+                <input className="text-input" type="number" placeholder="0" value={hotelForm.montant_eur}
+                  onChange={e => setHotelForm(f=>({...f,montant_eur:e.target.value}))} />
+              </label>
+              <label><span>Devise locale</span>
+                <select className="text-input" value={hotelForm.devise} onChange={e => setHotelForm(f=>({...f,devise:e.target.value}))}>
+                  <option>EUR</option><option>JPY</option><option>KRW</option>
+                </select>
+              </label>
+              <label style={{ gridColumn:'1 / -1' }}><span>Montant en devise locale (optionnel)</span>
+                <input className="text-input" type="number" placeholder="0" value={hotelForm.montant_local}
+                  onChange={e => setHotelForm(f=>({...f,montant_local:e.target.value}))} />
+              </label>
+              <label style={{ gridColumn:'1 / -1' }}><span>Notes (confirmation, adresse…)</span>
+                <input className="text-input" placeholder="ex : Réf booking AB123" value={hotelForm.notes}
+                  onChange={e => setHotelForm(f=>({...f,notes:e.target.value}))} />
+              </label>
+              <label style={{ gridColumn:'1 / -1', display:'flex', alignItems:'center', gap:10 }}>
+                <input type="checkbox" checked={hotelForm.paye} onChange={e => setHotelForm(f=>({...f,paye:e.target.checked}))}
+                  style={{ width:18, height:18, cursor:'pointer' }} />
+                <span style={{ fontWeight:700, color:'#27ae60' }}>✅ Paiement déjà effectué</span>
+              </label>
+            </div>
+            <button className="primary-action" style={{ background:'#8e44ad' }} onClick={addHotel}>
+              <PlusCircle size={17} /> Enregistrer l'hébergement
+            </button>
           </div>
         )}
-      </div>
 
-      {/* ── Formulaire ── */}
-      <div className="panel card-panel">
-        <SectionTitle title="Ajouter une dépense" />
-        <div className="input-grid two">
-          <label><span>Date</span>
-            <input className="text-input" type="date" value={form.date} onChange={e => setForm(f=>({...f,date:e.target.value}))} />
-          </label>
-          <label><span>Zone</span>
-            <select className="text-input" value={form.pays} onChange={e => setForm(f=>({...f,pays:e.target.value}))}>
-              {Object.keys(ZONE_CURRENCY).map(z => <option key={z}>{z}</option>)}
-            </select>
-          </label>
-          <label><span>Catégorie</span>
-            <select className="text-input" value={form.categorie} onChange={e => setForm(f=>({...f,categorie:e.target.value}))}>
-              {CATEGORIES.map(c => <option key={c}>{c} → {CAT_TO_ENV[c]||'Loisirs'}</option>)}
-            </select>
-          </label>
-          <label><span>Libellé</span>
-            <input className="text-input" placeholder="ex : Ramen Kyoto" value={form.label}
-              onChange={e => setForm(f=>({...f,label:e.target.value}))} />
-          </label>
-          <label style={{ gridColumn:'1 / -1' }}>
-            <span>Montant ({zoneInfo?.sym} {zoneInfo?.code}) — ≈ <strong style={{ color:'#0b1f3a' }}>{preview.toFixed(2)} €</strong>
-              &nbsp;<small style={{ color:'#888' }}>→ enveloppe <b>{CAT_TO_ENV[form.categorie]||'Loisirs'}</b></small>
-            </span>
-            <input className="text-input" type="number" placeholder="0" value={form.amount}
-              onChange={e => setForm(f=>({...f,amount:e.target.value}))} />
-          </label>
+        {/* Liste hôtels */}
+        <div className="panel card-panel">
+          <SectionTitle title={`Hébergements (${hotels.length})`} />
+          {hotels.length === 0 && <p className="soft">Aucun hébergement enregistré.</p>}
+          {VILLES.filter(v => hotels.some(h => h.ville === v)).map(ville => (
+            <div key={ville} style={{ marginBottom:16 }}>
+              <div style={{ fontWeight:800, color:'#0b1f3a', fontSize:'0.85rem', marginBottom:8, paddingBottom:4, borderBottom:'2px solid #f0e0f5' }}>
+                📍 {ville}
+              </div>
+              {hotels.filter(h => h.ville === ville).map(hotel => (
+                <div key={hotel.id} style={{ border:`2px solid ${hotel.paye?'#27ae60':'#e67e22'}`, borderRadius:12,
+                  padding:'10px 12px', marginBottom:8, background: hotel.paye?'#f0fff4':'#fffbf0' }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:8 }}>
+                    <div style={{ flex:1 }}>
+                      <div style={{ fontWeight:800, fontSize:'0.92rem', color:'#0b1f3a' }}>🏨 {hotel.nom}</div>
+                      {hotel.dates && <div style={{ fontSize:'0.78rem', color:'#666', marginTop:2 }}>📅 {hotel.dates}</div>}
+                      {hotel.notes && <div style={{ fontSize:'0.75rem', color:'#888', marginTop:2 }}>📝 {hotel.notes}</div>}
+                      <div style={{ marginTop:6, display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
+                        <span style={{ fontWeight:800, color:'#8e44ad', fontSize:'1rem' }}>{Number(hotel.montant_eur).toFixed(0)} €</span>
+                        {hotel.montant_local > 0 && (
+                          <span style={{ fontSize:'0.75rem', color:'#888' }}>({hotel.montant_local.toLocaleString('fr-FR')} {hotel.devise})</span>
+                        )}
+                        <span style={{ background: hotel.paye?'#27ae60':'#e67e22', color:'#fff',
+                          borderRadius:8, padding:'2px 8px', fontSize:'0.7rem', fontWeight:700 }}>
+                          {hotel.paye ? '✅ Payé' : '⏳ À payer'}
+                        </span>
+                      </div>
+                    </div>
+                    <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+                      <button onClick={() => toggleHotelPaid(hotel)}
+                        style={{ background: hotel.paye?'#e67e22':'#27ae60', color:'#fff', border:'none', borderRadius:8,
+                          padding:'5px 8px', cursor:'pointer', fontSize:'0.7rem', fontWeight:700, whiteSpace:'nowrap' }}>
+                        {hotel.paye ? '↩ Impayé' : '✓ Payé'}
+                      </button>
+                      <button onClick={() => removeHotel(hotel.id)}
+                        style={{ background:'transparent', border:'1px solid #ddd', borderRadius:8,
+                          padding:'5px 8px', cursor:'pointer', color:'#e74c3c' }}>
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
-        <button className="primary-action" onClick={addExpense}><PlusCircle size={17} /> Enregistrer la dépense</button>
-      </div>
+      </>)}
 
-      {/* ── Historique ── */}
-      <div className="panel card-panel">
-        <SectionTitle title={`Historique (${expenses.length})`} linkLabel={expenses.length?'CSV':undefined} onLink={exportCsv} />
-        <div className="simple-list">
-          {expenses.length===0 && <p className="soft">Aucune dépense enregistrée.</p>}
-          {expenses.map(item => {
-            const env = CAT_TO_ENV[item.categorie]||'Loisirs'
+      {/* ══════════════════════════════════ */}
+      {/* ── ONGLET ENVELOPPES ── */}
+      {/* ══════════════════════════════════ */}
+      {activeTab === 'enveloppes' && (<>
+        <div className="panel card-panel">
+          <SectionTitle title="Enveloppes par catégorie" />
+          <p className="soft" style={{ marginBottom:'0.8rem' }}>Modifie les montants. Les dépenses s'imputent automatiquement.</p>
+          {ENV_LIST.map(env => {
+            const budgetEnv = Number(envBudgets[env]) || 0
+            const spentEnv  = spentByEnv(env)
+            const leftEnv   = budgetEnv - spentEnv
+            const pct       = budgetEnv > 0 ? Math.min(100, (spentEnv/budgetEnv)*100) : 0
             return (
-              <div className="simple-row no-hover" key={item.id}>
-                <span>
-                  <span style={{ display:'inline-block', width:8, height:8, borderRadius:'50%', background:ENV_COLORS[env], marginRight:6 }} />
-                  <strong>{item.label}</strong>
-                  <small style={{ marginLeft:6, color:'#888' }}>{item.date} · {item.categorie}</small><br/>
-                  <small>{(item.amount||0).toLocaleString('fr-FR')} {item.devise} → <b>{euro(Number(item.eur)||0)}</b>
-                    <span style={{ marginLeft:6, fontSize:'0.7rem', color:ENV_COLORS[env] }}>({env})</span>
-                  </small>
-                </span>
-                <button className="icon-btn" onClick={() => removeExpense(item.id)}><Trash2 size={16} /></button>
+              <div key={env} style={{ border:`2px solid ${ENV_COLORS[env]}`, borderRadius:12, padding:'0.8rem 1rem', marginBottom:10 }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6 }}>
+                  <span style={{ fontWeight:700, color:ENV_COLORS[env] }}>{ENV_EMOJI[env]} {env}</span>
+                  <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+                    <input type="number" value={budgetEnv}
+                      onChange={e => setEnvBudgets(prev => ({ ...prev, [env]: Math.max(0, Number(e.target.value)||0) }))}
+                      style={{ width:75, textAlign:'right', border:'none', borderBottom:`2px solid ${ENV_COLORS[env]}`,
+                        background:'transparent', fontWeight:700, fontSize:'1rem', color:ENV_COLORS[env] }} />
+                    <span style={{ color:ENV_COLORS[env], fontWeight:700 }}>€</span>
+                  </div>
+                </div>
+                <div style={{ background:'#e8e8e8', borderRadius:8, height:8, marginBottom:6 }}>
+                  <div style={{ background:ENV_COLORS[env], height:8, borderRadius:8, width:`${pct}%`, transition:'width 0.4s' }} />
+                </div>
+                <div style={{ display:'flex', justifyContent:'space-between', fontSize:'0.78rem', color:'#666' }}>
+                  <span>Dépensé : <b style={{ color:ENV_COLORS[env] }}>{spentEnv.toFixed(2)} €</b></span>
+                  <span style={{ color: leftEnv<0?'#e53935':'#27ae60', fontWeight:700 }}>
+                    {leftEnv<0?'⚠ +':''}{Math.abs(leftEnv).toFixed(2)} € {leftEnv<0?'dépassé':'restant'}
+                  </span>
+                </div>
+                {env === 'Hébergement' && (
+                  <div style={{ marginTop:6, fontSize:'0.72rem', color:'#888', borderTop:'1px solid #f0e0f5', paddingTop:4 }}>
+                    dont {hotelPaid.toFixed(0)} € payés / {hotelPending.toFixed(0)} € à payer sur {hotelTotal.toFixed(0)} € d'hôtels
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Réglages taux */}
+        <div className="panel card-panel">
+          <SectionTitle title="Réglages" linkLabel={showRates?'Masquer':'⚙ Taux de change'} onLink={() => setShowRates(v => !v)} />
+          {showRates && (
+            <div className="input-grid two" style={{ marginTop:'0.5rem' }}>
+              {Object.entries({ JPY:'Yen ¥', KRW:'Won ₩', EUR:'Euro €' }).map(([code,label]) => (
+                <label key={code}><span>1 {label} = … €</span>
+                  <input className="text-input" type="number" step="0.0001" value={rates[code] ?? ''}
+                    onChange={e => setRates(prev => ({ ...prev, [code]: parseFloat(e.target.value)||0 }))} />
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      </>)}
+
+    </motion.div>
+  )
+}
+sName="icon-btn" onClick={() => removeExpense(item.id)}><Trash2 size={16} /></button>
               </div>
             )
           })}
