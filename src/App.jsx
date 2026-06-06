@@ -628,7 +628,210 @@ function ChatGPTPage() {
       ))}
 
       {/* Astuce */}
-      <div style={{ background:'#fffbea', border:'1px solid #f0d060', borderRadius:12, padding:'0.9rem 1.1rem', fontSize:'0.82rem', color:'#7a6010' function BudgetPage() {
+      <div style={{ background:'#fffbea', border:'1px solid #f0d060', borderRadius:12, padding:'0.9rem 1.1rem', fontSize:'0.82rem', color:'#7a6010' }}>
+        <b>💡 Astuce :</b> Copie le prompt → ouvre ChatGPT → colle-le. Pour la photo, appuie sur l'icône 📎 dans ChatGPT pour ajouter ton image.
+      </div>
+
+    </motion.div>
+  )
+}
+
+function BudgetPage() {
+  // ── Constantes stables (hors du render) ──
+  const ZONE_CURRENCY = { Japon:{code:'JPY',sym:'¥'}, Corée:{code:'KRW',sym:'₩'}, Europe:{code:'EUR',sym:'€'} }
+  const CATEGORIES    = ['Restaurant','Transport','Visite','Shopping','Hôtel','Snack','Autre']
+  const ENV_LIST      = ['Restauration','Transport','Loisirs']
+  const CAT_TO_ENV    = { Restaurant:'Restauration', Snack:'Restauration', Transport:'Transport', Visite:'Loisirs', Shopping:'Loisirs', Hôtel:'Loisirs', Autre:'Loisirs' }
+  const ENV_COLORS    = { Restauration:'#e8523a', Transport:'#3a7bd5', Loisirs:'#27ae60' }
+  const ENV_EMOJI     = { Restauration:'🍜', Transport:'🚆', Loisirs:'🎌' }
+
+  // ── États localStorage ──
+  const [rates,     setRates]     = useLocalStorage('budget_rates',     { JPY:0.0061, KRW:0.00064, EUR:1 })
+  const [expenses,  setExpenses]  = useLocalStorage('budget_items',     [])
+  const [envBudgets,setEnvBudgets]= useLocalStorage('budget_envelopes', { Restauration:1200, Transport:800, Loisirs:600 })
+
+  // ── UI states ──
+  const [showRates, setShowRates] = useState(false)
+  const [form, setForm] = useState({
+    date: new Date().toISOString().slice(0,10), pays:'Japon', categorie:'Restaurant', label:'', amount:''
+  })
+
+  // ── Calculs dérivés — toujours à jour ──
+  const toEUR = (amount, pays) => {
+    const code = ZONE_CURRENCY[pays]?.code ?? 'EUR'
+    return Math.round(parseFloat(amount) * (Number(rates[code]) || 1) * 100) / 100
+  }
+
+  // Dépensé par enveloppe (robuste : gère les anciennes dépenses sans .eur)
+  const spentByEnv = (env) =>
+    expenses
+      .filter(x => (CAT_TO_ENV[x.categorie] || 'Loisirs') === env)
+      .reduce((s, x) => s + (Number(x.eur) || Number(x.amount) || 0), 0)
+
+  const totalBudget = ENV_LIST.reduce((s, e) => s + (Number(envBudgets[e]) || 0), 0)
+  const totalSpent  = ENV_LIST.reduce((s, e) => s + spentByEnv(e), 0)
+  const totalLeft   = totalBudget - totalSpent
+
+  // ── Ajouter une dépense ──
+  const addExpense = () => {
+    const raw = parseFloat(form.amount)
+    if (!form.label.trim() || isNaN(raw) || raw <= 0) return
+    const eurVal = toEUR(raw, form.pays)
+    setExpenses(prev => [{
+      id: Date.now(), date: form.date, pays: form.pays,
+      categorie: form.categorie, label: form.label.trim(),
+      amount: raw, devise: ZONE_CURRENCY[form.pays].code, eur: eurVal,
+    }, ...prev])
+    setForm(f => ({ ...f, label:'', amount:'' }))
+  }
+
+  const removeExpense = (id) => setExpenses(prev => prev.filter(x => x.id !== id))
+
+  const exportCsv = () => {
+    const header = 'date,pays,catégorie,libellé,montant_local,devise,equivalent_eur,enveloppe'
+    const rows = expenses.map(x =>
+      [x.date, x.pays, x.categorie, `"${x.label}"`, x.amount, x.devise,
+       (Number(x.eur)||0).toFixed(2), CAT_TO_ENV[x.categorie]||'Loisirs'].join(',')
+    )
+    const blob = new Blob([header+'\n'+rows.join('\n')], { type:'text/csv;charset=utf-8' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob); a.download = 'depenses-lacidi.csv'; a.click()
+  }
+
+  const zoneInfo = ZONE_CURRENCY[form.pays]
+  const preview  = form.amount ? toEUR(form.amount, form.pays) : 0
+
+  return (
+    <motion.div key="budget" initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} className="page-stack">
+
+      {/* ── Récap global ── */}
+      <div className="panel card-panel" style={{ background:'#0b1f3a', color:'#fff', borderRadius:16 }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
+          <span style={{ fontWeight:700, fontSize:'1.05rem' }}>💰 Budget voyage</span>
+          <span style={{ fontSize:'1.3rem', fontWeight:800 }}>{totalBudget.toFixed(0)} €</span>
+        </div>
+        <div style={{ background:'rgba(255,255,255,0.15)', borderRadius:10, height:10, marginBottom:8 }}>
+          <div style={{ background: totalLeft<0?'#ff6b6b':'#7dffb0', height:10, borderRadius:10,
+            width:`${Math.min(100, totalBudget ? (totalSpent/totalBudget)*100 : 0)}%`, transition:'width 0.4s' }} />
+        </div>
+        <div style={{ display:'flex', justifyContent:'space-between', fontSize:'0.88rem' }}>
+          <span>Dépensé : <b>{totalSpent.toFixed(2)} €</b></span>
+          <span style={{ color: totalLeft<0?'#ff6b6b':'#7dffb0', fontWeight:700 }}>
+            {totalLeft<0?'⚠ Dépassé':'Restant'} : {Math.abs(totalLeft).toFixed(2)} €
+          </span>
+        </div>
+      </div>
+
+      {/* ── Enveloppes ── */}
+      <div className="panel card-panel">
+        <SectionTitle title="Enveloppes par catégorie" />
+        <p className="soft" style={{ marginBottom:'0.8rem' }}>Modifie les montants. Les dépenses s'imputent automatiquement sur chaque enveloppe.</p>
+        {ENV_LIST.map(env => {
+          const budgetEnv = Number(envBudgets[env]) || 0
+          const spentEnv  = spentByEnv(env)
+          const leftEnv   = budgetEnv - spentEnv
+          const pct       = budgetEnv > 0 ? Math.min(100, (spentEnv/budgetEnv)*100) : 0
+          return (
+            <div key={env} style={{ border:`2px solid ${ENV_COLORS[env]}`, borderRadius:12, padding:`0.8rem 1rem`, marginBottom:10 }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6 }}>
+                <span style={{ fontWeight:700, color:ENV_COLORS[env] }}>{ENV_EMOJI[env]} {env}</span>
+                <div style={{ display:'flex', alignItems:'center', gap:4 }}>
+                  <input type="number" value={budgetEnv}
+                    onChange={e => setEnvBudgets(prev => ({ ...prev, [env]: Math.max(0, Number(e.target.value)||0) }))}
+                    style={{ width:75, textAlign:'right', border:'none', borderBottom:`2px solid ${ENV_COLORS[env]}`,
+                      background:'transparent', fontWeight:700, fontSize:'1rem', color:ENV_COLORS[env] }} />
+                  <span style={{ color:ENV_COLORS[env], fontWeight:700 }}>€</span>
+                </div>
+              </div>
+              <div style={{ background:'#e8e8e8', borderRadius:8, height:8, marginBottom:6 }}>
+                <div style={{ background:ENV_COLORS[env], height:8, borderRadius:8, width:`${pct}%`, transition:'width 0.4s' }} />
+              </div>
+              <div style={{ display:'flex', justifyContent:'space-between', fontSize:'0.78rem', color:'#666' }}>
+                <span>Dépensé : <b style={{ color:ENV_COLORS[env] }}>{spentEnv.toFixed(2)} €</b></span>
+                <span style={{ color: leftEnv<0?'#e53935':'#27ae60', fontWeight:700 }}>
+                  {leftEnv<0?'⚠ +':''}{Math.abs(leftEnv).toFixed(2)} € {leftEnv<0?'dépassé':'restant'}
+                </span>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* ── Taux & réglages ── */}
+      <div className="panel card-panel">
+        <SectionTitle title="Réglages" linkLabel={showRates?'Masquer':'⚙ Taux de change'} onLink={() => setShowRates(v => !v)} />
+        {showRates && (
+          <div className="input-grid two" style={{ marginTop:'0.5rem' }}>
+            {Object.entries({ JPY:'Yen ¥', KRW:'Won ₩', EUR:'Euro €' }).map(([code,label]) => (
+              <label key={code}><span>1 {label} = … €</span>
+                <input className="text-input" type="number" step="0.0001" value={rates[code] ?? ''}
+                  onChange={e => setRates(prev => ({ ...prev, [code]: parseFloat(e.target.value)||0 }))} />
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ── Formulaire ── */}
+      <div className="panel card-panel">
+        <SectionTitle title="Ajouter une dépense" />
+        <div className="input-grid two">
+          <label><span>Date</span>
+            <input className="text-input" type="date" value={form.date} onChange={e => setForm(f=>({...f,date:e.target.value}))} />
+          </label>
+          <label><span>Zone</span>
+            <select className="text-input" value={form.pays} onChange={e => setForm(f=>({...f,pays:e.target.value}))}>
+              {Object.keys(ZONE_CURRENCY).map(z => <option key={z}>{z}</option>)}
+            </select>
+          </label>
+          <label><span>Catégorie</span>
+            <select className="text-input" value={form.categorie} onChange={e => setForm(f=>({...f,categorie:e.target.value}))}>
+              {CATEGORIES.map(c => <option key={c}>{c} → {CAT_TO_ENV[c]||'Loisirs'}</option>)}
+            </select>
+          </label>
+          <label><span>Libellé</span>
+            <input className="text-input" placeholder="ex : Ramen Kyoto" value={form.label}
+              onChange={e => setForm(f=>({...f,label:e.target.value}))} />
+          </label>
+          <label style={{ gridColumn:'1 / -1' }}>
+            <span>Montant ({zoneInfo?.sym} {zoneInfo?.code}) — ≈ <strong style={{ color:'#0b1f3a' }}>{preview.toFixed(2)} €</strong>
+              &nbsp;<small style={{ color:'#888' }}>→ enveloppe <b>{CAT_TO_ENV[form.categorie]||'Loisirs'}</b></small>
+            </span>
+            <input className="text-input" type="number" placeholder="0" value={form.amount}
+              onChange={e => setForm(f=>({...f,amount:e.target.value}))} />
+          </label>
+        </div>
+        <button className="primary-action" onClick={addExpense}><PlusCircle size={17} /> Enregistrer la dépense</button>
+      </div>
+
+      {/* ── Historique ── */}
+      <div className="panel card-panel">
+        <SectionTitle title={`Historique (${expenses.length})`} linkLabel={expenses.length?'CSV':undefined} onLink={exportCsv} />
+        <div className="simple-list">
+          {expenses.length===0 && <p className="soft">Aucune dépense enregistrée.</p>}
+          {expenses.map(item => {
+            const env = CAT_TO_ENV[item.categorie]||'Loisirs'
+            return (
+              <div className="simple-row no-hover" key={item.id}>
+                <span>
+                  <span style={{ display:'inline-block', width:8, height:8, borderRadius:'50%', background:ENV_COLORS[env], marginRight:6 }} />
+                  <strong>{item.label}</strong>
+                  <small style={{ marginLeft:6, color:'#888' }}>{item.date} · {item.categorie}</small><br/>
+                  <small>{(item.amount||0).toLocaleString('fr-FR')} {item.devise} → <b>{euro(Number(item.eur)||0)}</b>
+                    <span style={{ marginLeft:6, fontSize:'0.7rem', color:ENV_COLORS[env] }}>({env})</span>
+                  </small>
+                </span>
+                <button className="icon-btn" onClick={() => removeExpense(item.id)}><Trash2 size={16} /></button>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+function BudgetPage() {
   const ZONE_CURRENCY = { Japon:{code:'JPY',sym:'¥'}, Corée:{code:'KRW',sym:'₩'}, Europe:{code:'EUR',sym:'€'} }
   const CATEGORIES    = ['Restaurant','Transport','Visite','Shopping','Hôtel','Snack','Autre']
   const ENV_LIST      = ['Restauration','Transport','Loisirs','Hébergement']
@@ -1100,15 +1303,7 @@ function ChatGPTPage() {
     </motion.div>
   )
 }
-sName="icon-btn" onClick={() => removeExpense(item.id)}><Trash2 size={16} /></button>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-    </motion.div>
-  )
-}
+
 
 // ════════════════════════════════════════════════════
 //  DONNÉES EXPLORER
