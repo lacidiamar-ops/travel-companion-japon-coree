@@ -22,7 +22,7 @@ const assets = {
 
 const days = [
   { id: 0, date: '09 juil.', city: 'Paris → Rome', title: 'Départ Paris — Nuit à Paris CDG', image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1200&q=80', summary: "Départ de chez vous, trajet jusqu'à Paris CDG. Nuit à l'hôtel de l'aéroport pour un départ serein le lendemain matin.", timeRange: '06:00 – 23:00', steps: '-', highlights: ['CDG Aéroport', 'Hôtel transit Paris', 'Préparatifs finaux'], restaurants: ['Restaurant hôtel CDG', 'Brasserie aéroport'], spots: ['Tour Eiffel (si temps)', 'CDG Terminal 2'] },
-  { id: -1, date: '10 juil.', city: 'Rome → Tokyo', title: 'Paris ✈️ Rome ✈️ Tokyo Haneda — Grand envol !', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80', summary: "Vol Paris CDG → Rome Fiumicino, correspondance, puis vol long-courrier Rome → Tokyo Haneda (HND). Vol de nuit, arrivée à Haneda le 11 juillet au matin. Premier contact avec le Japon !", timeRange: '06:00 – 23:59', steps: '~20h de voyage', highlights: ['CDG Terminal', 'Rome Fiumicino FCO', 'Vol de nuit Rome-Tokyo', 'Tokyo Haneda HND'], restaurants: ['Repas à bord', 'Snack aéroport Rome'], spots: ['Vue aérienne Japon', 'Approche Haneda'] },
+  { id: -1, date: '10 juil.', city: 'Rome → Tokyo', title: 'Paris ✈️ Rome ✈️ Tokyo Haneda — Grand envol !', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80', summary: "Vol Paris CDG → Rome Fiumicino, correspondance, puis vol long-courrier Rome → Tokyo Haneda (HND). Vol de nuit, arrivée à Haneda le 11 juillet au matin. Premier contact avec le Japon !", timeRange: '06:00 – 23:59', steps: '~20h de voyage', highlights: ['CDG Terminal', 'Rome Fiumicino FCO', 'Vol de nuit Rome-Tokyo', 'Tokyo Haneda HND'], restaurants: ['Repas à bord', 'Snack aéroport Rome'], spots: ['Vue aérienne Japon', 'Approche Haneda'], qrUrl: 'https://vjw.digital.go.jp' },
   { id: 1, date: '11 juil.', city: 'Haneda → Osaka', title: 'Arrivée Haneda → Shinkansen → Dotonbori', image: 'https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&w=1200&q=80', summary: "Arrivée Tokyo Haneda Terminal 3 vers 11h. Monorail jusqu'à Hamamatsucho puis JR Yamanote/Keihin-Tohoku jusqu'à Tokyo Station (~500-700¥, 25-30 min). Shinkansen Tokaido (Nozomi ou Hikari) vers Shin-Osaka (2h30-3h). Métro Midosuji direction Namba → descente Nippombashi sortie 2 → 5 min à pied jusqu'au Candeo Hotel Osaka Namba. Check-in 18h. Soirée Dotonbori : croisière Tombori River Cruise (2000¥, 20 min), photos Glico Running Man et crabe géant Kani Doraku, street food (takoyaki, kushikatsu, brochettes wagyu, gyoza), ruelle Hozenji Yokocho et dessert cheesecake Rikuro Ojisan.", timeRange: '11:00 – 22:15', steps: '~10 000 pas', highlights: ['Haneda Terminal 3', 'Tokyo Monorail', 'Tokyo Station', 'Shinkansen Tokaido', 'Shin-Osaka', 'Midosuji Line', 'Candeo Hotel Namba', 'Tombori Cruise', 'Glico Man', 'Hozenji Yokocho'], restaurants: ['Kukuru Takoyaki', 'Daruma Kushikatsu', 'Kani Doraku Dotonbori', 'Rikuro Ojisan no Mise Namba', 'Hozenji Yokocho izakaya'], spots: ['Glico Running Man', 'Crabe Kani Doraku', 'Tombori Riverwalk', 'Hozenji Yokocho'], itinerary: [
     { time: '11:00', icon: '✈️', step: "Arrivée Haneda Terminal 3 (sortie arrivées)" },
     { time: '11:15', icon: '🚝', step: "Suivre panneaux Tokyo Monorail (モノレール) → direction Hamamatsucho" },
@@ -347,6 +347,18 @@ function DayPreviewCard({ day, onOpen }) {
             <span className="chip sand"><Footprints size={15} /> {day.steps}</span>
             <button className="chip blue" onClick={onOpen}><Camera size={15} /> Spots photo</button>
           </div>
+          {day.qrUrl && (
+            <div style={{ marginTop:10 }}>
+              <a href={day.qrUrl} target="_blank" rel="noopener noreferrer"
+                style={{ display:'flex', alignItems:'center', gap:8, padding:'10px 14px', borderRadius:12,
+                  background:'#1a2e8a', color:'#fff', fontWeight:700, fontSize:'0.84rem',
+                  textDecoration:'none', border:'none', cursor:'pointer' }}>
+                <span style={{ fontSize:'1.2rem' }}>📱</span>
+                QR Code Immigration Japon — Visit Japan Web
+                <span style={{ marginLeft:'auto', opacity:0.8 }}>→</span>
+              </a>
+            </div>
+          )}
           {day.itinerary && day.itinerary.length > 0 && (
             <div style={{ marginTop:12 }}>
               <button onClick={() => setShowItin(v => !v)}
@@ -643,7 +655,7 @@ function BudgetPage() {
   const CAT_TO_ENV    = { Restaurant:'Restauration', Snack:'Restauration', Transport:'Transport', Visite:'Loisirs', Shopping:'Loisirs', Hôtel:'Hébergement', Autre:'Loisirs' }
   const ENV_COLORS    = { Restauration:'#e8523a', Transport:'#3a7bd5', Loisirs:'#27ae60', Hébergement:'#8e44ad' }
   const ENV_EMOJI     = { Restauration:'🍜', Transport:'🚆', Loisirs:'🎌', Hébergement:'🏨' }
-  const VILLES        = ['Osaka','Kyoto','Nara','Tokyo','Séoul','Busan']
+  const VILLES        = ['Paris','Osaka','Kyoto','Nara','Hakone','Tokyo','Séoul','Busan']
 
   // ── États locaux ──
   const [rates,      setRates]      = useLocalStorage('budget_rates',     { JPY:0.0061, KRW:0.00064, EUR:1 })
