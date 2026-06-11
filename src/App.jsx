@@ -22,7 +22,7 @@ const assets = {
 
 const days = [
   { id: 0, date: '09 juil.', city: 'Paris → Rome', title: 'Départ Paris — Nuit à Paris CDG', image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1200&q=80', summary: "Départ de chez vous, trajet jusqu'à Paris CDG. Nuit à l'hôtel de l'aéroport pour un départ serein le lendemain matin.", timeRange: '06:00 – 23:00', steps: '-', highlights: ['CDG Aéroport', 'Hôtel transit Paris', 'Préparatifs finaux'], restaurants: ['Restaurant hôtel CDG', 'Brasserie aéroport'], spots: ['Tour Eiffel (si temps)', 'CDG Terminal 2'] },
-  { id: -1, date: '10 juil.', city: 'Rome → Tokyo', title: 'Paris ✈️ Rome ✈️ Tokyo Haneda — Grand envol !', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80', summary: "Vol Paris CDG → Rome Fiumicino, correspondance, puis vol long-courrier Rome → Tokyo Haneda (HND). Vol de nuit, arrivée à Haneda le 11 juillet au matin. Premier contact avec le Japon !", timeRange: '06:00 – 23:59', steps: '~20h de voyage', highlights: ['CDG Terminal', 'Rome Fiumicino FCO', 'Vol de nuit Rome-Tokyo', 'Tokyo Haneda HND'], restaurants: ['Repas à bord', 'Snack aéroport Rome'], spots: ['Vue aérienne Japon', 'Approche Haneda'], qrUrl: 'https://vjw.digital.go.jp' },
+  { id: -1, date: '10 juil.', city: 'Rome → Tokyo', title: 'Paris ✈️ Rome ✈️ Tokyo Haneda — Grand envol !', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80', summary: "Vol Paris CDG → Rome Fiumicino, correspondance, puis vol long-courrier Rome → Tokyo Haneda (HND). Vol de nuit, arrivée à Haneda le 11 juillet au matin. Premier contact avec le Japon !", timeRange: '06:00 – 23:59', steps: '~20h de voyage', highlights: ['CDG Terminal', 'Rome Fiumicino FCO', 'Vol de nuit Rome-Tokyo', 'Tokyo Haneda HND'], restaurants: ['Repas à bord', 'Snack aéroport Rome'], spots: ['Vue aérienne Japon', 'Approche Haneda'], qrUrl: 'https://vjw.digital.go.jp', qrImg: '/qr-rome-tokyo.jpg' },
   { id: 1, date: '11 juil.', city: 'Haneda → Osaka', title: 'Arrivée Haneda → Shinkansen → Dotonbori', image: 'https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&w=1200&q=80', summary: "Arrivée Tokyo Haneda Terminal 3 vers 11h. Monorail jusqu'à Hamamatsucho puis JR Yamanote/Keihin-Tohoku jusqu'à Tokyo Station (~500-700¥, 25-30 min). Shinkansen Tokaido (Nozomi ou Hikari) vers Shin-Osaka (2h30-3h). Métro Midosuji direction Namba → descente Nippombashi sortie 2 → 5 min à pied jusqu'au Candeo Hotel Osaka Namba. Check-in 18h. Soirée Dotonbori : croisière Tombori River Cruise (2000¥, 20 min), photos Glico Running Man et crabe géant Kani Doraku, street food (takoyaki, kushikatsu, brochettes wagyu, gyoza), ruelle Hozenji Yokocho et dessert cheesecake Rikuro Ojisan.", timeRange: '11:00 – 22:15', steps: '~10 000 pas', highlights: ['Haneda Terminal 3', 'Tokyo Monorail', 'Tokyo Station', 'Shinkansen Tokaido', 'Shin-Osaka', 'Midosuji Line', 'Candeo Hotel Namba', 'Tombori Cruise', 'Glico Man', 'Hozenji Yokocho'], restaurants: ['Kukuru Takoyaki', 'Daruma Kushikatsu', 'Kani Doraku Dotonbori', 'Rikuro Ojisan no Mise Namba', 'Hozenji Yokocho izakaya'], spots: ['Glico Running Man', 'Crabe Kani Doraku', 'Tombori Riverwalk', 'Hozenji Yokocho'], itinerary: [
     { time: '11:00', icon: '✈️', step: "Arrivée Haneda Terminal 3 (sortie arrivées)" },
     { time: '11:15', icon: '🚝', step: "Suivre panneaux Tokyo Monorail (モノレール) → direction Hamamatsucho" },
@@ -53,7 +53,7 @@ const days = [
   { id: 9, date: '19 juil.', city: 'Séoul', title: 'N Seoul Tower → Hongdae', image: 'https://images.unsplash.com/photo-1506816561089-5cc37b3aa9b0?auto=format&fit=crop&w=1200&q=80', summary: 'Vue Namsan, marchés, Hongdae et dîner BBQ coréen.', timeRange: '10:00 – 22:00', steps: '13 400 pas', highlights: ['N Seoul Tower', 'Hongdae'], restaurants: ['Wangbijib', 'Hongdae Chicken'], spots: ['Namsan', 'Hongdae'] },
   { id: 10, date: '20 juil.', city: 'Busan', title: 'Séoul → Busan + Haeundae', image: 'https://images.unsplash.com/photo-1597211833712-5e41faa202ea?auto=format&fit=crop&w=1200&q=80', summary: 'KTX vers Busan, Haeundae Beach, Dongbaekseom et The Bay 101.', timeRange: '08:00 – 21:30', steps: '12 100 pas', highlights: ['KTX', 'Haeundae', 'The Bay 101'], restaurants: ['Haeundae Market', 'The Bay 101'], spots: ['Haeundae', 'Skyline Busan'] },
   { id: 11, date: '21 juil.', city: 'Busan', title: 'Temple mer → Gamcheon → Gwangalli', image: 'https://images.unsplash.com/photo-1601687962453-2780b75b2ce8?auto=format&fit=crop&w=1200&q=80', summary: 'Temple Haedong Yonggungsa, Gamcheon, Jagalchi et Gwangalli.', timeRange: '09:00 – 22:00', steps: '16 050 pas', highlights: ['Temple mer', 'Gamcheon', 'Gwangalli'], restaurants: ['Jagalchi', 'BIFF Square'], spots: ['Gamcheon', 'Gwangalli Bridge'] },
-  { id: 12, date: '22 juil.', city: 'Tokyo', title: 'Busan → Narita → Shinjuku', image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80', summary: 'Gimhae Airport, vol vers Narita, Narita Express puis Shinjuku.', timeRange: '08:30 – 22:00', steps: '9 400 pas', highlights: ['Blue Line Park', 'NEX', 'Shinjuku'], restaurants: ['Shinjuku late dinner'], spots: ['Kabukicho'], qrUrl: 'https://vjw.digital.go.jp' },
+  { id: 12, date: '22 juil.', city: 'Tokyo', title: 'Busan → Narita → Shinjuku', image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80', summary: 'Gimhae Airport, vol vers Narita, Narita Express puis Shinjuku.', timeRange: '08:30 – 22:00', steps: '9 400 pas', highlights: ['Blue Line Park', 'NEX', 'Shinjuku'], restaurants: ['Shinjuku late dinner'], spots: ['Kabukicho'], qrUrl: 'https://vjw.digital.go.jp', qrImg: '/qr-busan-tokyo.jpg' },
 ]
 
 const instagramBuzz = [
@@ -347,16 +347,18 @@ function DayPreviewCard({ day, onOpen }) {
             <span className="chip sand"><Footprints size={15} /> {day.steps}</span>
             <button className="chip blue" onClick={onOpen}><Camera size={15} /> Spots photo</button>
           </div>
-          {day.qrUrl && (
-            <div style={{ marginTop:10 }}>
-              <a href={day.qrUrl} target="_blank" rel="noopener noreferrer"
-                style={{ display:'flex', alignItems:'center', gap:8, padding:'10px 14px', borderRadius:12,
-                  background:'#1a2e8a', color:'#fff', fontWeight:700, fontSize:'0.84rem',
-                  textDecoration:'none', border:'none', cursor:'pointer' }}>
-                <span style={{ fontSize:'1.2rem' }}>📱</span>
-                QR Code Immigration Japon — Visit Japan Web
-                <span style={{ marginLeft:'auto', opacity:0.8 }}>→</span>
-              </a>
+          {day.qrImg && (
+            <div style={{ marginTop:12, background:'#1a2e8a', borderRadius:14, padding:'12px 14px' }}>
+              <div style={{ color:'#fff', fontWeight:700, fontSize:'0.85rem', marginBottom:8, display:'flex', alignItems:'center', gap:6 }}>
+                <span>📱</span> QR Code Immigration Japon — Visit Japan Web
+              </div>
+              <div style={{ display:'flex', justifyContent:'center', background:'#fff', borderRadius:10, padding:10 }}>
+                <img src={day.qrImg} alt="QR Code Visit Japan Web"
+                  style={{ width:'100%', maxWidth:260, height:'auto', display:'block', borderRadius:6 }} />
+              </div>
+              <div style={{ color:'rgba(255,255,255,0.7)', fontSize:'0.72rem', textAlign:'center', marginTop:6 }}>
+                ZENNOUHI ATIQUA · Immigration &amp; Customs
+              </div>
             </div>
           )}
           {day.itinerary && day.itinerary.length > 0 && (
