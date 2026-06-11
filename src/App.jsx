@@ -356,6 +356,9 @@ function DayPreviewCard({ day, onOpen }) {
                 <img src={day.qrImg} alt="QR Code Visit Japan Web"
                   style={{ width:'100%', maxWidth:260, height:'auto', display:'block', borderRadius:6 }} />
               </div>
+              <div style={{ color:'#fff', fontSize:'0.78rem', textAlign:'center', marginTop:8, opacity:0.9 }}>
+                ✈️ {day.city} — À présenter à l'immigration Haneda
+              </div>
 
             </div>
           )}
