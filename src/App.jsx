@@ -347,21 +347,37 @@ function DayPreviewCard({ day, onOpen }) {
             <span className="chip sand"><Footprints size={15} /> {day.steps}</span>
             <button className="chip blue" onClick={onOpen}><Camera size={15} /> Spots photo</button>
           </div>
-          {day.qrImg && (
-            <div style={{ marginTop:12, background:'#1a2e8a', borderRadius:14, padding:'12px 14px' }}>
-              <div style={{ color:'#fff', fontWeight:700, fontSize:'0.85rem', marginBottom:8, display:'flex', alignItems:'center', gap:6 }}>
-                <span>📱</span> QR Code Immigration Japon — Visit Japan Web
-              </div>
-              <div style={{ display:'flex', justifyContent:'center', background:'#fff', borderRadius:10, padding:10 }}>
-                <img src={day.qrImg} alt="QR Code Visit Japan Web"
-                  style={{ width:'100%', maxWidth:260, height:'auto', display:'block', borderRadius:6 }} />
-              </div>
-              <div style={{ color:'#fff', fontSize:'0.78rem', textAlign:'center', marginTop:8, opacity:0.9 }}>
-                ✈️ {day.city} — À présenter à l'immigration Haneda
-              </div>
-
-            </div>
-          )}
+          {day.qrImg && (() => {
+            const [qrFull, setQrFull] = React.useState(false)
+            return (
+              <>
+                {qrFull && (
+                  <div onClick={() => setQrFull(false)}
+                    style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.95)', zIndex:9999,
+                      display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:16, padding:20 }}>
+                    <div style={{ color:'#fff', fontWeight:700, fontSize:'0.95rem', textAlign:'center' }}>
+                      ✈️ {day.city}
+                    </div>
+                    <div style={{ color:'rgba(255,255,255,0.7)', fontSize:'0.8rem' }}>QR Code Immigration Japon</div>
+                    <img src={day.qrImg} alt="QR Code"
+                      style={{ width:'90vw', maxWidth:380, height:'auto', borderRadius:12, background:'#fff', padding:16 }} />
+                    <div style={{ color:'rgba(255,255,255,0.5)', fontSize:'0.78rem' }}>Appuyer pour fermer</div>
+                  </div>
+                )}
+                <div onClick={() => setQrFull(true)}
+                  style={{ marginTop:12, background:'#1a2e8a', borderRadius:14, padding:'12px 14px',
+                    display:'flex', alignItems:'center', gap:12, cursor:'pointer' }}>
+                  <img src={day.qrImg} alt="QR Code Visit Japan Web"
+                    style={{ width:64, height:64, objectFit:'cover', borderRadius:8, background:'#fff', padding:4, flexShrink:0 }} />
+                  <div>
+                    <div style={{ color:'#fff', fontWeight:700, fontSize:'0.85rem' }}>📱 QR Code Immigration Japon</div>
+                    <div style={{ color:'rgba(255,255,255,0.8)', fontSize:'0.75rem', marginTop:3 }}>✈️ {day.city}</div>
+                    <div style={{ color:'rgba(255,255,255,0.5)', fontSize:'0.7rem', marginTop:2 }}>Appuyer pour agrandir</div>
+                  </div>
+                </div>
+              </>
+            )
+          })()}
           {day.itinerary && day.itinerary.length > 0 && (
             <div style={{ marginTop:12 }}>
               <button onClick={() => setShowItin(v => !v)}
