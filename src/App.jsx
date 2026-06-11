@@ -356,9 +356,7 @@ function DayPreviewCard({ day, onOpen }) {
                 <img src={day.qrImg} alt="QR Code Visit Japan Web"
                   style={{ width:'100%', maxWidth:260, height:'auto', display:'block', borderRadius:6 }} />
               </div>
-              <div style={{ color:'rgba(255,255,255,0.7)', fontSize:'0.72rem', textAlign:'center', marginTop:6 }}>
-                ZENNOUHI ATIQUA · Immigration &amp; Customs
-              </div>
+
             </div>
           )}
           {day.itinerary && day.itinerary.length > 0 && (
