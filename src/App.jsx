@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { wordSections } from './wordContent.js'
-import { loadEditsFromCloud, saveEditToCloud, deleteEditFromCloud,
+import { supabase, loadEditsFromCloud, saveEditToCloud, deleteEditFromCloud,
   loadExpensesFromCloud, saveExpenseToCloud, deleteExpenseFromCloud,
   loadHotelsFromCloud, saveHotelToCloud, deleteHotelFromCloud,
   loadBudgetConfigFromCloud, saveBudgetConfigToCloud } from './supabase.js'
@@ -54,6 +54,9 @@ const days = [
   { id: 10, date: '20 juil.', city: 'Busan', title: 'Séoul → Busan + Haeundae', image: 'https://images.unsplash.com/photo-1597211833712-5e41faa202ea?auto=format&fit=crop&w=1200&q=80', summary: 'KTX vers Busan, Haeundae Beach, Dongbaekseom et The Bay 101.', timeRange: '08:00 – 21:30', steps: '12 100 pas', highlights: ['KTX', 'Haeundae', 'The Bay 101'], restaurants: ['Haeundae Market', 'The Bay 101'], spots: ['Haeundae', 'Skyline Busan'] },
   { id: 11, date: '21 juil.', city: 'Busan', title: 'Temple mer → Gamcheon → Gwangalli', image: 'https://images.unsplash.com/photo-1601687962453-2780b75b2ce8?auto=format&fit=crop&w=1200&q=80', summary: 'Temple Haedong Yonggungsa, Gamcheon, Jagalchi et Gwangalli.', timeRange: '09:00 – 22:00', steps: '16 050 pas', highlights: ['Temple mer', 'Gamcheon', 'Gwangalli'], restaurants: ['Jagalchi', 'BIFF Square'], spots: ['Gamcheon', 'Gwangalli Bridge'] },
   { id: 12, date: '22 juil.', city: 'Tokyo', title: 'Busan → Narita → Shinjuku', image: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80', summary: 'Gimhae Airport, vol vers Narita, Narita Express puis Shinjuku.', timeRange: '08:30 – 22:00', steps: '9 400 pas', highlights: ['Blue Line Park', 'NEX', 'Shinjuku'], restaurants: ['Shinjuku late dinner'], spots: ['Kabukicho'], qrUrl: 'https://vjw.digital.go.jp', qrImg: '/qr-busan-tokyo.jpg' },
+  { id: 13, date: '23 juil.', city: 'Tokyo', title: 'Shinjuku → Shibuya → Harajuku', image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1200&q=80', summary: 'Journée Tokyo : Shinjuku Gyoen, Shibuya Crossing, Takeshita Street à Harajuku et soirée Roppongi.', timeRange: '09:00 – 22:00', steps: '16 000 pas', highlights: ['Shinjuku Gyoen', 'Shibuya Crossing', 'Harajuku', 'Roppongi'], restaurants: ['Ichiran Shibuya', 'Afuri Ramen', 'Harajuku Crepes'], spots: ['Shibuya Crossing', 'Takeshita Street', 'Omotesando'] },
+  { id: 14, date: '24 juil.', city: 'Tokyo', title: 'Asakusa → Akihabara → Odaiba', image: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1200&q=80', summary: 'Senso-ji et Nakamise à Asakusa, électronique et manga à Akihabara, Odaiba et vue sur la baie de Tokyo.', timeRange: '08:30 – 21:30', steps: '15 500 pas', highlights: ['Senso-ji', 'Akihabara', 'Odaiba', 'Tokyo Skytree'], restaurants: ['Asakusa Mugitoro', 'Akihabara maid café', 'Odaiba food court'], spots: ['Senso-ji', 'Nakamise', 'Rainbow Bridge', 'Gundam Statue'] },
+  { id: 15, date: '25 juil.', city: 'Tokyo → Paris', title: 'Dernier jour → Vol retour', image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80', summary: 'Matinée libre à Tokyo, transfer Narita, vol retour Tokyo Narita → Paris CDG. Fin du voyage inoubliable !', timeRange: '08:00 – 23:59', steps: '~8 000 pas', highlights: ['Tokyo Narita NRT', 'Vol retour Paris CDG', 'Souvenirs dernière minute'], restaurants: ['Déjeuner Ginza', 'Repas bord avion'], spots: ['Tsukiji outer market', 'Ginza', 'Narita Airport'] },
 ]
 
 const instagramBuzz = [
@@ -335,7 +338,7 @@ function DayPreviewCard({ day, onOpen }) {
       <img src={day.image} alt={day.title} />
       <div className="next-day-content">
         <div className="date-badge">
-          <strong>{String(day.id).padStart(2, '0')}</strong>
+          <strong>{day.id < 0 ? '✈' : String(day.id).padStart(2, '0')}</strong>
           <span>{day.date}</span>
         </div>
         <div className="next-day-text">
@@ -693,7 +696,7 @@ function BudgetPage() {
   const [showHotelForm, setShowHotelForm] = useState(false)
   const [lastSync, setLastSync] = useState(null)
 
-  // ── Chargement Supabase au démarrage ──
+  // ── Chargement Supabase + Realtime ──
   useEffect(() => {
     const load = async () => {
       setSyncStatus('loading')
@@ -707,9 +710,24 @@ function BudgetPage() {
       setLastSync(new Date())
     }
     load()
-    // Refresh toutes les 30s pour voir les ajouts des autres
-    const interval = setInterval(load, 30000)
-    return () => clearInterval(interval)
+
+    // Realtime : mise à jour instantanée dès qu'un autre téléphone modifie
+    const channel = supabase
+      .channel('budget-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'budget_expenses' }, () => {
+        load()
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'budget_hotels' }, () => {
+        load()
+      })
+      .subscribe()
+
+    // Fallback polling 60s au cas où Realtime est coupé
+    const interval = setInterval(load, 60000)
+    return () => {
+      supabase.removeChannel(channel)
+      clearInterval(interval)
+    }
   }, [])
 
   // ── Calculs ──
