@@ -3432,9 +3432,32 @@ function AppShell() {
   const [showNotifs, setShowNotifs] = useState(false)
   const [notifPos, setNotifPos] = useState(null)
   const [notifData, setNotifData] = useState(null)
-  const [expenses]   = useLocalStorage('budget_items', [])
-  const [envBudgets2]= useLocalStorage('budget_envelopes', { Restauration:1200, Transport:800, Loisirs:600 })
-  const spent = expenses.reduce((s, x) => s + (Number(x.eur) || Number(x.amount) || 0), 0)
+  const [expenses,   setExpenses2]   = useState([])
+  const [hotels2,    setHotels2]     = useState([])
+  const [envBudgets2,setEnvBudgets2] = useState({ Restauration:1500, Transport:1200, Loisirs:1000, Hébergement:5500 })
+
+  useEffect(() => {
+    const loadShell = async () => {
+      const [cloudExp, cloudHotels, cloudConfig] = await Promise.all([
+        loadExpensesFromCloud(),
+        loadHotelsFromCloud(),
+        loadBudgetConfigFromCloud(),
+      ])
+      if (cloudExp !== null) setExpenses2(cloudExp)
+      if (cloudHotels !== null) setHotels2(cloudHotels)
+      if (cloudConfig?.envelopes) setEnvBudgets2(cloudConfig.envelopes)
+    }
+    loadShell()
+    const channel = supabase.channel('shell-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'budget_expenses' }, loadShell)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'budget_hotels' }, loadShell)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'budget_config' }, loadShell)
+      .subscribe()
+    return () => supabase.removeChannel(channel)
+  }, [])
+
+  const spent = expenses.reduce((s, x) => s + (Number(x.eur) || 0), 0)
+    + hotels2.filter(h => h.paye).reduce((s, h) => s + (Number(h.montant_eur) || 0), 0)
   const total = Object.values(envBudgets2).reduce((s, v) => s + (Number(v)||0), 0)
   const nextDay = useMemo(() => days[4], [])
 
