@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
 const SUPABASE_URL = 'https://vjulagaprzbnquynwjmt.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqdWxhZ2FwcnpibnF1eW53am10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4OTYzMDEsImV4cCI6MjA5MjQ3MjMwMX0.wX5C8kV4COGDwca_rxGMY41wHfpmsD7hMEWcxirIpak'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInJlZiI6InZqdWxhZ2FwcnpibnF1eW53am10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4OTYzMDEsImV4cCI6MjA5MjQ3MjMwMX0.wX5C8kV4COGDwca_rxGMY41wHfpmsD7hMEWcxirIpak'
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
@@ -51,13 +51,23 @@ export async function deleteEditFromCloud(sectionId) {
 // BUDGET — DÉPENSES
 // ═══════════════════════════════════
 
+const isLegacyReliquatExpense = (row) => {
+  const label = String(row?.label || '').toLowerCase()
+  const amount = Math.round(Number(row?.eur) || 0)
+  return label.includes('reliquat') && amount === 750
+}
+
 export async function loadExpensesFromCloud() {
   const { data, error } = await supabase
     .from('budget_expenses')
     .select('*')
     .order('created_at', { ascending: false })
   if (error) { console.error('loadExpenses error:', error); return null }
-  return data
+
+  // Ancienne erreur de calcul : une ligne technique "reliquat payé" de 750 €
+  // a pu être enregistrée comme une vraie dépense. On la retire de l'affichage
+  // et des totaux pour que le budget soit calculé uniquement sur les achats réels.
+  return (data || []).filter(row => !isLegacyReliquatExpense(row))
 }
 
 export async function saveExpenseToCloud(expense) {
@@ -87,7 +97,7 @@ export async function loadHotelsFromCloud() {
     .select('*')
     .order('created_at', { ascending: true })
   if (error) { console.error('loadHotels error:', error); return null }
-  return data
+  return data || []
 }
 
 export async function saveHotelToCloud(hotel) {
@@ -111,17 +121,31 @@ export async function deleteHotelFromCloud(id) {
 // BUDGET — CONFIG (enveloppes, taux)
 // ═══════════════════════════════════
 
-export async function loadBudgetConfigFromCloud(key) {
+const DEFAULT_BUDGET_CONFIG_KEY = 'main'
+
+export async function loadBudgetConfigFromCloud(key = DEFAULT_BUDGET_CONFIG_KEY) {
   const { data, error } = await supabase
     .from('budget_config')
     .select('value')
     .eq('key', key)
-    .single()
-  if (error) return null
-  return data?.value
+    .maybeSingle()
+
+  if (!error && data?.value) return data.value
+
+  // Compatibilité avec d'anciennes lignes éventuellement créées sous la clé "budget".
+  if (key === DEFAULT_BUDGET_CONFIG_KEY) {
+    const fallback = await loadBudgetConfigFromCloud('budget')
+    if (fallback) return fallback
+  }
+
+  return null
 }
 
-export async function saveBudgetConfigToCloud(key, value) {
+export async function saveBudgetConfigToCloud(keyOrValue = DEFAULT_BUDGET_CONFIG_KEY, maybeValue) {
+  // Compatibilité avec l'appel existant dans App.jsx : saveBudgetConfigToCloud({ envelopes: updated })
+  const key = typeof keyOrValue === 'string' ? keyOrValue : DEFAULT_BUDGET_CONFIG_KEY
+  const value = typeof keyOrValue === 'string' ? maybeValue : keyOrValue
+
   const { error } = await supabase
     .from('budget_config')
     .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' })
