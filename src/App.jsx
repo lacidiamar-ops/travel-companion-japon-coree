@@ -746,14 +746,27 @@ function BudgetPage() {
     return Math.round(parseFloat(amount) * (Number(rates[code]) || 1) * 100) / 100
   }
 
+  // spentByEnv = uniquement ce qui est RÉELLEMENT payé (déduit du budget restant)
   const spentByEnv = (env) => {
     let total = expenses
       .filter(x => (CAT_TO_ENV[x.categorie] || 'Loisirs') === env)
       .reduce((s, x) => s + (Number(x.eur) || 0), 0)
     if (env === 'Hébergement') {
-      // Tous les hôtels (payés ou non) comptent dans le budget engagé
+      // Seuls les hôtels marqués "payé" sont déduits du budget restant
       total += hotels
+        .filter(h => h.paye)
         .reduce((s, h) => s + (Number(h.montant_eur) || 0), 0)
+    }
+    return total
+  }
+
+  // engagedByEnv = total prévu/réservé (payé ou non) — sert d'indicateur, pas de déduction
+  const engagedByEnv = (env) => {
+    let total = expenses
+      .filter(x => (CAT_TO_ENV[x.categorie] || 'Loisirs') === env)
+      .reduce((s, x) => s + (Number(x.eur) || 0), 0)
+    if (env === 'Hébergement') {
+      total += hotels.reduce((s, h) => s + (Number(h.montant_eur) || 0), 0)
     }
     return total
   }
@@ -764,6 +777,7 @@ function BudgetPage() {
 
   const totalBudget   = ENV_LIST.reduce((s, e) => s + (Number(envBudgets[e]) || 0), 0)
   const totalSpent    = ENV_LIST.reduce((s, e) => s + spentByEnv(e), 0)
+  const totalEngaged  = ENV_LIST.reduce((s, e) => s + engagedByEnv(e), 0)
   const totalLeft     = totalBudget - totalSpent
 
   // ── Ajouter dépense ──
