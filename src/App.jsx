@@ -931,7 +931,7 @@ function BudgetPage() {
             </label>
             <label><span>Catégorie</span>
               <select className="text-input" value={form.categorie} onChange={e => setForm(f=>({...f,categorie:e.target.value}))}>
-                {CATEGORIES.map(c => <option key={c}>{c} → {CAT_TO_ENV[c]||'Loisirs'}</option>)}
+                {CATEGORIES.map(c => <option key={c} value={c}>{c} → {CAT_TO_ENV[c]||'Loisirs'}</option>)}
               </select>
             </label>
             <label><span>Libellé</span>
