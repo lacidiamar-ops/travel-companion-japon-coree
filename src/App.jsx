@@ -686,12 +686,41 @@ function BudgetPage() {
 
   // ── États locaux ──
   const [rates,      setRates]      = useLocalStorage('budget_rates',     { JPY:0.0061, KRW:0.00064, EUR:1 })
+  const [ratesUpdatedAt, setRatesUpdatedAt] = useLocalStorage('budget_rates_updated', null)
+  const [ratesLoading, setRatesLoading] = useState(false)
   const [envBudgets, setEnvBudgets] = useState({ Restauration:1500, Transport:1200, Loisirs:1000, Hébergement:5500 })
   const [expenses,   setExpenses]   = useState([])
   const [hotels,     setHotels]     = useState([])
   const [syncStatus, setSyncStatus] = useState('loading')
   const [activeTab,  setActiveTab]  = useState('depenses') // 'depenses' | 'hebergement' | 'enveloppes'
   const [showRates,  setShowRates]  = useState(false)
+
+  // ── Taux de change automatiques (Frankfurter.app — API gratuite BCE, sans clé) ──
+  const fetchLiveRates = async () => {
+    setRatesLoading(true)
+    try {
+      const res = await fetch('https://api.frankfurter.app/latest?from=EUR&to=JPY,KRW')
+      const data = await res.json()
+      if (data?.rates?.JPY && data?.rates?.KRW) {
+        const newRates = {
+          EUR: 1,
+          JPY: Math.round((1 / data.rates.JPY) * 1e6) / 1e6,
+          KRW: Math.round((1 / data.rates.KRW) * 1e6) / 1e6,
+        }
+        setRates(newRates)
+        setRatesUpdatedAt(new Date().toISOString())
+      }
+    } catch (e) {
+      console.warn('Taux de change: fetch échoué, valeurs actuelles conservées', e)
+    }
+    setRatesLoading(false)
+  }
+
+  // Auto-fetch à l'ouverture si les taux datent de plus de 12h (ou jamais chargés)
+  useEffect(() => {
+    const stale = !ratesUpdatedAt || (Date.now() - new Date(ratesUpdatedAt).getTime()) > 12*60*60*1000
+    if (stale) fetchLiveRates()
+  }, [])
   const [form, setForm] = useState({
     date: new Date().toISOString().slice(0,10), pays:'Japon', categorie:'Restaurant', label:'', amount:''
   })
@@ -1176,14 +1205,32 @@ function BudgetPage() {
         <div className="panel card-panel">
           <SectionTitle title="Réglages" linkLabel={showRates?'Masquer':'⚙ Taux de change'} onLink={() => setShowRates(v => !v)} />
           {showRates && (
-            <div className="input-grid two" style={{ marginTop:'0.5rem' }}>
-              {Object.entries({ JPY:'Yen ¥', KRW:'Won ₩', EUR:'Euro €' }).map(([code,label]) => (
-                <label key={code}><span>1 {label} = … €</span>
-                  <input className="text-input" type="number" step="0.0001" value={rates[code] ?? ''}
-                    onChange={e => setRates(prev => ({ ...prev, [code]: parseFloat(e.target.value)||0 }))} />
-                </label>
-              ))}
-            </div>
+            <>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginTop:'0.5rem', marginBottom:'0.6rem' }}>
+                <span style={{ fontSize:'0.75rem', color:'#888' }}>
+                  {ratesUpdatedAt
+                    ? `Mis à jour ${new Date(ratesUpdatedAt).toLocaleString('fr-FR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' })}`
+                    : 'Pas encore actualisé'}
+                </span>
+                <button onClick={fetchLiveRates} disabled={ratesLoading}
+                  style={{ display:'flex', alignItems:'center', gap:6, padding:'6px 12px', borderRadius:20,
+                    border:'none', background: ratesLoading ? '#ccc' : '#0b1f3a', color:'#fff',
+                    fontSize:'0.75rem', fontWeight:700, cursor: ratesLoading ? 'default' : 'pointer' }}>
+                  {ratesLoading ? '⏳ Actualisation…' : '🔄 Actualiser les taux'}
+                </button>
+              </div>
+              <div className="input-grid two">
+                {Object.entries({ JPY:'Yen ¥', KRW:'Won ₩', EUR:'Euro €' }).map(([code,label]) => (
+                  <label key={code}><span>1 {label} = … €</span>
+                    <input className="text-input" type="number" step="0.0001" value={rates[code] ?? ''}
+                      onChange={e => setRates(prev => ({ ...prev, [code]: parseFloat(e.target.value)||0 }))} />
+                  </label>
+                ))}
+              </div>
+              <p style={{ fontSize:'0.7rem', color:'#aaa', marginTop:6 }}>
+                Taux automatiques (source : Banque Centrale Européenne). Ajustables manuellement si besoin.
+              </p>
+            </>
           )}
         </div>
       </>)}
@@ -1990,10 +2037,32 @@ function ConverterPage() {
   ]
   const DEFAULT_RATES = { EUR:1, JPY:162.5, KRW:1480, USD:1.08 }
   const [rates, setRates]   = useLocalStorage('conv_rates', DEFAULT_RATES)
+  const [ratesUpdatedAt, setRatesUpdatedAt] = useLocalStorage('conv_rates_updated', null)
+  const [ratesLoading, setRatesLoading] = useState(false)
   const [from, setFrom]     = useState('EUR')
   const [to, setTo]         = useState('JPY')
   const [amount, setAmount] = useState('')
   const [showRates, setShowRates] = useState(false)
+
+  const fetchLiveRates = async () => {
+    setRatesLoading(true)
+    try {
+      const res = await fetch('https://api.frankfurter.app/latest?from=EUR&to=JPY,KRW,USD')
+      const data = await res.json()
+      if (data?.rates) {
+        setRates({ EUR:1, JPY:data.rates.JPY, KRW:data.rates.KRW, USD:data.rates.USD })
+        setRatesUpdatedAt(new Date().toISOString())
+      }
+    } catch (e) {
+      console.warn('Taux de change: fetch échoué', e)
+    }
+    setRatesLoading(false)
+  }
+
+  useEffect(() => {
+    const stale = !ratesUpdatedAt || (Date.now() - new Date(ratesUpdatedAt).getTime()) > 12*60*60*1000
+    if (stale) fetchLiveRates()
+  }, [])
 
   const convert = (val, f, t) => {
     const n = parseFloat(val)
@@ -2097,10 +2166,23 @@ function ConverterPage() {
 
       {/* Taux modifiables */}
       <div style={{ background:'#fff', borderRadius:16, padding:'1rem', border:'1px solid #e0e0e0' }}>
-        <button onClick={() => setShowRates(v => !v)}
-          style={{ background:'none', border:'none', cursor:'pointer', fontWeight:700, fontSize:'0.85rem', color:'#0b1f3a' }}>
-          ⚙️ {showRates ? 'Masquer' : 'Mettre à jour les taux de change'}
-        </button>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+          <button onClick={() => setShowRates(v => !v)}
+            style={{ background:'none', border:'none', cursor:'pointer', fontWeight:700, fontSize:'0.85rem', color:'#0b1f3a' }}>
+            ⚙️ {showRates ? 'Masquer' : 'Taux de change'}
+          </button>
+          <button onClick={fetchLiveRates} disabled={ratesLoading}
+            style={{ display:'flex', alignItems:'center', gap:6, padding:'6px 12px', borderRadius:20,
+              border:'none', background: ratesLoading ? '#ccc' : '#0b1f3a', color:'#fff',
+              fontSize:'0.75rem', fontWeight:700, cursor: ratesLoading ? 'default' : 'pointer' }}>
+            {ratesLoading ? '⏳' : '🔄'} {ratesLoading ? 'Actualisation…' : 'Actualiser'}
+          </button>
+        </div>
+        {ratesUpdatedAt && (
+          <div style={{ fontSize:'0.7rem', color:'#aaa', marginTop:4 }}>
+            Mis à jour {new Date(ratesUpdatedAt).toLocaleString('fr-FR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' })}
+          </div>
+        )}
         {showRates && (
           <div style={{ marginTop:10, display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
             {CURRENCIES.filter(c => c.code !== 'EUR').map(c => (
